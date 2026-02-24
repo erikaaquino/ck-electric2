@@ -1,13 +1,17 @@
 import React from 'react';
 import { Bolt, Verified, Timer, Phone, Mail, LocationOn, Check, ArrowRightAlt, FormatQuote, CorporateFare, ElectricBolt, GridView, Light, ChargingStation, Construction, Call } from '@mui/icons-material';
 import Button from './Button';
+import Input from './Input';
+import Select from './Select';
+import Textarea from './Textarea';
+import ServiceCard from './ServiceCard';
 
 export default function HomePage() {
   return (
     <main className="bg-primary-50">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center overflow-hidden pt-24 pb-32">
-        <div className="absolute inset-0 z-0 bg-primary-100 clip-diagonal">
+        <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-primary-100 via-primary-100/60 to-transparent z-10"></div>
           <img 
             alt="Professional electrician working" 
@@ -18,7 +22,7 @@ export default function HomePage() {
         
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-neutral-950 text-primary-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-positive-100 border border-positive-200 rounded-full text-small-upper text-positive-700 mb-8">
               <span className="flex h-2 w-2 rounded-full bg-positive-500 animate-pulse"></span>
               Direct Access to Licensed Experts
             </div>
@@ -28,7 +32,7 @@ export default function HomePage() {
               <span className="text-primary-500 italic underline decoration-primary-400">Quality.</span>
             </h1>
             
-            <p className="text-large text-neutral-700 mb-10 font-medium leading-relaxed max-w-xl">
+            <p className="text-base text-neutral-700 mb-10 leading-relaxed max-w-xl">
               Talk directly with a licensed electrician. No call centers, no middlemen. Fast response and industrial-grade quality for every project.
             </p>
             
@@ -36,71 +40,64 @@ export default function HomePage() {
               <div className="flex items-center gap-4 bg-white/50 backdrop-blur-sm p-4 border-l-4 border-primary-500">
                 <Verified className="text-primary-500 text-4xl" />
                 <div>
-                  <p className="text-neutral-950 font-black uppercase text-xs tracking-widest">Licensed & Bonded</p>
-                  <p className="text-neutral-700/70 text-xs mt-1">Full Compliance Guaranteed</p>
+                  <p className="text-neutral-950 text-base-upper mb-1">Licensed & Bonded</p>
+                  <p className="text-neutral-700/70 text-small mt-1">Full Compliance Guaranteed</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-4 bg-white/50 backdrop-blur-sm p-4 border-l-4 border-primary-500">
                 <Timer className="text-primary-500 text-4xl" />
                 <div>
-                  <p className="text-neutral-950 font-black uppercase text-xs tracking-widest">Fast Response</p>
-                  <p className="text-neutral-700/70 text-xs mt-1">Same-day Estimates Available</p>
+                  <p className="text-neutral-950 text-base-upper mb-1">Fast Response</p>
+                  <p className="text-neutral-700/70 text-small mt-1">Same-day Estimates Available</p>
                 </div>
               </div>
             </div>
           </div>
           
           <div className="lg:col-span-5 relative">
-            <div className="absolute -inset-4 bg-primary-500 rotate-3 z-0"></div>
+          
             <div className="relative z-10 bg-white p-10 shadow-2xl">
               <h3 className="text-display-3 text-neutral-950 mb-2">Get a Free Estimate</h3>
-              <p className="text-neutral-700/60 text-sm mb-8 font-medium">Professional service within 24 hours.</p>
+              <p className="text-neutral-700/60 text-small mb-8">Professional service within 24 hours.</p>
               
-              <form className="space-y-5">
+              <form className="space-y-5" method="POST" action="/api/estimate">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-black text-neutral-950 uppercase tracking-widest">Name</label>
-                    <input 
-                      className="w-full bg-primary-50 border-transparent focus:border-primary-500 focus:ring-0 text-neutral-950 text-sm p-4" 
-                      placeholder="Your Name" 
-                      type="text"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-black text-neutral-950 uppercase tracking-widest">Phone</label>
-                    <input 
-                      className="w-full bg-primary-50 border-transparent focus:border-primary-500 focus:ring-0 text-neutral-950 text-sm p-4" 
-                      placeholder="(555) 000-0000" 
-                      type="tel"
-                    />
-                  </div>
+                  <Input
+                    label="Name"
+                    name="name"
+                    placeholder="Your Name"
+                    type="text"
+                    required
+                  />
+                  <Input
+                    label="Phone"
+                    name="phone"
+                    placeholder="(555) 000-0000"
+                    type="tel"
+                    required
+                  />
                 </div>
                 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black text-neutral-950 uppercase tracking-widest">Project Type</label>
-                  <select className="w-full bg-primary-50 border-transparent focus:border-primary-500 focus:ring-0 text-neutral-950 text-sm p-4">
-                    <option>Residential Wiring</option>
-                    <option>Commercial Service</option>
-                    <option>EV Charger Installation</option>
-                    <option>Panel Replacement</option>
-                    <option>Lighting Design</option>
-                  </select>
-                </div>
+                <Input
+                  label="Email"
+                  name="email"
+                  placeholder="your.email@example.com"
+                  type="email"
+                  required
+                />
                 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black text-neutral-950 uppercase tracking-widest">Message</label>
-                  <textarea 
-                    className="w-full bg-primary-50 border-transparent focus:border-primary-500 focus:ring-0 text-neutral-950 text-sm p-4" 
-                    placeholder="How can we help?" 
-                    rows={3}
-                  ></textarea>
-                </div>
+                <Textarea
+                  label="Message"
+                  name="message"
+                  placeholder="How can we help?"
+                  rows={3}
+                />
                 
                 <Button
                   label="Request Immediate Estimate"
                   type="submit"
-                  className="w-full bg-negative-500 hover:bg-neutral-950 text-white font-black py-5 uppercase tracking-widest text-xs"
+                  className="w-full"
                 />
               </form>
             </div>
@@ -113,19 +110,19 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 skew-content">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <p className="text-primary-500 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Experience</p>
+              <p className="text-primary-500 text-small-upper mb-2">Experience</p>
               <p className="text-display-4 text-white italic">25+ Yrs</p>
             </div>
             <div>
-              <p className="text-primary-500 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Response</p>
+              <p className="text-primary-500 text-small-upper mb-2">Response</p>
               <p className="text-display-4 text-white italic">&lt;24 Hrs</p>
             </div>
             <div>
-              <p className="text-primary-500 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Satisfied</p>
+              <p className="text-primary-500 text-small-upper mb-2">Satisfied</p>
               <p className="text-display-4 text-white italic">1.2k+</p>
             </div>
             <div>
-              <p className="text-primary-500 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Licensed</p>
+              <p className="text-primary-500 text-small-upper mb-2">Licensed</p>
               <p className="text-display-4 text-white italic">Direct</p>
             </div>
           </div>
@@ -146,29 +143,29 @@ export default function HomePage() {
             </div>
             
             <div className="w-full md:w-1/2">
-              <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4">No Middlemen. No Mess.</h2>
+              <h2 className="text-primary-500 text-base-upper mb-4">No Middlemen. No Mess.</h2>
               <h3 className="text-display-2 text-neutral-950 mb-8 leading-tight">
                 Locally Owned & <br/>Expertly Operated
               </h3>
               
-              <div className="space-y-6 text-neutral-700 text-large font-medium leading-relaxed">
+              <div className="space-y-6 text-neutral-700 text-bae leading-relaxed">
                 <p>CK Electric was founded on a simple principle: people deserve to talk to the experts doing the work. When you call us, you speak directly with Rob or Matt, not a call center.</p>
                 <p>We combine industrial-grade precision with residential-level care. Whether it's a major commercial TI or a home panel upgrade, we bring decades of experience.</p>
                 
                 <ul className="grid grid-cols-1 gap-4 pt-6">
-                  <li className="flex items-center gap-4 text-neutral-950 font-black uppercase text-xs tracking-widest">
+                  <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
                     <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
                       <Check className="text-sm -rotate-45" />
                     </span>
                     Licensed Master Electricians
                   </li>
-                  <li className="flex items-center gap-4 text-neutral-950 font-black uppercase text-xs tracking-widest">
+                  <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
                     <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
                       <Check className="text-sm -rotate-45" />
                     </span>
                     Zero Outsourcing
                   </li>
-                  <li className="flex items-center gap-4 text-neutral-950 font-black uppercase text-xs tracking-widest">
+                  <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
                     <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
                       <Check className="text-sm -rotate-45" />
                     </span>
@@ -185,76 +182,58 @@ export default function HomePage() {
       <section className="py-32 bg-primary-100 clip-diagonal-reverse" id="services">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
           <div className="text-center mb-24">
-            <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4">What We Do</h2>
+            <h2 className="text-primary-500 text-base-upper mb-4">What We Do</h2>
             <h3 className="text-display-2 text-neutral-950">Full-Spectrum Services</h3>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="group relative bg-white p-10 hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-500">
-              <div className="w-16 h-16 bg-neutral-950 text-primary-500 flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 transition-transform">
-                <CorporateFare className="text-4xl" />
-              </div>
-              <h4 className="text-display-4 text-neutral-950 mb-4">Commercial TIs</h4>
-              <p className="text-neutral-700 text-sm leading-relaxed mb-8 font-medium">Expert build-outs and improvements for retail, office, and industrial spaces across the corridor.</p>
-              <a className="inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest text-neutral-950 group-hover:text-primary-500 transition-colors" href="#">
-                Learn More <ArrowRightAlt className="text-sm" />
-              </a>
-            </div>
+            <ServiceCard
+              icon={<CorporateFare className="text-4xl" />}
+              title="Commercial TIs"
+              description="Expert build-outs and improvements for retail, office, and industrial spaces across the corridor."
+              link="#commercial-tis"
+              borderColor="primary-500"
+            />
             
-            <div className="group relative bg-white p-10 hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-400">
-              <div className="w-16 h-16 bg-neutral-950 text-primary-500 flex items-center justify-center mb-8 -rotate-3 group-hover:rotate-0 transition-transform">
-                <ElectricBolt className="text-4xl" />
-              </div>
-              <h4 className="text-display-4 text-neutral-950 mb-4">Wiring & Rewiring</h4>
-              <p className="text-neutral-700 text-sm leading-relaxed mb-8 font-medium">Modernizing outdated electrical systems for safety, efficiency, and code compliance.</p>
-              <a className="inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest text-neutral-950 group-hover:text-primary-500 transition-colors" href="#">
-                Learn More <ArrowRightAlt className="text-sm" />
-              </a>
-            </div>
+            <ServiceCard
+              icon={<ElectricBolt className="text-4xl" />}
+              title="Wiring & Rewiring"
+              description="Modernizing outdated electrical systems for safety, efficiency, and code compliance."
+              link="#wiring-rewiring"
+              borderColor="primary-400"
+            />
             
-            <div className="group relative bg-white p-10 hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-500">
-              <div className="w-16 h-16 bg-neutral-950 text-primary-500 flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 transition-transform">
-                <GridView className="text-4xl" />
-              </div>
-              <h4 className="text-display-4 text-neutral-950 mb-4">Panel Upgrades</h4>
-              <p className="text-neutral-700 text-sm leading-relaxed mb-8 font-medium">Support high-demand appliances and ensure modern safety standards with panel replacements.</p>
-              <a className="inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest text-neutral-950 group-hover:text-primary-500 transition-colors" href="#">
-                Learn More <ArrowRightAlt className="text-sm" />
-              </a>
-            </div>
+            <ServiceCard
+              icon={<GridView className="text-4xl" />}
+              title="Panel Upgrades"
+              description="Support high-demand appliances and ensure modern safety standards with panel replacements."
+              link="#panel-upgrades"
+              borderColor="primary-500"
+            />
             
-            <div className="group relative bg-white p-10 hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-400">
-              <div className="w-16 h-16 bg-neutral-950 text-primary-500 flex items-center justify-center mb-8 -rotate-3 group-hover:rotate-0 transition-transform">
-                <Light className="text-4xl" />
-              </div>
-              <h4 className="text-display-4 text-neutral-950 mb-4">Lighting Solutions</h4>
-              <p className="text-neutral-700 text-sm leading-relaxed mb-8 font-medium">Custom LED design, landscape lighting, and smart home lighting controls for security.</p>
-              <a className="inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest text-neutral-950 group-hover:text-primary-500 transition-colors" href="#">
-                Learn More <ArrowRightAlt className="text-sm" />
-              </a>
-            </div>
+            <ServiceCard
+              icon={<Light className="text-4xl" />}
+              title="Lighting Solutions"
+              description="Custom LED design, landscape lighting, and smart home lighting controls for security."
+              link="#lighting-solutions"
+              borderColor="primary-400"
+            />
             
-            <div className="group relative bg-white p-10 hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-500">
-              <div className="w-16 h-16 bg-neutral-950 text-primary-500 flex items-center justify-center mb-8 rotate-3 group-hover:rotate-0 transition-transform">
-                <ChargingStation className="text-4xl" />
-              </div>
-              <h4 className="text-display-4 text-neutral-950 mb-4">EV Chargers</h4>
-              <p className="text-neutral-700 text-sm leading-relaxed mb-8 font-medium">Fast, certified installation of Tesla, JuiceBox, and ChargePoint residential chargers.</p>
-              <a className="inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest text-neutral-950 group-hover:text-primary-500 transition-colors" href="#">
-                Learn More <ArrowRightAlt className="text-sm" />
-              </a>
-            </div>
+            <ServiceCard
+              icon={<ChargingStation className="text-4xl" />}
+              title="EV Chargers"
+              description="Fast, certified installation of Tesla, JuiceBox, and ChargePoint residential chargers."
+              link="#ev-chargers"
+              borderColor="primary-500"
+            />
             
-            <div className="group relative bg-white p-10 hover:-translate-y-2 transition-all duration-300 border-b-8 border-primary-400">
-              <div className="w-16 h-16 bg-neutral-950 text-primary-500 flex items-center justify-center mb-8 -rotate-3 group-hover:rotate-0 transition-transform">
-                <Construction className="text-4xl" />
-              </div>
-              <h4 className="text-display-4 text-neutral-950 mb-4">Emergency Repair</h4>
-              <p className="text-neutral-700 text-sm leading-relaxed mb-8 font-medium">Rapid response for electrical failures and proactive preventative maintenance.</p>
-              <a className="inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest text-neutral-950 group-hover:text-primary-500 transition-colors" href="#">
-                Learn More <ArrowRightAlt className="text-sm" />
-              </a>
-            </div>
+            <ServiceCard
+              icon={<Construction className="text-4xl" />}
+              title="Emergency Repair"
+              description="Rapid response for electrical failures and proactive preventative maintenance."
+              link="#emergency-repair"
+              borderColor="primary-400"
+            />
           </div>
         </div>
       </section>
@@ -270,13 +249,70 @@ export default function HomePage() {
                 label="Get a Free Estimate"
                 href="#estimate"
                 variant="secondary"
-                className="bg-white text-negative-500 font-black px-10 py-5 uppercase tracking-widest text-xs"
+                className="bg-white text-negative-500 text-base-upper px-10 py-5"
               />
               <Button
                 label="Call Us Now"
                 href="tel:5550123456"
-                className="bg-neutral-950 text-white font-black px-10 py-5 uppercase tracking-widest text-xs"
+                className="bg-neutral-950 text-white text-base-upper px-10 py-5"
               />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Meet the Owners Section */}
+      <section className="py-32 bg-neutral-50" id="team">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+            <div className="max-w-xl">
+              <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4">Experts on Site</h2>
+              <h3 className="text-display-2 font-black text-neutral-950 leading-tight">Meet the Owners</h3>
+            </div>
+            <p className="text-neutral-700 font-medium max-w-sm border-l-4 border-primary-500 pl-6">Licensed Electrical Contractors with decades of combined experience in Puget Sound.</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Rob Konen */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-neutral-950 rotate-1 group-hover:rotate-0 transition-transform"></div>
+              <div className="relative bg-white p-8 flex flex-col sm:flex-row gap-8 items-center border border-neutral-950/10">
+                <div className="w-40 h-40 bg-neutral-200 flex-shrink-0 overflow-hidden skew-x-3">
+                  <img 
+                    alt="Rob Konen" 
+                    className="w-full h-full object-cover -skew-x-3 grayscale group-hover:grayscale-0 transition-all duration-500 scale-110" 
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuC54c9kdYvsNlkyXjT6z6v8p3uOypYBLFZdsDaf0NhjD2tHmxfM4Ao6LeGpm5VZ0NKoyjuigsjc-ed6yeqEa8CqePwCtOAibYOM0Yu6b9vm9Q_vkJI8FUrQlvugOCrGNtMaOEL4_WaR9E73rez8DtYP7OxcrN-PijxJk_BgV_PcGXKj4in-8bauVmApyMoIEBCVjdz3HRcB3deKvBTWbFLUndFMYQNA5QpLLNTNXoQ4riooneUKIo0JBlH3oqq_ce9RCC3EpDzJ4yg"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-display-4 font-black text-neutral-950">Rob Konen</h4>
+                  <p className="text-primary-500 text-[10px] font-black uppercase tracking-widest mb-6">Co-Owner / Lead Electrician</p>
+                  <button className="bg-primary-500 text-neutral-950 font-black text-[10px] uppercase tracking-widest px-6 py-3 shadow-[4px_4px_0px_0px_rgba(49,36,7,1)] hover:shadow-none transition-all">
+                    Contact Rob
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Matt Cheshier */}
+            <div className="relative group">
+              <div className="absolute inset-0 bg-neutral-950 -rotate-1 group-hover:rotate-0 transition-transform"></div>
+              <div className="relative bg-white p-8 flex flex-col sm:flex-row gap-8 items-center border border-neutral-950/10">
+                <div className="w-40 h-40 bg-neutral-200 flex-shrink-0 overflow-hidden -skew-x-3">
+                  <img 
+                    alt="Matt Cheshier" 
+                    className="w-full h-full object-cover skew-x-3 grayscale group-hover:grayscale-0 transition-all duration-500 scale-110" 
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA55VjAPh4_ZCfHXxXV-c7UXvxIRs5VVjoFXxXDNt_pfU8X9phwqNLyJOyfoy0AMqmqJlfo8HhC-ujqxC26Q6T8eu-qjL8vcQy9fyt9eSg3upZk8PSSU00XG682KplKgi5SRmHizj2u8TOlzCtisOB3NtQ-PMYaEm_cCROFJN8R9mxteqDkF7TW7VugQnpQGkZTJtQfmLIIqWVd3j0sR_oFrO8GAZhcnqy54auas5usMWNQubl1bIDluGq_OOmxBIXkGeBZ8L7b6Ls"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-display-4 font-black text-neutral-950">Matt Cheshier</h4>
+                  <p className="text-primary-500 text-[10px] font-black uppercase tracking-widest mb-6">Co-Owner / Lead Electrician</p>
+                  <button className="bg-primary-500 text-neutral-950 font-black text-[10px] uppercase tracking-widest px-6 py-3 shadow-[4px_4px_0px_0px_rgba(49,36,7,1)] hover:shadow-none transition-all">
+                    Contact Matt
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -26,12 +26,12 @@ export default function Header() {
       <div className="justify-between px-4 sm:px-8 py-0 flex-[0_0_auto] bg-neutral-950 flex items-center relative self-stretch w-full border-b border-neutral-200">
         <div className="inline-flex items-center gap-2 sm:gap-4 relative flex-[0_0_auto]">
           <span
-            className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small-upper text-white whitespace-nowrap text-xs sm:text-[10px]"
+            className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small-bold  text-white whitespace-nowrap"
             aria-label="Service area"
           >
-            SERVICE AREA
+            Service Area
           </span>
-          <span className="hidden sm:inline-flex relative items-center justify-center w-fit text-small-bold text-white whitespace-nowrap">
+          <span className="hidden sm:inline-flex relative items-center justify-center w-fit text-small text-white whitespace-nowrap">
             Tacoma — Skagit Valley
           </span>
         </div>
@@ -64,18 +64,18 @@ export default function Header() {
         <div className="flex max-w-[1440px] items-center justify-between gap-4 sm:gap-6 relative w-full p-4">
           {/* Logo section */}
           <div className="inline-flex items-center gap-3 sm:gap-6 relative flex-[0_0_auto]">
-            <Link href="#home" aria-label="CK Electric home" className="relative w-[100px] h-[72px] bg-neutral-300 rounded flex items-center justify-center">
+            <Link href="#home" aria-label="CK Electric home" className="relative w-[50px] h-[36px] bg-neutral-300 rounded flex items-center justify-center">
               {/* Logo placeholder - replace with actual logo */}
-              <span className="text-neutral-950 font-bold text-sm sm:text-base">CK</span>
+              <span className="text-base text-neutral-950 whitespace-nowrap">CK</span>
             </Link>
             <div className="hidden sm:inline-flex items-start flex-col relative flex-[0_0_auto]">
               <div className="flex items-start self-stretch w-full flex-col relative flex-[0_0_auto]">
-                <span className="relative flex items-center justify-center w-fit mt-[-1.00px] text-medium text-neutral-950 whitespace-nowrap">
+                <span className="relative flex items-center justify-center w-fit mt-[-1.00px] text-base-bold text-neutral-950 whitespace-nowrap">
                   CK ELECTRIC
                 </span>
               </div>
               <div className="flex items-start self-stretch w-full flex-col relative flex-[0_0_auto]">
-                <span className="relative flex items-center justify-center w-fit mt-[-1.00px] text-display-5-upper text-primary-500 whitespace-nowrap">
+                <span className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small text-primary-500 whitespace-nowrap">
                   PUGET SOUND
                 </span>
               </div>
@@ -90,7 +90,7 @@ export default function Header() {
                   href={item.href}
                   onClick={() => setActiveNav(item.label)}
                   className={`inline-flex items-center gap-2 p-2 flex-[0_0_auto] rounded-lg justify-center relative transition-colors ${
-                    activeNav === item.label ? "bg-primary-300" : "hover:bg-primary-300"
+                    activeNav === item.label ? "bg-primary-200" : "hover:bg-primary-100"
                   }`}
                   aria-current={activeNav === item.label ? "page" : undefined}
                 >
@@ -102,12 +102,13 @@ export default function Header() {
             ))}
           </ul>
 
-          {/* Desktop Contact section */}
+          <div className="hidden lg:flex items-center gap-4">
+            {/* Desktop Contact section */}
           <div className="hidden lg:inline-flex flex-col items-center justify-center relative flex-[0_0_auto]">
             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
               <a
                 href="tel:5550123456"
-                className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small-bold text-neutral-950 whitespace-nowrap hover:underline"
+                className="relative flex items-center justify-center w-fit mt-[-1.00px] text-base-bold text-neutral-950 whitespace-nowrap hover:underline"
                 aria-label="Call us at (555) 012-3456"
               >
                 (555) 012-3456
@@ -125,6 +126,7 @@ export default function Header() {
             />
           </div>
 
+          </div>
           {/* Mobile menu button */}
           <button
             className="lg:hidden inline-flex items-center justify-center p-2 rounded-lg hover:bg-primary-300 transition-colors"
@@ -139,7 +141,7 @@ export default function Header() {
           </button>
         </div>
 
-        </header>
+      </header>
 
       {/* Mobile Side Overlay Menu */}
       {mobileMenuOpen && (
@@ -157,13 +159,13 @@ export default function Header() {
               <div className="flex items-center justify-between p-4 border-b border-neutral-200">
                 <div className="inline-flex items-center gap-3">
                   <div className="w-[60px] h-[40px] bg-neutral-300 rounded flex items-center justify-center">
-                    <span className="text-neutral-950 font-bold text-sm">CK</span>
+                    <span className="text-base text-neutral-950 whitespace-nowrap">CK</span>
                   </div>
                   <div className="inline-flex items-start flex-col">
                     <span className="text-medium text-neutral-950 whitespace-nowrap">
-                      CK ELECTRIC
+                      CK Electric
                     </span>
-                    <span className="text-display-5-upper text-primary-500 whitespace-nowrap text-xs">
+                    <span className="text-display-5-upper text-primary-500 whitespace-nowrap">
                       PUGET SOUND
                     </span>
                   </div>
@@ -214,7 +216,7 @@ export default function Header() {
                     />
                     <a
                       href="mailto:hello@ckelectric.com"
-                      className="text-small-bold text-neutral-950 whitespace-nowrap hover:underline"
+                      className="text-base-bold text-neutral-950 whitespace-nowrap hover:underline"
                       aria-label="Email us at hello@ckelectric.com"
                     >
                       hello@ckelectric.com
@@ -229,7 +231,7 @@ export default function Header() {
                     />
                     <a
                       href="tel:5550123456"
-                      className="text-small-bold text-neutral-950 whitespace-nowrap hover:underline"
+                      className="text-base-bold text-neutral-950 whitespace-nowrap hover:underline"
                       aria-label="Call us at (555) 012-3456"
                     >
                       (555) 012-3456

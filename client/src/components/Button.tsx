@@ -21,7 +21,7 @@ export default function Button({
   ariaLabel,
   className = '',
 }: ButtonProps) {
-  const baseClasses = "inline-flex items-center gap-2 px-6 py-3 relative flex-[0_0_auto] transition-all cursor-pointer rounded";
+  const baseClasses = "inline-flex items-center justify-center gap-2 px-6 py-3 relative flex-[0_0_auto] transition-all cursor-pointer rounded";
   
   const variantClasses = {
     primary: "bg-primary-500 shadow-[4px_4px_0px_var(--color-primary-900)] hover:shadow-[2px_2px_0px_var(--color-primary-900)] hover:translate-x-[2px] hover:translate-y-[2px]",
