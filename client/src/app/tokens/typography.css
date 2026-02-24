@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+:root {
+  /* Typography */
+  --font-display: "Playfair Display";
+  --font-display-1-size: 96px;
+  --font-display-1-line-height: 1.2;
+  --font-display-1-letter-spacing: -4.8px;
+  --font-display-1-weight: 900;
+  
+  --font-display-1-underline-size: 96px;
+  --font-display-1-underline-line-height: 1.2;
+  --font-display-1-underline-letter-spacing: -1.2px;
+  --font-display-1-underline-weight: 900;
+  --font-display-1-underline-style: italic;
+  
+  --font-display-2-size: 48px;
+  --font-display-2-line-height: 1.2;
+  --font-display-2-letter-spacing: 0px;
+  --font-display-2-weight: 900;
+  
+  --font-display-2-italic-size: 48px;
+  --font-display-2-italic-line-height: 1.2;
+  --font-display-2-italic-letter-spacing: 0px;
+  --font-display-2-italic-weight: 900;
+  --font-display-2-italic-style: italic;
+  
+  --font-display-3-size: 32px;
+  --font-display-3-line-height: 1.2;
+  --font-display-3-letter-spacing: 0px;
+  --font-display-3-weight: 900;
+  
+  --font-display-3-italic-size: 32px;
+  --font-display-3-italic-line-height: 1.2;
+  --font-display-3-italic-letter-spacing: 0px;
+  --font-display-3-italic-weight: 900;
+  --font-display-3-italic-style: italic;
+  
+  --font-display-4-size: 24px;
+  --font-display-4-line-height: 1.2;
+  --font-display-4-letter-spacing: -0.5px;
+  --font-display-4-weight: 900;
+  
+  --font-regular-italic-size: 24px;
+  --font-regular-italic-line-height: 1.2;
+  --font-regular-italic-letter-spacing: 0px;
+  --font-regular-italic-weight: 400;
+  --font-regular-italic-style: italic;
+  
+  --font-display-5-size: 16px;
+  --font-display-5-line-height: 1.2;
+  --font-display-5-letter-spacing: 4.8px;
+  --font-display-5-weight: 900;
+  
+  --font-display-5-upper-size: 16px;
+  --font-display-5-upper-line-height: 1.2;
+  --font-display-5-upper-letter-spacing: 4.8px;
+  --font-display-5-upper-weight: 900;
+  --font-display-5-upper-text-transform: uppercase;
+  
+  /* Inter Typography */
+  --font-inter: "Inter";
+  --font-large-size: 32px;
+  --font-large-line-height: 1.5;
+  --font-large-letter-spacing: 0px;
+  --font-large-weight: 500;
+  
+  --font-medium-size: 24px;
+  --font-medium-line-height: 1.5;
+  --font-medium-letter-spacing: 0px;
+  --font-medium-weight: 500;
+  
+  --font-base-upper-size: 16px;
+  --font-base-upper-line-height: 1.5;
+  --font-base-upper-letter-spacing: 1px;
+  --font-base-upper-weight: 900;
+  --font-base-upper-text-transform: uppercase;
+  
+  --font-base-size: 16px;
+  --font-base-line-height: 1.5;
+  --font-base-letter-spacing: 0px;
+  --font-base-weight: 500;
+  
+  --font-base-bold-size: 16px;
+  --font-base-bold-line-height: 1.5;
+  --font-base-bold-letter-spacing: 0px;
+  --font-base-bold-weight: 700;
+  
+  --font-small-size: 14px;
+  --font-small-line-height: 1.5;
+  --font-small-letter-spacing: 0px;
+  --font-small-weight: 400;
+  
+  --font-small-bold-size: 14px;
+  --font-small-bold-line-height: 1.5;
+  --font-small-bold-letter-spacing: 0px;
+  --font-small-bold-weight: 700;
+  
+  --font-small-upper-size: 14px;
+  --font-small-upper-line-height: 1.5;
+  --font-small-upper-letter-spacing: 1.4px;
+  --font-small-upper-weight: 700;
+  --font-small-upper-text-transform: uppercase;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  
+  /* Typography Utilities */
+  --text-display-1: var(--font-display) 900 / 1.2;
+  --text-display-1-underline: var(--font-display) 900 italic / 1.2;
+  --text-display-2: var(--font-display) 900 / 1.2;
+  --text-display-2-italic: var(--font-display) 900 italic / 1.2;
+  --text-display-3: var(--font-display) 900 / 1.2;
+  --text-display-3-italic: var(--font-display) 900 italic / 1.2;
+  --text-display-4: var(--font-display) 900 / 1.2;
+  --text-regular-italic: var(--font-display) 400 italic / 1.2;
+  --text-display-5: var(--font-display) 900 / 1.2;
+  --text-display-5-upper: var(--font-display) 900 / 1.2;
+  
+  /* Inter Typography Utilities */
+  --text-large: var(--font-inter) 500 / 1.5;
+  --text-medium: var(--font-inter) 500 / 1.5;
+  --text-base-upper: var(--font-inter) 900 / 1.5;
+  --text-base: var(--font-inter) 500 / 1.5;
+  --text-base-bold: var(--font-inter) 700 / 1.5;
+  --text-small: var(--font-inter) 400 / 1.5;
+  --text-small-bold: var(--font-inter) 700 / 1.5;
+  --text-small-upper: var(--font-inter) 700 / 1.5;
+}

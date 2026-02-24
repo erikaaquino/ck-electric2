@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  
+  /* Neutral Colors */
+  --color-neutral-50: #f8f8f7;
+  --color-neutral-100: #e8e7e6;
+  --color-neutral-200: #d7d6d4;
+  --color-neutral-300: #c5c3c0;
+  --color-neutral-400: #b4b3ae;
+  --color-neutral-500: #96938e;
+  --color-neutral-600: #737068;
+  --color-neutral-700: #504c42;
+  --color-neutral-800: #454035;
+  --color-neutral-900: #2d281c;
+  --color-neutral-950: #161003;
+  
+  /* Primary Colors */
+  --color-primary-50: #FCF6E9;
+  --color-primary-100: #F9EED7;
+  --color-primary-200: #F3DDAF;
+  --color-primary-300: #EDCD88;
+  --color-primary-400: #E6BC60;
+  --color-primary-500: #E0AA36;
+  --color-primary-600: #C28E1E;
+  --color-primary-700: #926B16;
+  --color-primary-800: #61470F;
+  --color-primary-900: #312407;
+  --color-primary-950: #161003;
+  
+  /* Positive Colors */
+  --color-positive-50: #E6FAEE;
+  --color-positive-100: #D0F5E1;
+  --color-positive-200: #A2ECC2;
+  --color-positive-300: #73E2A4;
+  --color-positive-400: #45D985;
+  --color-positive-500: #27BE69;
+  --color-positive-600: #1F9854;
+  --color-positive-700: #17723F;
+  --color-positive-800: #104C2A;
+  --color-positive-900: #082615;
+  --color-positive-950: #031109;
+  
+  /* Negative Colors */
+  --color-negative-50: #FEECEE;
+  --color-negative-100: #FCD9DE;
+  --color-negative-200: #FAB3BD;
+  --color-negative-300: #F78C9C;
+  --color-negative-400: #F5667A;
+  --color-negative-500: #F2415A;
+  --color-negative-600: #E5102E;
+  --color-negative-700: #AC0C22;
+  --color-negative-800: #730817;
+  --color-negative-900: #39040B;
+  --color-negative-950: #1D0206;
+  
+  /* Warning Colors */
+  --color-warning-50: #FFF8E5;
+  --color-warning-100: #FFF3D1;
+  --color-warning-200: #FFE59E;
+  --color-warning-300: #FFD970;
+  --color-warning-400: #FFCB3D;
+  --color-warning-500: #FFBF0F;
+  --color-warning-600: #D69D00;
+  --color-warning-700: #A37800;
+  --color-warning-800: #6B4F00;
+  --color-warning-900: #382900;
+  --color-warning-950: #1A1300;
+  
+  /* Info Colors */
+  --color-info-50: #EBEFFF;
+  --color-info-100: #D6E0FF;
+  --color-info-200: #A8BDFF;
+  --color-info-300: #809DFF;
+  --color-info-400: #527AFF;
+  --color-info-500: #295BFF;
+  --color-info-600: #0037EB;
+  --color-info-700: #002AB3;
+  --color-info-800: #001B75;
+  --color-info-900: #000E3D;
+  --color-info-950: #00071F;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  /* Neutral Colors */
+  --color-neutral-50: var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-300: var(--color-neutral-300);
+  --color-neutral-400: var(--color-neutral-400);
+  --color-neutral-500: var(--color-neutral-500);
+  --color-neutral-600: var(--color-neutral-600);
+  --color-neutral-700: var(--color-neutral-700);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-900: var(--color-neutral-900);
+  --color-neutral-950: var(--color-neutral-950);
+  
+  /* Primary Colors */
+  --color-primary-50: var(--color-primary-50);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+  --color-primary-950: var(--color-primary-950);
+  
+  /* Positive Colors */
+  --color-positive-50: var(--color-positive-50);
+  --color-positive-100: var(--color-positive-100);
+  --color-positive-200: var(--color-positive-200);
+  --color-positive-300: var(--color-positive-300);
+  --color-positive-400: var(--color-positive-400);
+  --color-positive-500: var(--color-positive-500);
+  --color-positive-600: var(--color-positive-600);
+  --color-positive-700: var(--color-positive-700);
+  --color-positive-800: var(--color-positive-800);
+  --color-positive-900: var(--color-positive-900);
+  --color-positive-950: var(--color-positive-950);
+  
+  /* Negative Colors */
+  --color-negative-50: var(--color-negative-50);
+  --color-negative-100: var(--color-negative-100);
+  --color-negative-200: var(--color-negative-200);
+  --color-negative-300: var(--color-negative-300);
+  --color-negative-400: var(--color-negative-400);
+  --color-negative-500: var(--color-negative-500);
+  --color-negative-600: var(--color-negative-600);
+  --color-negative-700: var(--color-negative-700);
+  --color-negative-800: var(--color-negative-800);
+  --color-negative-900: var(--color-negative-900);
+  --color-negative-950: var(--color-negative-950);
+  
+  /* Warning Colors */
+  --color-warning-50: var(--color-warning-50);
+  --color-warning-100: var(--color-warning-100);
+  --color-warning-200: var(--color-warning-200);
+  --color-warning-300: var(--color-warning-300);
+  --color-warning-400: var(--color-warning-400);
+  --color-warning-500: var(--color-warning-500);
+  --color-warning-600: var(--color-warning-600);
+  --color-warning-700: var(--color-warning-700);
+  --color-warning-800: var(--color-warning-800);
+  --color-warning-900: var(--color-warning-900);
+  --color-warning-950: var(--color-warning-950);
+  
+  /* Info Colors */
+  --color-info-50: var(--color-info-50);
+  --color-info-100: var(--color-info-100);
+  --color-info-200: var(--color-info-200);
+  --color-info-300: var(--color-info-300);
+  --color-info-400: var(--color-info-400);
+  --color-info-500: var(--color-info-500);
+  --color-info-600: var(--color-info-600);
+  --color-info-700: var(--color-info-700);
+  --color-info-800: var(--color-info-800);
+  --color-info-900: var(--color-info-900);
+  --color-info-950: var(--color-info-950);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
