@@ -112,6 +112,16 @@
   letter-spacing: var(--font-display-1-letter-spacing);
 }
 
+@media (min-width: 768px) {
+  .md\:text-display-1 {
+    font-family: var(--font-display) !important;
+    font-size: var(--font-display-1-size) !important;
+    line-height: var(--font-display-1-line-height) !important;
+    font-weight: var(--font-display-1-weight) !important;
+    letter-spacing: var(--font-display-1-letter-spacing) !important;
+  }
+}
+
 .text-display-1-underline {
   font-family: var(--font-display);
   font-size: var(--font-display-1-underline-size);
@@ -254,4 +264,46 @@
   font-weight: var(--font-small-upper-weight);
   letter-spacing: var(--font-small-upper-letter-spacing);
   text-transform: var(--font-small-upper-text-transform);
+}
+
+/* Hero Title Responsive Styles */
+.hero-title {
+  font-family: var(--font-display);
+  font-size: var(--font-display-2-size);
+  line-height: var(--font-display-2-line-height);
+  font-weight: var(--font-display-2-weight);
+  letter-spacing: var(--font-display-2-letter-spacing);
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: var(--font-display-1-size) !important;
+    line-height: var(--font-display-1-line-height) !important;
+    letter-spacing: var(--font-display-1-letter-spacing) !important;
+  }
+}
+
+/* Section Title Responsive Styles */
+.about-title,
+.services-title,
+.team-title,
+.portfolio-title,
+.testimonials-title {
+  font-family: var(--font-display);
+  font-size: var(--font-display-3-size);
+  line-height: var(--font-display-3-line-height);
+  font-weight: var(--font-display-3-weight);
+  letter-spacing: var(--font-display-3-letter-spacing);
+}
+
+@media (min-width: 768px) {
+  .about-title,
+  .services-title,
+  .team-title,
+  .portfolio-title,
+  .testimonials-title {
+    font-size: var(--font-display-2-size) !important;
+    line-height: var(--font-display-2-line-height) !important;
+    letter-spacing: var(--font-display-2-letter-spacing) !important;
+  }
 }

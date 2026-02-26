@@ -209,7 +209,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         // Content Section Props
         contentTitle="Project Overview"
         content={
-          <div className="space-y-4 text-neutral-600 text-medium leading-relaxed">
+          <div className="space-y-4 text-neutral-600 text-base leading-relaxed">
             {project.projectFields?.mainContentSection ? (
               <div dangerouslySetInnerHTML={{ __html: project.projectFields.mainContentSection }} />
             ) : (

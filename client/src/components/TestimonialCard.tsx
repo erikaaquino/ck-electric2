@@ -24,8 +24,8 @@ export default function TestimonialCard({
         {quote}
       </p>
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-neutral-950 flex items-center justify-center font-black text-primary-500 rotate-45">
-          <span className="-rotate-45">{initials}</span>
+        <div className="w-12 h-12 bg-neutral-950 rounded-full flex items-center justify-center font-black text-primary-500">
+          <span>{initials}</span>
         </div>
         <div>
           <p className="text-neutral-950 font-black uppercase text-xs tracking-widest">{clientName}</p>

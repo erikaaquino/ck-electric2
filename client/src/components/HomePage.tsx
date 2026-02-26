@@ -30,7 +30,7 @@ export default function HomePage() {
               Direct Access to Licensed Experts
             </div>
             
-            <h1 className="text-display-1 text-neutral-950 leading-[0.9] mb-8 tracking-tighter">
+            <h1 className="hero-title text-neutral-950 leading-[0.9] mb-8 tracking-tighter font-bold">
               Efficiency and <br/>
               <span className="text-primary-500 italic underline decoration-primary-400">Quality.</span>
             </h1>
@@ -39,7 +39,7 @@ export default function HomePage() {
               Talk directly with a licensed electrician. No call centers, no middlemen. Fast response and industrial-grade quality for every project.
             </p>
             
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap md:flex-col gap-6">
               <div className="flex items-center gap-4 bg-white/50 backdrop-blur-sm p-4 border-l-4 border-primary-500">
                 <Verified className="text-primary-500 text-4xl" />
                 <div>
@@ -147,7 +147,7 @@ export default function HomePage() {
             
             <div className="w-full md:w-1/2">
               <h2 className="text-primary-500 text-base-upper mb-4">No Middlemen. No Mess.</h2>
-              <h3 className="text-display-2 text-neutral-950 mb-8 leading-tight">
+              <h3 className="about-title text-neutral-950 mb-8 leading-tight">
                 Locally Owned & <br/>Expertly Operated
               </h3>
               
@@ -175,6 +175,14 @@ export default function HomePage() {
                     Puget Sound Focused
                   </li>
                 </ul>
+                
+                <div className="pt-8">
+                  <Button
+                    label="Request Estimate"
+                    variant="primary"
+                    href="/request-estimate"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -185,8 +193,8 @@ export default function HomePage() {
       <section className="py-32 bg-primary-100 clip-diagonal-reverse" id="services">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
           <div className="text-center mb-24">
-            <h2 className="text-primary-500 text-base-upper mb-4">What We Do</h2>
-            <h3 className="text-display-2 text-neutral-950">Full-Spectrum Services</h3>
+            <h2 className="text-primary-500 text-base-upper mb-4 md:text-lg lg:text-xl">What We Do</h2>
+            <h3 className="services-title text-neutral-950 text-lg md:text-2xl lg:text-3xl">Full-Spectrum Services</h3>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -232,6 +240,14 @@ export default function HomePage() {
               link="#emergency-repair"
             />
           </div>
+          
+          <div className="text-center mt-16">
+            <Button
+              label="View All Services"
+              variant="secondary"
+              href="/services"
+            />
+          </div>
         </div>
       </section>
 
@@ -240,12 +256,12 @@ export default function HomePage() {
       {/* Meet the Owners Section */}
       <section className="py-32 bg-neutral-50" id="team">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
-            <div className="max-w-xl">
-              <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4">Experts on Site</h2>
-              <h3 className="text-display-2 font-black text-neutral-950 leading-tight">Meet the Owners</h3>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8 text-center md:text-left">
+            <div className="max-w-xl mx-auto md:mx-0">
+              <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4 md:text-sm lg:text-base">Experts on Site</h2>
+              <h3 className="team-title text-neutral-950 text-lg md:text-2xl lg:text-3xl">Meet the Owners</h3>
             </div>
-            <p className="text-neutral-700 font-medium max-w-sm border-l-4 border-primary-500 pl-6">Licensed Electrical Contractors with decades of combined experience in Puget Sound.</p>
+            <p className="text-neutral-700 font-medium max-w-sm border-l-4 border-primary-500 pl-6 mx-auto md:mx-0">Licensed Electrical Contractors with decades of combined experience in Puget Sound.</p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-12">
@@ -298,8 +314,8 @@ export default function HomePage() {
       <section className="py-32 bg-neutral-950" id="projects">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-24">
-            <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4">Our Portfolio</h2>
-            <h3 className="text-display-2 font-black text-white italic">Featured Work</h3>
+            <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4 md:text-sm lg:text-base">Our Portfolio</h2>
+            <h3 className="portfolio-title text-white italic text-lg md:text-2xl lg:text-3xl">Featured Work</h3>
           </div>
           
           <div className="grid md:grid-cols-3 gap-0">
@@ -325,6 +341,14 @@ export default function HomePage() {
               position="bottom"
             />
           </div>
+          
+          <div className="text-center mt-16">
+            <Button
+              label="See Full Portfolio"
+              variant="secondary"
+              href="/projects"
+            />
+          </div>
         </div>
       </section>
 
@@ -332,8 +356,8 @@ export default function HomePage() {
       <section className="py-32 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center text-center mb-24">
-            <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4">Client Feedback</h2>
-            <h3 className="text-display-2 font-black text-neutral-950">What They Say</h3>
+            <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4 md:text-sm lg:text-base">Client Feedback</h2>
+            <h3 className="testimonials-title text-neutral-950 text-lg md:text-2xl lg:text-3xl">What They Say</h3>
           </div>
           
           <div className="grid md:grid-cols-2 gap-12">
