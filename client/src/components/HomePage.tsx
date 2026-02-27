@@ -17,7 +17,7 @@ export default async function HomePage() {
   
   try {
     const response = await fetchWordPressGraphQL(GET_LANDING_PAGE);
-    landingPageData = response.data;
+    landingPageData = response.data as LandingPageData;
   } catch (error) {
     console.error('Error fetching landing page data:', error);
   }
