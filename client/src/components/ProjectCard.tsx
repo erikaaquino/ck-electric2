@@ -20,8 +20,8 @@ export default function ProjectCard({
   link
 }: ProjectCardProps) {
   return (
-    <a href={link} className="block group">
-      <article className="flex flex-col h-full bg-white transition-all">
+    <article className="flex flex-col h-full bg-white transition-all group cursor-pointer hover:shadow-lg">
+      <a href={link} className="block group">
         <div className="aspect-video bg-neutral-100 rounded-lg overflow-hidden mb-6 relative border border-neutral-200">
           <img 
             alt="Project image" 
@@ -50,10 +50,9 @@ export default function ProjectCard({
             label="View Project"
             icon={<ArrowRightAlt />}
             variant="tertiary"
-            href={link}
           />
         </div>
-      </article>
-    </a>
+      </a>
+    </article>
   );
 }

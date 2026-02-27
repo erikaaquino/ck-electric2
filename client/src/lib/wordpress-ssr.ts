@@ -8,7 +8,7 @@ export async function fetchWordPressGraphQL<T>(
   query: string,
   variables?: Record<string, any>
 ): Promise<T | null> {
-  const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_ENDPOINT;
+  const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
   
   console.log('🔍 [GraphQL] Iniciando llamada...');
   console.log('📍 [GraphQL] Endpoint:', endpoint);

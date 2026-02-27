@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import HeaderClient from "@/components/HeaderClient";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MuiProvider from "@/components/MuiProvider";
 
@@ -36,8 +36,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
       >
+        <Header />
         <MuiProvider>
-          <HeaderClient />
           <main>
             {children}
           </main>

@@ -1,13 +1,73 @@
-import { useState } from "react";
+'use client';
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Button from "./Button";
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import { fetchWordPressGraphQL } from '../lib/wordpress-graphql';
+import { GET_LANDING_PAGE, LandingPageData } from '../lib/wordpress-queries';
+
+interface CompanyLogo {
+  node: {
+    link: string;
+    mediaItemUrl: string;
+    description: string | null;
+    altText: string;
+  };
+}
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [headerData, setHeaderData] = useState({
+    serviceArea: "Not Available",
+    slogan: "Not Available", 
+    contactEmail: "Not Available",
+    contactPhone: "Not Available",
+    companyLogo: null as CompanyLogo | null,
+    loading: true
+  });
+
+  // Fetch WordPress data on component mount
+  useEffect(() => {
+    async function fetchHeaderData() {
+      console.log('🚀 Header: Fetching WordPress data');
+      
+      try {
+        const response = await fetchWordPressGraphQL(GET_LANDING_PAGE);
+        const landingPageData = response.data as LandingPageData;
+        
+        if (landingPageData?.page?.landingPage?.headerInfo) {
+          const { serviceArea, slogan, contactEmail, contactPhoneNumber, companyLogo } = landingPageData.page.landingPage.headerInfo;
+          
+          setHeaderData({
+            serviceArea: serviceArea || "Not Available",
+            slogan: slogan || "Not Available",
+            contactEmail: contactEmail || "Not Available", 
+            contactPhone: contactPhoneNumber || "Not Available",
+            companyLogo: companyLogo || null,
+            loading: false
+          });
+          
+          console.log('🎨 Header: Data loaded successfully:', {
+            serviceArea,
+            slogan,
+            contactEmail,
+            contactPhone,
+            hasCompanyLogo: !!companyLogo,
+            companyLogoUrl: companyLogo?.node?.mediaItemUrl
+          });
+        }
+      } catch (error) {
+        console.error('❌ Header: Error fetching WordPress data:', error);
+        setHeaderData(prev => ({ ...prev, loading: false }));
+      }
+    }
+
+    fetchHeaderData();
+  }, []);
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -16,6 +76,8 @@ export default function Header() {
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ];
+
+  const { serviceArea, slogan, contactEmail, contactPhone, companyLogo, loading } = headerData;
 
   return (
     <nav className="flex flex-col w-full items-start relative" role="navigation" aria-label="Main navigation">
@@ -29,7 +91,7 @@ export default function Header() {
             Service Area
           </span>
           <span className="hidden sm:inline-flex relative items-center justify-center w-fit text-small text-white whitespace-nowrap">
-            Tacoma — Skagit Valley
+            {loading ? "Loading..." : serviceArea}
           </span>
         </div>
         <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
@@ -46,11 +108,11 @@ export default function Header() {
           </div>
           <div className="hidden sm:inline-flex items-start flex-col relative flex-[0_0_auto]">
             <a
-              href="mailto:hello@ckelectric.com"
+              href={`mailto:${contactEmail}`}
               className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small-bold text-white whitespace-nowrap hover:underline"
-              aria-label="Email us at hello@ckelectric.com"
+              aria-label={`Email us at ${contactEmail}`}
             >
-              hello@ckelectric.com
+              {loading ? "Loading..." : contactEmail}
             </a>
           </div>
         </div>
@@ -61,9 +123,18 @@ export default function Header() {
         <div className="flex max-w-[1440px] items-center justify-between gap-4 sm:gap-6 relative w-full p-4">
           {/* Logo section */}
           <div className="inline-flex items-center gap-3 sm:gap-6 relative flex-[0_0_auto]">
-            <Link href="/" aria-label="CK Electric home" className="relative w-[50px] h-[36px] bg-neutral-300 rounded flex items-center justify-center">
-              {/* Logo placeholder - replace with actual logo */}
-              <span className="text-base text-neutral-950 whitespace-nowrap">CK</span>
+            <Link href="/" aria-label="CK Electric home" className="relative w-[50px] h-[36px] flex items-center justify-center">
+              {companyLogo?.node?.mediaItemUrl ? (
+                <img 
+                  src={companyLogo.node.mediaItemUrl}
+                  alt={companyLogo.node.altText || "CK Electric Logo"}
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <div className="w-full h-full bg-neutral-300 rounded flex items-center justify-center">
+                  <span className="text-base text-neutral-950 whitespace-nowrap">CK</span>
+                </div>
+              )}
             </Link>
             <div className="hidden sm:inline-flex items-start flex-col relative flex-[0_0_auto]">
               <div className="flex items-start self-stretch w-full flex-col relative flex-[0_0_auto]">
@@ -73,7 +144,7 @@ export default function Header() {
               </div>
               <div className="flex items-start self-stretch w-full flex-col relative flex-[0_0_auto]">
                 <span className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small text-primary-500 whitespace-nowrap">
-                  PUGET SOUND
+                  {loading ? "Loading..." : slogan}
                 </span>
               </div>
             </div>
@@ -100,11 +171,11 @@ export default function Header() {
           <div className="hidden lg:inline-flex flex-col items-center justify-center relative flex-[0_0_auto]">
             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
               <a
-                href="tel:5550123456"
+                href={`tel:${contactPhone}`}
                 className="relative flex items-center justify-center w-fit mt-[-1.00px] text-base-bold text-neutral-950 whitespace-nowrap hover:underline"
-                aria-label="Call us at (555) 012-3456"
+                aria-label={`Call us at ${contactPhone}`}
               >
-                (555) 012-3456
+                {loading ? "Loading..." : contactPhone}
               </a>
             </div>
           </div>
@@ -114,8 +185,8 @@ export default function Header() {
             <Button
               label="Call Now"
               icon={<PhoneIcon sx={{ color: 'rgb(38, 38, 38)', fontSize: '16px' }} />}
-              href="tel:5550123456"
-              ariaLabel="Call now at (555) 012-3456"
+              href={`tel:${contactPhone}`}
+              ariaLabel={`Call now at ${contactPhone}`}
             />
           </div>
 
@@ -151,15 +222,25 @@ export default function Header() {
               {/* Menu Header */}
               <div className="flex items-center justify-between p-4 border-b border-neutral-200">
                 <div className="inline-flex items-center gap-3">
-                  <div className="w-[60px] h-[40px] bg-neutral-300 rounded flex items-center justify-center">
-                    <span className="text-base text-neutral-950 whitespace-nowrap">CK</span>
-                  </div>
+                  {companyLogo?.node?.mediaItemUrl ? (
+                    <div className="w-[60px] h-[40px] flex items-center justify-center">
+                      <img 
+                        src={companyLogo.node.mediaItemUrl}
+                        alt={companyLogo.node.altText || "CK Electric Logo"}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-[60px] h-[40px] bg-neutral-300 rounded flex items-center justify-center">
+                      <span className="text-base text-neutral-950 whitespace-nowrap">CK</span>
+                    </div>
+                  )}
                   <div className="inline-flex items-start flex-col">
                     <span className="text-medium text-neutral-950 whitespace-nowrap">
                       CK Electric
                     </span>
                     <span className="text-display-5-upper text-primary-500 whitespace-nowrap">
-                      PUGET SOUND
+                      {loading ? "Loading..." : slogan}
                     </span>
                   </div>
                 </div>
@@ -191,47 +272,31 @@ export default function Header() {
                 </ul>
               </nav>
 
-              {/* Contact Section */}
-              <div className="border-t border-neutral-200 p-4 space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <EmailIcon 
-                      sx={{ 
-                        color: 'rgb(38, 38, 38)', 
-                        fontSize: '20px'
-                      }} 
-                    />
-                    <a
-                      href="mailto:hello@ckelectric.com"
-                      className="text-base-bold text-neutral-950 whitespace-nowrap hover:underline"
-                      aria-label="Email us at hello@ckelectric.com"
-                    >
-                      hello@ckelectric.com
-                    </a>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <PhoneIcon 
-                      sx={{ 
-                        color: 'rgb(38, 38, 38)', 
-                        fontSize: '20px'
-                      }} 
-                    />
-                    <a
-                      href="tel:5550123456"
-                      className="text-base-bold text-neutral-950 whitespace-nowrap hover:underline"
-                      aria-label="Call us at (555) 012-3456"
-                    >
-                      (555) 012-3456
-                    </a>
-                  </div>
+              {/* Mobile Contact Section */}
+              <div className="p-4 border-t border-neutral-200">
+                <div className="space-y-4">
+                  <a
+                    href={`tel:${contactPhone}`}
+                    className="flex items-center gap-3 text-neutral-950 hover:text-primary-500 transition-colors"
+                  >
+                    <PhoneIcon sx={{ fontSize: '20px' }} />
+                    <span className="text-base-bold">{loading ? "Loading..." : contactPhone}</span>
+                  </a>
+                  <a
+                    href={`mailto:${contactEmail}`}
+                    className="flex items-center gap-3 text-neutral-950 hover:text-primary-500 transition-colors"
+                  >
+                    <EmailIcon sx={{ fontSize: '20px' }} />
+                    <span className="text-base-bold">{loading ? "Loading..." : contactEmail}</span>
+                  </a>
+                  <Button
+                    label="Call Now"
+                    icon={<PhoneIcon sx={{ color: 'rgb(38, 38, 38)', fontSize: '16px' }} />}
+                    href={`tel:${contactPhone}`}
+                    ariaLabel={`Call now at ${contactPhone}`}
+                    className="w-full"
+                  />
                 </div>
-                <Button
-                  label="Call Now"
-                  icon={<PhoneIcon sx={{ color: 'rgb(38, 38, 38)', fontSize: '16px' }} />}
-                  href="tel:5550123456"
-                  ariaLabel="Call now at (555) 012-3456"
-                  className="w-full"
-                />
               </div>
             </div>
           </div>

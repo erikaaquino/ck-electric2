@@ -8,8 +8,32 @@ import ServiceCard from './ServiceCard';
 import FeaturedProjectCard from './FeaturedProjectCard';
 import TestimonialCard from './TestimonialCard';
 import CtaBox from './CtaBox';
+import { fetchWordPressGraphQL } from '../lib/wordpress-graphql';
+import { GET_LANDING_PAGE, LandingPageData } from '../lib/wordpress-queries';
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Fetch landing page data from WordPress
+  let landingPageData: LandingPageData | null = null;
+  
+  try {
+    const response = await fetchWordPressGraphQL(GET_LANDING_PAGE);
+    landingPageData = response.data;
+  } catch (error) {
+    console.error('Error fetching landing page data:', error);
+  }
+
+  // Use WordPress data if available, otherwise use fallbacks
+  const heroTitle = landingPageData?.page.landingPage.heroTitle || "Efficiency and Quality.";
+  const heroSubtitle = landingPageData?.page.landingPage.heroSubtitle || "Talk directly with a licensed electrician. No call centers, no middlemen. Fast response and industrial-grade quality for every project.";
+  const tag = landingPageData?.page.landingPage.tag || "Direct Access to Licensed Experts";
+  const aboutTitle = landingPageData?.page.landingPage.aboutUs.title || "NO MIDDLEMEN. NO MESS.";
+  const aboutSubtitle = landingPageData?.page.landingPage.aboutUs.subtitle || "Locally Owned & Expertly Operated";
+  const aboutDescription = landingPageData?.page.landingPage.aboutUs.description || "<p>CK Electric was founded on a simple principle: people deserve to talk to the experts doing the work. When you call us, you speak directly with Rob or Matt, not a call center.</p><p>We combine industrial-grade precision with residential-level care. Whether it's a major commercial TI or a home panel upgrade, we bring decades of experience.</p>";
+  const feature1Title = landingPageData?.page.landingPage.heroItems.feature1.title1 || "LICENSED & BONDED";
+  const feature1Description = landingPageData?.page.landingPage.heroItems.feature1.description1 || "Full Compliance Guaranteed";
+  const feature2Title = landingPageData?.page.landingPage.heroItems.item2.title || "FAST RESPONSE";
+  const feature2Description = landingPageData?.page.landingPage.heroItems.item2.description || "Same-day Estimates Available";
+
   return (
     <main className="bg-primary-50">
       {/* Hero Section */}
@@ -27,32 +51,37 @@ export default function HomePage() {
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-positive-100 border border-positive-200 rounded-full text-small-upper text-positive-700 mb-8">
               <span className="flex h-2 w-2 rounded-full bg-positive-500 animate-pulse"></span>
-              Direct Access to Licensed Experts
+              {tag}
             </div>
             
             <h1 className="hero-title text-neutral-950 leading-[0.9] mb-8 tracking-tighter font-bold">
-              Efficiency and <br/>
-              <span className="text-primary-500 italic underline decoration-primary-400">Quality.</span>
+              {heroTitle.split(' ').map((word, index) => 
+                word.includes('Quality') ? (
+                  <span key={index} className="text-primary-500 italic underline decoration-primary-400">{word}</span>
+                ) : (
+                  <span key={index}>{word} </span>
+                )
+              )}
             </h1>
             
             <p className="text-base text-neutral-700 mb-10 leading-relaxed max-w-xl">
-              Talk directly with a licensed electrician. No call centers, no middlemen. Fast response and industrial-grade quality for every project.
+              {heroSubtitle}
             </p>
             
-            <div className="flex flex-wrap md:flex-col gap-6">
+            <div className="flex flex-wrap flex-col md:flex-row gap-6">
               <div className="flex items-center gap-4 bg-white/50 backdrop-blur-sm p-4 border-l-4 border-primary-500">
                 <Verified className="text-primary-500 text-4xl" />
                 <div>
-                  <p className="text-neutral-950 text-base-upper mb-1">Licensed & Bonded</p>
-                  <p className="text-neutral-700/70 text-small mt-1">Full Compliance Guaranteed</p>
+                  <p className="text-neutral-950 text-base-upper mb-1">{feature1Title}</p>
+                  <p className="text-neutral-700/70 text-small mt-1">{feature1Description}</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-4 bg-white/50 backdrop-blur-sm p-4 border-l-4 border-primary-500">
                 <Timer className="text-primary-500 text-4xl" />
                 <div>
-                  <p className="text-neutral-950 text-base-upper mb-1">Fast Response</p>
-                  <p className="text-neutral-700/70 text-small mt-1">Same-day Estimates Available</p>
+                  <p className="text-neutral-950 text-base-upper mb-1">{feature2Title}</p>
+                  <p className="text-neutral-700/70 text-small mt-1">{feature2Description}</p>
                 </div>
               </div>
             </div>
@@ -146,43 +175,43 @@ export default function HomePage() {
             </div>
             
             <div className="w-full md:w-1/2">
-              <h2 className="text-primary-500 text-base-upper mb-4">No Middlemen. No Mess.</h2>
+              <h2 className="text-primary-500 text-base-upper mb-4">{aboutTitle}</h2>
               <h3 className="about-title text-neutral-950 mb-8 leading-tight">
-                Locally Owned & <br/>Expertly Operated
+                {aboutSubtitle}
               </h3>
               
-              <div className="space-y-6 text-neutral-700 text-bae leading-relaxed">
-                <p>CK Electric was founded on a simple principle: people deserve to talk to the experts doing the work. When you call us, you speak directly with Rob or Matt, not a call center.</p>
-                <p>We combine industrial-grade precision with residential-level care. Whether it's a major commercial TI or a home panel upgrade, we bring decades of experience.</p>
+              <div 
+                className="space-y-6 text-neutral-700 text-bae leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: aboutDescription }}
+              />
                 
-                <ul className="grid grid-cols-1 gap-4 pt-6">
-                  <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
-                    <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
-                      <Check className="text-sm -rotate-45" />
-                    </span>
-                    Licensed Master Electricians
-                  </li>
-                  <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
-                    <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
-                      <Check className="text-sm -rotate-45" />
-                    </span>
-                    Zero Outsourcing
-                  </li>
-                  <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
-                    <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
-                      <Check className="text-sm -rotate-45" />
-                    </span>
-                    Puget Sound Focused
-                  </li>
-                </ul>
+              <ul className="grid grid-cols-1 gap-4 pt-6">
+                <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
+                  <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
+                    <Check className="text-sm -rotate-45" />
+                  </span>
+                  Licensed Master Electricians
+                </li>
+                <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
+                  <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
+                    <Check className="text-sm -rotate-45" />
+                  </span>
+                  Zero Outsourcing
+                </li>
+                <li className="flex items-center gap-4 text-neutral-950 text-base-bold">
+                  <span className="w-6 h-6 bg-positive-500 flex items-center justify-center text-white rotate-45">
+                    <Check className="text-sm -rotate-45" />
+                  </span>
+                  Puget Sound Focused
+                </li>
+              </ul>
                 
-                <div className="pt-8">
-                  <Button
-                    label="Request Estimate"
-                    variant="primary"
-                    href="/request-estimate"
-                  />
-                </div>
+              <div className="pt-8">
+                <Button
+                  label="Request Estimate"
+                  variant="primary"
+                  href="/request-estimate"
+                />
               </div>
             </div>
           </div>

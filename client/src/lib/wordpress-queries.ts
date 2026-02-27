@@ -180,6 +180,169 @@ export const GET_ALL_PROJECTS = `
   }
 `;
 
+// TypeScript interfaces for Landing Page data
+export interface HeaderInfo {
+  contactEmail: string;
+  contactPhoneNumber: string;
+  fieldGroupName: string;
+  serviceArea: string;
+  slogan: string;
+  companyLogo: {
+    node: {
+      link: string;
+      mediaItemUrl: string;
+      description: string | null;
+      altText: string;
+    };
+  };
+}
+
+export interface AboutUs {
+  description: string;
+  fieldGroupName: string;
+  subtitle: string;
+  title: string;
+}
+
+export interface Feature1 {
+  description1: string;
+  fieldGroupName: string;
+  title1: string;
+}
+
+export interface Item2 {
+  description: string;
+  fieldGroupName: string;
+  title: string;
+}
+
+export interface HeroItems {
+  feature1: Feature1;
+  item2: Item2;
+}
+
+export interface HeroFooterFeature {
+  fieldGroupName: string;
+  subtitle: string;
+  title: string;
+}
+
+export interface HeroFooterTitle {
+  fieldGroupName: string;
+  subtitle: string;
+  title: string;
+}
+
+export interface HeroFooter {
+  feature1: HeroFooterFeature;
+  feature2: HeroFooterFeature;
+  feature3: HeroFooterFeature;
+  title: HeroFooterTitle;
+}
+
+export interface LandingPage {
+  fieldGroupName: string;
+  heroSubtitle: string;
+  heroTitle: string;
+  tag: string;
+  headerInfo: HeaderInfo;
+  aboutUs: AboutUs;
+  heroItems: HeroItems;
+  heroFooter: HeroFooter;
+}
+
+export interface FeaturedImageNode {
+  altText: string;
+  description: string | null;
+}
+
+export interface FeaturedImage {
+  cursor: string;
+  node: FeaturedImageNode;
+}
+
+export interface LandingPageData {
+  page: {
+    landingPage: LandingPage;
+    featuredImage: FeaturedImage;
+  };
+}
+
+export const GET_LANDING_PAGE = `
+  query NewQuery {
+    page(id: "cG9zdDoxMjI=") {
+      landingPage {
+        fieldGroupName
+        heroSubtitle
+        heroTitle
+        tag
+        headerInfo {
+          contactEmail
+          contactPhoneNumber
+          fieldGroupName
+          serviceArea
+          slogan
+          companyLogo {
+            node {
+              link
+              mediaItemUrl
+              description
+              altText
+            }
+          }
+        }
+        aboutUs {
+          description
+          fieldGroupName
+          subtitle
+          title
+        }
+        heroItems {
+          feature1 {
+            description1
+            fieldGroupName
+            title1
+          }
+          item2 {
+            description
+            fieldGroupName
+            title
+          }
+        }
+        heroFooter {
+          feature1 {
+            fieldGroupName
+            subtitle
+            title
+          }
+          feature2 {
+            fieldGroupName
+            subtitle
+            title
+          }
+          feature3 {
+            fieldGroupName
+            subtitle
+            title
+          }
+          title {
+            fieldGroupName
+            subtitle
+            title
+          }
+        }
+      }
+      featuredImage {
+        cursor
+        node {
+          altText
+          description
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PROJECT_BY_SLUG = `
   query GetProjectBySlug($slug: ID!) {
     project(id: $slug, idType: SLUG) {
