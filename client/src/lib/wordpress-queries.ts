@@ -53,9 +53,6 @@ export const GET_POST_BY_SLUG = `
       author {
         node {
           name
-          avatar {
-            url
-          }
         }
       }
       featuredImage {
@@ -77,6 +74,80 @@ export const GET_POST_BY_SLUG = `
         }
       }
       seo {
+        metaDesc
+        metaKeywords
+        opengraphDescription
+        opengraphTitle
+      }
+    }
+  }
+`;
+
+export const GET_LANDING_PAGE = `
+  query NewQuery {
+    page(id: "cG9zdDoxMjI=") {
+      title
+      content
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      ctaButtonsHero {
+        primaryCtaLink
+        primaryCtaText
+        secondaryCtaLink
+        secondaryCtaText
+      }
+      landingPage {
+        headerInfo {
+          companyLogo {
+            node {
+              mediaItemUrl
+            }
+          }
+          contactEmail
+          contactPhoneNumber
+          fieldGroupName
+          serviceArea
+          slogan
+        }
+        heroItems {
+          feature1 {
+            title1
+            description1
+          }
+          item2 {
+            title
+            description
+          }
+        }
+        heroFooter {
+          feature1 {
+            subtitle
+            title
+          }
+          feature2 {
+            subtitle
+            title
+          }
+          feature3 {
+            subtitle
+            title
+          }
+        }
+        aboutUs {
+          description
+          subtitle
+          title
+          itemsList {
+            item1
+            item2
+            item3
+          }
+        }
+      }
+      seo {
         canonical
         cornerstone
         focuskw
@@ -87,93 +158,13 @@ export const GET_POST_BY_SLUG = `
         metaRobotsNoindex
         opengraphAuthor
         opengraphDescription
-        opengraphModifiedTime
-        opengraphPublishedTime
-        opengraphPublisher
-        opengraphSiteName
-        opengraphTitle
-        opengraphType
-        opengraphUrl
-        readingTime
-        title
-      }
-    }
-  }
-`;
-
-export const GET_ALL_PAGES = `
-  query GetAllPages($first: Int, $after: String) {
-    pages(first: $first, after: $after) {
-      nodes {
-        id
-        title
-        slug
-        content
-        excerpt
-        date
-        modified
-        featuredImage {
-          node {
-            sourceUrl
-            altText
-          }
-        }
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-    }
-  }
-`;
-
-export const GET_PAGE_BY_SLUG = `
-  query GetPageBySlug($slug: ID!) {
-    page(id: $slug, idType: SLUG) {
-      id
-      title
-      content
-      excerpt
-      date
-      modified
-      featuredImage {
-        node {
-          sourceUrl
-          altText
-        }
-      }
-    }
-  }
-`;
-
-export const GET_ALL_CATEGORIES = `
-  query GetAllCategories {
-    categories {
-      nodes {
-        name
-        slug
-        count
-      }
-    }
-  }
-`;
-
-export const NEW_QUERY = `
-  query NewQuery {
-    posts {
-      nodes {
-        heroSection {
-          subtitle
-          title
-        }
-        id
       }
     }
   }
 `;
 
 export const GET_ALL_PROJECTS = `
-  query GetAllProjects {
+  query NewQuery {
     projects {
       nodes {
         id
@@ -181,22 +172,157 @@ export const GET_ALL_PROJECTS = `
         slug
         featuredImage {
           node {
-            id
             sourceUrl
-            altText
           }
         }
         projectFields {
-          fieldGroupName
           specifications {
             coverageArea
-            fieldGroupName
-            responseTime
-            warranty
+            projectType
+            clientType
+            completionDate
+            projectValue
+            technologies
+            challenges
+            solutions
           }
-          mainContentSection
         }
       }
+    }
+  }
+`;
+
+export const GET_PROJECTS_PAGE = `
+  query NewQuery {
+    page(id: "cG9zdDoyMzQ=") {
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      seo {
+        metaDesc
+        metaKeywords
+        metaRobotsNofollow
+        metaRobotsNoindex
+        opengraphAuthor
+        opengraphDescription
+      }
+      ctaButtonsHero {
+        primaryCtaLink
+        primaryCtaText
+        secondaryCtaLink
+        secondaryCtaText
+      }
+      title
+      content
+    }
+  }
+`;
+
+export const GET_BLOG_PAGE = `
+  query NewQuery {
+    page(id: "cG9zdDoyNDk=") {
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      seo {
+        metaDesc
+        metaKeywords
+        metaRobotsNofollow
+        metaRobotsNoindex
+        opengraphAuthor
+        opengraphDescription
+      }
+      ctaButtonsHero {
+        primaryCtaLink
+        primaryCtaText
+        secondaryCtaLink
+        secondaryCtaText
+      }
+      title
+      content
+    }
+  }
+`;
+
+export const GET_SERVICES_PAGE = `
+  query NewQuery {
+    page(id: "cG9zdDoyNDM=") {
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      seo {
+        metaDesc
+        metaKeywords
+        metaRobotsNofollow
+        metaRobotsNoindex
+        opengraphAuthor
+        opengraphDescription
+      }
+      ctaButtonsHero {
+        primaryCtaLink
+        primaryCtaText
+        secondaryCtaLink
+        secondaryCtaText
+      }
+      title
+      content
+    }
+  }
+`;
+
+export const GET_OWNERS = `
+  query NewQuery {
+    matt: owner(id: "cG9zdDoyMTc=") {
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      owners {
+        email
+        fullName
+        phoneNumber
+        position
+      }
+      seo {
+        metaDesc
+        metaKeywords
+        metaRobotsNofollow
+        metaRobotsNoindex
+        opengraphAuthor
+        opengraphDescription
+        opengraphUrl
+      }
+      id
+    }
+    rob: owner(id: "cG9zdDoyMTU=") {
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      owners {
+        email
+        fullName
+        phoneNumber
+        position
+      }
+      seo {
+        metaDesc
+        metaKeywords
+        metaRobotsNofollow
+        metaRobotsNoindex
+        opengraphAuthor
+        opengraphDescription
+        opengraphUrl
+      }
+      id
     }
   }
 `;
@@ -249,268 +375,3 @@ export const GET_PROJECT_BY_SLUG = `
     }
   }
 `;
-
-export const GET_LANDING_PAGE = `
-  query NewQuery {
-    page(id: "cG9zdDoxMjI=") {
-      landingPage {
-        fieldGroupName
-        heroSubtitle
-        heroTitle
-        tag
-        headerInfo {
-          contactEmail
-          contactPhoneNumber
-          fieldGroupName
-          serviceArea
-          slogan
-          companyLogo {
-            node {
-              link
-              mediaItemUrl
-              description
-              altText
-            }
-          }
-        }
-        aboutUs {
-          description
-          fieldGroupName
-          subtitle
-          title
-        }
-        heroItems {
-          feature1 {
-            description1
-            fieldGroupName
-            title1
-          }
-          item2 {
-            description
-            fieldGroupName
-            title
-          }
-        }
-        heroFooter {
-          feature1 {
-            fieldGroupName
-            subtitle
-            title
-          }
-          feature2 {
-            fieldGroupName
-            subtitle
-            title
-          }
-          feature3 {
-            fieldGroupName
-            subtitle
-            title
-          }
-          title {
-            fieldGroupName
-            subtitle
-            title
-          }
-        }
-      }
-      featuredImage {
-        cursor
-        node {
-          altText
-          description
-        }
-      }
-    }
-  }
-`;
-
-export const GET_OWNERS = `
-  query NewQuery {
-    matt: owner(id: "cG9zdDoyMTc=") {
-      featuredImage {
-        node {
-          mediaItemUrl
-        }
-      }
-      owners {
-        email
-        fullName
-        phoneNumber
-        position
-      }
-      seo {
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
-        opengraphAuthor
-        opengraphDescription
-        canonical
-      }
-    }
-    rob: owner(id: "cG9zdDoyMTU=") {
-      featuredImage {
-        node {
-          mediaItemUrl
-        }
-      }
-      owners {
-        email
-        fullName
-        phoneNumber
-        position
-      }
-      seo {
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
-        opengraphAuthor
-        opengraphDescription
-        canonical
-      }
-    }
-  }
-`;
-
-// TypeScript interfaces for Landing Page data
-export interface CompanyLogo {
-  node: {
-    link: string;
-    mediaItemUrl: string;
-    description: string | null;
-    altText: string;
-  };
-}
-
-export interface HeaderInfo {
-  contactEmail: string;
-  contactPhoneNumber: string;
-  fieldGroupName: string;
-  serviceArea: string;
-  slogan: string;
-  companyLogo: CompanyLogo;
-}
-
-export interface AboutUs {
-  description: string;
-  fieldGroupName: string;
-  subtitle: string;
-  title: string;
-}
-
-export interface HeroFeature {
-  description1?: string;
-  description?: string;
-  fieldGroupName: string;
-  title1?: string;
-  title?: string;
-}
-
-export interface HeroItems {
-  feature1: HeroFeature;
-  item2: HeroFeature;
-}
-
-export interface HeroFooterFeature {
-  fieldGroupName: string;
-  subtitle: string;
-  title: string;
-}
-
-export interface HeroFooterTitle {
-  fieldGroupName: string;
-  subtitle: string;
-  title: string;
-}
-
-export interface HeroFooter {
-  feature1: HeroFooterFeature;
-  feature2: HeroFooterFeature;
-  feature3: HeroFooterFeature;
-  title: HeroFooterTitle;
-}
-
-export interface LandingPage {
-  fieldGroupName: string;
-  heroSubtitle: string;
-  heroTitle: string;
-  tag: string;
-  headerInfo: HeaderInfo;
-  aboutUs: AboutUs;
-  heroItems: HeroItems;
-  heroFooter: HeroFooter;
-}
-
-export interface FeaturedImageNode {
-  altText: string;
-  description: string | null;
-}
-
-export interface FeaturedImage {
-  cursor: string;
-  node: FeaturedImageNode;
-}
-
-export interface LandingPageData {
-  page: {
-    landingPage: LandingPage;
-    featuredImage: FeaturedImage;
-  };
-}
-
-// TypeScript interfaces for Owners
-export interface OwnerInfo {
-  email: string | null;
-  fieldGroupName: string;
-  fullName: string;
-  phoneNumber: string | null;
-  position: string;
-}
-
-export interface OwnerNode {
-  owners: OwnerInfo;
-  id: string;
-}
-
-export interface OwnersPageInfo {
-  seo: {
-    schema: {
-      raw: string;
-    };
-  };
-  startCursor: string;
-}
-
-export interface OwnerSeo {
-  metaDesc: string;
-  metaKeywords: string;
-  metaRobotsNofollow: string;
-  metaRobotsNoindex: string;
-  opengraphAuthor: string;
-  opengraphDescription: string;
-  title: string;
-  opengraphUrl: string;
-}
-
-export interface OwnersData {
-  matt: {
-    featuredImage: {
-      node: {
-        mediaItemUrl: string;
-      };
-    };
-    owners: OwnerInfo;
-    seo: OwnerSeo;
-  };
-  rob: {
-    featuredImage: {
-      node: {
-        mediaItemUrl: string;
-      };
-    };
-    owners: OwnerInfo;
-    seo: OwnerSeo;
-  };
-}

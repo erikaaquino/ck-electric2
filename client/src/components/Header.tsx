@@ -8,7 +8,8 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchWordPressGraphQL } from '../lib/wordpress-graphql';
-import { GET_LANDING_PAGE, LandingPageData } from '../lib/wordpress-queries';
+import { GET_LANDING_PAGE } from '../lib/wordpress-queries';
+import { LandingPageData } from '../lib/wordpress-types';
 
 interface CompanyLogo {
   node: {
@@ -26,48 +27,47 @@ export default function Header() {
     slogan: "Not Available", 
     contactEmail: "Not Available",
     contactPhone: "Not Available",
-    companyLogo: null as CompanyLogo | null,
+    companyLogo: null,
     loading: true
   });
 
   // Fetch WordPress data on component mount
   useEffect(() => {
     async function fetchHeaderData() {
-      console.log('🚀 Header: Fetching WordPress data');
+      console.log('🚀 Header: Starting data fetch');
       
       try {
         const response = await fetchWordPressGraphQL(GET_LANDING_PAGE);
-        const landingPageData = response.data as LandingPageData;
+        console.log('📋 Header: Raw landing page data:', JSON.stringify(response, null, 2));
         
-        if (landingPageData?.page?.landingPage?.headerInfo) {
-          const { serviceArea, slogan, contactEmail, contactPhoneNumber, companyLogo } = landingPageData.page.landingPage.headerInfo;
+        if (response && response.data && response.data.page) {
+          const page = response.data.page;
+          console.log('🎯 Header: Full page structure:', JSON.stringify(page, null, 2));
+          console.log('🎯 Header: Landing page data:', JSON.stringify(page.landingPage, null, 2));
+          console.log('🎯 Header: Header info:', JSON.stringify(page.landingPage?.headerInfo, null, 2));
           
           setHeaderData({
-            serviceArea: serviceArea || "Not Available",
-            slogan: slogan || "Not Available",
-            contactEmail: contactEmail || "Not Available", 
-            contactPhone: contactPhoneNumber || "Not Available",
-            companyLogo: companyLogo || null,
+            serviceArea: page.landingPage?.headerInfo?.serviceArea || "Not Available",
+            slogan: page.landingPage?.headerInfo?.slogan || "Not Available", 
+            contactEmail: page.landingPage?.headerInfo?.contactEmail || "Not Available",
+            contactPhone: page.landingPage?.headerInfo?.contactPhoneNumber || "Not Available",
+            companyLogo: page.landingPage?.headerInfo?.companyLogo || null,
             loading: false
           });
-          
-          console.log('🎨 Header: Data loaded successfully:', {
-            serviceArea,
-            slogan,
-            contactEmail,
-            contactPhone,
-            hasCompanyLogo: !!companyLogo,
-            companyLogoUrl: companyLogo?.node?.mediaItemUrl
-          });
+        } else {
+          console.error('❌ Header: Invalid response structure:', response);
+          setHeaderData(prev => ({ ...prev, loading: false }));
         }
       } catch (error) {
-        console.error('❌ Header: Error fetching WordPress data:', error);
+        console.error('❌ Header: Fetch error:', error);
         setHeaderData(prev => ({ ...prev, loading: false }));
       }
     }
-
+    
     fetchHeaderData();
   }, []);
+
+  const { serviceArea, slogan, contactEmail, contactPhone, companyLogo, loading } = headerData;
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -76,8 +76,6 @@ export default function Header() {
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ];
-
-  const { serviceArea, slogan, contactEmail, contactPhone, companyLogo, loading } = headerData;
 
   return (
     <nav className="flex flex-col w-full items-start relative" role="navigation" aria-label="Main navigation">

@@ -12,7 +12,12 @@ import { fetchWordPressGraphQL } from '../lib/wordpress-graphql';
 import { GET_LANDING_PAGE, LandingPageData, GET_OWNERS, OwnersData } from '../lib/wordpress-queries';
 
 export default async function HomePage() {
-  // Fetch landing page data from WordPress
+  // Helper function to strip HTML tags
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '').trim();
+}
+
+// Fetch landing page data from WordPress
   let landingPageData: LandingPageData | null = null;
   
   try {
@@ -33,8 +38,8 @@ export default async function HomePage() {
   }
 
   // Use WordPress data if available, otherwise use fallbacks
-  const heroTitle = landingPageData?.page.landingPage.heroTitle || "Efficiency and Quality.";
-  const heroSubtitle = landingPageData?.page.landingPage.heroSubtitle || "Talk directly with a licensed electrician. No call centers, no middlemen. Fast response and industrial-grade quality for every project.";
+  const heroTitle = landingPageData?.page.title || "Efficiency and Quality.";
+  const heroSubtitle = stripHtml(landingPageData?.page.content || "Talk directly with a licensed electrician. No call centers, no middlemen. Fast response and industrial-grade quality for every project.");
   const tag = landingPageData?.page.landingPage.tag || "Direct Access to Licensed Experts";
   const aboutTitle = landingPageData?.page.landingPage.aboutUs.title || "NO MIDDLEMEN. NO MESS.";
   const aboutSubtitle = landingPageData?.page.landingPage.aboutUs.subtitle || "Locally Owned & Expertly Operated";

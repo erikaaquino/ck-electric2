@@ -1,4 +1,4 @@
-import { GET_ALL_PROJECTS } from '@/lib/wordpress-queries';
+import { GET_ALL_PROJECTS, GET_PROJECTS_PAGE, ProjectsPageData } from '@/lib/wordpress-queries';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import Link from 'next/link';
 import { Metadata } from 'next';
@@ -34,43 +34,71 @@ interface ProjectsResponse {
   };
 }
 
+// Helper function to strip HTML tags and decode entities
+function stripHtml(html: string | undefined): string {
+  if (!html) return '';
+  
+  // Remove HTML tags
+  const text = html.replace(/<[^>]*>/g, '');
+  
+  // Decode HTML entities
+  const decoded = text
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8216;/g, "'")
+    .replace(/&#8220;/g, '"')
+    .replace(/&#8221;/g, '"')
+    .replace(/&#8211;/g, '–')
+    .replace(/&#8212;/g, '—')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ');
+  
+  // Clean up extra whitespace
+  return decoded.replace(/\s+/g, ' ').trim();
+}
+
 // Generate metadata for the projects page - SSR
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const data = await fetchWordPressGraphQL<ProjectsResponse>(
+    // Fetch projects page data from WordPress
+    const pageDataResponse = await fetchWordPressGraphQL<ProjectsPageData>(
+      GET_PROJECTS_PAGE
+    );
+    
+    // Fetch projects data
+    const projectsDataResponse = await fetchWordPressGraphQL<ProjectsResponse>(
       GET_ALL_PROJECTS
     );
 
-    const projects = data?.projects?.nodes || [];
+    const pageData = pageDataResponse?.page;
+    const projects = projectsDataResponse?.projects?.nodes || [];
     const projectCount = projects.length;
 
+    // Clean the content for metadata
+    const cleanContent = stripHtml(pageData?.content);
+
     return {
-      title: projectCount > 0 
-        ? `Our Projects - ${projectCount} Industrial Electrical Projects`
-        : 'Our Projects - Industrial Electrical Solutions',
-      description: projectCount > 0
+      title: pageData?.title || `Our Projects - ${projectCount} Industrial Electrical Projects`,
+      description: pageData?.seo?.metaDesc || (projectCount > 0
         ? `Browse our portfolio of ${projectCount} completed industrial electrical projects. See our work in lighting, electrical installations, and more.`
-        : 'Discover our industrial electrical projects and solutions. From lighting installations to electrical systems, we deliver quality work.',
-      keywords: 'industrial electrical projects, electrical installations, lighting projects, commercial electrical',
+        : 'Discover our industrial electrical projects and solutions. From lighting installations to electrical systems, we deliver quality work.'),
+      keywords: pageData?.seo?.metaKeywords || 'industrial electrical projects, electrical installations, lighting projects, commercial electrical',
       openGraph: {
-        title: 'Our Projects - Industrial Electrical Solutions',
-        description: 'Browse our portfolio of completed industrial electrical projects',
+        title: pageData?.title || 'Our Projects - Industrial Electrical Solutions',
+        description: pageData?.seo?.opengraphDescription || 'Browse our portfolio of completed industrial electrical projects',
         type: 'website',
         url: '/projects',
-        images: projects.length > 0 && projects[0].featuredImage?.node?.sourceUrl ? [
+        images: pageData?.featuredImage?.node?.mediaItemUrl ? [
           {
-            url: projects[0].featuredImage.node.sourceUrl,
+            url: pageData.featuredImage.node.mediaItemUrl,
             width: 1200,
             height: 630,
             alt: 'Industrial Electrical Projects',
           },
         ] : [],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: 'Our Projects - Industrial Electrical Solutions',
-        description: 'Browse our portfolio of completed industrial electrical projects',
-        images: projects.length > 0 && projects[0].featuredImage?.node?.sourceUrl ? [projects[0].featuredImage.node.sourceUrl] : [],
       },
     };
   } catch (error) {
@@ -85,11 +113,21 @@ export async function generateMetadata(): Promise<Metadata> {
 // Page component - SSR
 export default async function ProjectsPage() {
   try {
+    // Fetch projects page data from WordPress
+    const pageDataResponse = await fetchWordPressGraphQL<ProjectsPageData>(
+      GET_PROJECTS_PAGE
+    );
+    
+    // Fetch projects data
     const data = await fetchWordPressGraphQL<ProjectsResponse>(
       GET_ALL_PROJECTS
     );
 
+    const pageData = pageDataResponse?.page;
     const projects = data?.projects?.nodes || [];
+
+    // Clean the content for display
+    const cleanContent = stripHtml(pageData?.content);
 
     if (projects.length === 0) {
       return (
@@ -97,10 +135,10 @@ export default async function ProjectsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                Our Projects
+                {pageData?.title || "Our Projects"}
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
-                Discover our latest work and see how we've helped clients achieve their goals
+                {cleanContent || "Discover our latest work and see how we've helped clients achieve their goals"}
               </p>
               
               <div className="text-center py-12">
@@ -121,13 +159,13 @@ export default async function ProjectsPage() {
     return (
       <>
         <HeroSection
-          title="Our Projects"
-          subtitle="Discover our latest work and see how we've helped clients achieve their goals with professional electrical solutions across Puget Sound."
-          primaryButtonText="Request a free estimate"
-          primaryButtonHref="#estimate"
-          secondaryButtonText="Call us now"
-          secondaryButtonHref="#contact"
-          backgroundImage="https://images.unsplash.com/photo-1603796826034-2a34491c3b2e?w=1920&h=1080&fit=crop"
+          title={pageData?.title || "Our Projects"}
+          subtitle={cleanContent || "Discover our latest work and see how we've helped clients achieve their goals with professional electrical solutions across Puget Sound."}
+          primaryButtonText={pageData?.ctaButtonsHero?.primaryCtaText || "Request a free estimate"}
+          primaryButtonHref={pageData?.ctaButtonsHero?.primaryCtaLink || "#estimate"}
+          secondaryButtonText={pageData?.ctaButtonsHero?.secondaryCtaText || "Call us now"}
+          secondaryButtonHref={pageData?.ctaButtonsHero?.secondaryCtaLink || "#contact"}
+          backgroundImage={pageData?.featuredImage?.node?.mediaItemUrl || "https://images.unsplash.com/photo-1603796826034-2a34491c3b2e?w=1920&h=1080&fit=crop"}
         />
         
         <section className="py-20 bg-neutral-50">
