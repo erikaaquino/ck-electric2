@@ -1,5 +1,7 @@
-import { Phone, Mail, LocationOn, Facebook, LinkedIn } from '@mui/icons-material';
+import { Phone, Mail, LocationOn, Facebook } from '@mui/icons-material';
 import SocialLinks from './SocialLinks';
+import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
+import { GET_HEADER_DATA, GET_FOOTER_SERVICES } from '@/lib/wordpress-queries';
 
 interface FooterLink {
   label: string;
@@ -11,38 +13,39 @@ interface FooterSection {
   links: FooterLink[];
 }
 
-export default function Footer() {
+interface FooterProps {
+  headerData?: any;
+  servicesData?: any;
+}
+
+export default async function Footer({ headerData, servicesData }: FooterProps) {
+  // If data not passed as props, fetch it
+  const headerResponse = headerData || await fetchWordPressGraphQL(GET_HEADER_DATA);
+  const servicesResponse = servicesData || await fetchWordPressGraphQL(GET_FOOTER_SERVICES);
+  
+  const headerInfo = headerResponse?.page?.landingPage?.headerInfo;
+  const services = servicesResponse?.services?.nodes || [];
+  
   const companyLinks: FooterLink[] = [
-    { label: "About Us", href: "#about" },
-    { label: "Services", href: "#services" },
-    { label: "Projects", href: "#projects" },
-    { label: "Blog", href: "#blog" },
+    { label: "Services", href: "/services" },
+    { label: "Projects", href: "/projects" },
+    { label: "Blog", href: "/blog" },
   ];
 
-  const servicesLinks: FooterLink[] = [
-    { label: "Commercial TIs", href: "#commercial-tis" },
-    { label: "Wiring & Rewiring", href: "#wiring-rewiring" },
-    { label: "Panel Upgrades", href: "#panel-upgrades" },
-    { label: "EV Chargers", href: "#ev-chargers" },
-    { label: "Emergency Repair", href: "#emergency-repair" },
-  ];
-
-  const legalLinks: FooterLink[] = [
-    { label: "Privacy Policy", href: "#privacy" },
-    { label: "Terms of Service", href: "#terms" },
-    { label: "License Information", href: "#license" },
-  ];
+  const servicesLinks: FooterLink[] = services.map((service: any) => ({
+    label: service.title,
+    href: `/services/${service.slug}`,
+  }));
 
   const socialLinks = [
-    { icon: <Facebook className="text-xl" />, href: "#facebook", label: "Facebook" },
-    { icon: <LinkedIn className="text-xl" />, href: "#linkedin", label: "LinkedIn" },
+    { icon: <Facebook className="text-xl" />, href: headerInfo?.facebookLink || "#facebook", label: "Facebook" },
   ];
 
   return (
     <footer className="bg-neutral-950 text-white">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
           {/* Company Info */}
           <div className="space-y-6">
@@ -51,7 +54,7 @@ export default function Footer() {
                 CK ELECTRIC
               </h3>
               <p className="text-small text-neutral-400 leading-relaxed">
-                Professional electrical services across Puget Sound. Licensed, bonded, and committed to excellence.
+                {headerInfo?.slogan || "Professional electrical services across Puget Sound. Licensed, bonded, and committed to excellence."}
               </p>
             </div>
             
@@ -59,19 +62,19 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-small text-neutral-300">
                 <Phone className="text-primary-500 text-lg" />
-                <a href="tel:5550123456" className="hover:text-primary-500 transition-colors">
-                  (555) 012-3456
+                <a href={`tel:${headerInfo?.contactPhoneNumber || "5550123456"}`} className="hover:text-primary-500 transition-colors">
+                  {headerInfo?.contactPhoneNumber || "(555) 012-3456"}
                 </a>
               </div>
               <div className="flex items-center gap-3 text-small text-neutral-300">
                 <Mail className="text-primary-500 text-lg" />
-                <a href="mailto:hello@ckelectric.com" className="hover:text-primary-500 transition-colors">
-                  hello@ckelectric.com
+                <a href={`mailto:${headerInfo?.contactEmail || "hello@ckelectric.com"}`} className="hover:text-primary-500 transition-colors">
+                  {headerInfo?.contactEmail || "hello@ckelectric.com"}
                 </a>
               </div>
               <div className="flex items-center gap-3 text-small text-neutral-300">
                 <LocationOn className="text-primary-500 text-lg" />
-                <span>Tacoma to Skagit Valley, WA</span>
+                <span>{headerInfo?.serviceArea || "Tacoma to Skagit Valley, WA"}</span>
               </div>
             </div>
           </div>
@@ -110,23 +113,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Legal & Social */}
+          {/* Social Links */}
           <div className="space-y-6">
-            <h4 className="text-base-bold text-white">Legal</h4>
-            <ul className="space-y-3">
-              {legalLinks.map((link) => (
-                <li key={link.href}>
-                  <a 
-                    href={link.href}
-                    className="text-small text-neutral-400 hover:text-primary-500 transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            
-            {/* Social Links */}
             <SocialLinks socialLinks={socialLinks} />
           </div>
         </div>

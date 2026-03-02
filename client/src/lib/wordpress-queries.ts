@@ -570,6 +570,44 @@ export const GET_PROJECT_BY_SLUG = `
   }
 `;
 
+export const GET_HEADER_DATA = `
+  query GetHeaderData {
+    page(id: "cG9zdDoxMjI=") {
+      landingPage {
+        headerInfo {
+          companyLogo {
+            node {
+              mediaItemUrl
+              altText
+            }
+          }
+          contactEmail
+          contactPhoneNumber
+          fieldGroupName
+          serviceArea
+          slogan
+        }
+      }
+    }
+  }
+`;
+
+export const GET_FOOTER_SERVICES = `
+  query GetFooterServices {
+    services(first: 6) {
+      nodes {
+        title
+        slug
+        servicesFields {
+          heroSection {
+            primaryCatText
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const GET_CONTACT_PAGE = `
   query GetContactPage {
     page(id: "cG9zdDoyNTQ=") {
