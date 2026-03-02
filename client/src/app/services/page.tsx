@@ -1,5 +1,8 @@
-import { GET_SERVICES_PAGE, ServicesPageData } from '@/lib/wordpress-queries';
-import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
+import { GET_SERVICES_PAGE } from '@/lib/wordpress-queries';
+import { GET_ALL_SERVICES } from '@/lib/wordpress-queries';
+import { ServicesPageData } from '@/lib/wordpress-types';
+import { ServicesResponse } from '@/lib/wordpress-types';
+import { fetchWordPressGraphQL } from '@/lib/wordpress-graphql';
 import { Metadata } from 'next';
 import HeroSection from '@/components/HeroSection';
 import ServiceCard from '@/components/ServiceCard';
@@ -38,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
       GET_SERVICES_PAGE
     );
 
-    const pageData = pageDataResponse?.page;
+    const pageData = pageDataResponse.data?.page;
 
     return {
       title: pageData?.title || 'Services | CK Electric - Puget Sound',
@@ -61,55 +64,16 @@ export default async function ServicesPage() {
       GET_SERVICES_PAGE
     );
 
-    const pageData = pageDataResponse?.page;
+    // Fetch all services from WordPress
+    const servicesResponse = await fetchWordPressGraphQL<ServicesResponse>(
+      GET_ALL_SERVICES
+    );
+
+    const pageData = pageDataResponse.data?.page;
+    const services = servicesResponse.data?.services?.nodes || [];
 
     // Clean the content for display
     const cleanContent = stripHtml(pageData?.content);
-
-    const services = [
-      {
-        id: 1,
-        title: "Commercial Electrical",
-        description: "Complete electrical solutions for businesses including tenant improvements, new construction, and system upgrades.",
-        icon: "⚡",
-        link: "/services/commercial-electrical"
-      },
-      {
-        id: 2,
-        title: "Residential Electrical",
-        description: "Expert electrical services for homeowners including rewiring, panel upgrades, and safety inspections.",
-        icon: "🏠",
-        link: "/services/residential-electrical"
-      },
-      {
-        id: 3,
-        title: "EV Charger Installation",
-        description: "Professional electric vehicle charger installation for homes and businesses with certified electricians.",
-        icon: "�",
-        link: "/services/ev-charger-installation"
-      },
-      {
-        id: 4,
-        title: "Emergency Electrical",
-        description: "24/7 emergency electrical services for power outages, wiring issues, and electrical emergencies.",
-        icon: "�",
-        link: "/services/emergency-electrical"
-      },
-      {
-        id: 5,
-        title: "Panel Upgrades",
-        description: "Modern electrical panel upgrades to handle today's power demands and improve safety.",
-        icon: "⚙️",
-        link: "/services/panel-upgrades"
-      },
-      {
-        id: 6,
-        title: "Lighting Installation",
-        description: "Professional lighting solutions for commercial and residential properties with energy-efficient options.",
-        icon: "💡",
-        link: "/services/lighting-installation"
-      }
-    ];
 
     return (
       <>
@@ -130,10 +94,8 @@ export default async function ServicesPage() {
             {services.map((service) => (
               <ServiceCard
                 key={service.id}
-                title={service.title}
-                description={service.description}
-                icon={service.icon}
-                link={service.link}
+                service={service}
+                icon="⚡"
               />
             ))}
           </div>

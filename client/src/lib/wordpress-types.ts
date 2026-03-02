@@ -253,47 +253,88 @@ export interface OwnersData {
   };
 }
 
-// Blog Posts interfaces
-export interface PostNode {
+// Services interfaces
+export interface ServiceTag {
+  name: string;
+}
+
+export interface ServiceHeroSection {
+  primaryCatText: string;
+  primaryCtaLink: string | null;
+  secondaryCtaLink: string | null;
+  secondaryCtaText: string | null;
+  tags: {
+    nodes: ServiceTag[];
+  };
+  phoneNumber: string;
+  fieldGroupName?: string;
+}
+
+export interface ServiceSpecifications {
+  coverageArea: string;
+  responseTime: string;
+  type: string[];
+  warranty: string;
+}
+
+export interface ServiceFields {
+  heroSection: ServiceHeroSection;
+  smallDescription: string;
+  specifications: ServiceSpecifications;
+}
+
+export interface ServiceNode {
   id: string;
   title: string;
   slug: string;
   content: string;
-  excerpt: string;
-  date: string;
-  modified: string;
-  author: {
-    node: {
-      name: string;
-    };
+  servicesFields: ServiceFields;
+  seo: {
+    metaDesc: string;
+    metaKeywords: string;
+    opengraphDescription: string;
   };
-  featuredImage: {
+  featuredImage?: {
     node: {
       sourceUrl: string;
       altText: string;
     };
   };
-  categories: {
-    nodes: Array<{
-      name: string;
-      slug: string;
-    }>;
-  };
-  tags: {
-    nodes: Array<{
-      name: string;
-      slug: string;
-    }>;
+}
+
+export interface ServicesResponse {
+  services: {
+    nodes: ServiceNode[];
   };
 }
 
-export interface PostsResponse {
-  posts: {
-    nodes: PostNode[];
-    pageInfo: {
-      hasNextPage: boolean;
-      endCursor: string;
+export interface ServiceDetailResponse {
+  service: {
+    content: string;
+    title: string;
+    seo: {
+      canonical: string;
+      cornerstone: boolean;
+      focuskw: string;
+      fullHead: string;
+      metaDesc: string;
+      metaKeywords: string;
+      metaRobotsNofollow: string;
+      metaRobotsNoindex: string;
+      opengraphAuthor: string;
+      opengraphDescription: string;
+      readingTime: number;
     };
+    servicesFields: ServiceFields;
+    featuredImage?: {
+      node: {
+        sourceUrl: string;
+        altText: string;
+      };
+    };
+  };
+  services: {
+    nodes: ServiceNode[];
   };
 }
 

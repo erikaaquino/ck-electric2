@@ -10,6 +10,8 @@ import TestimonialCard from './TestimonialCard';
 import CtaBox from './CtaBox';
 import { fetchWordPressGraphQL } from '../lib/wordpress-graphql';
 import { GET_LANDING_PAGE, LandingPageData, GET_OWNERS, OwnersData } from '../lib/wordpress-queries';
+import { GET_ALL_SERVICES } from '../lib/wordpress-queries';
+import { ServicesResponse } from '../lib/wordpress-types';
 
 export default async function HomePage() {
   // Helper function to strip HTML tags
@@ -35,6 +37,16 @@ function stripHtml(html: string): string {
     ownersData = response.data as OwnersData;
   } catch (error) {
     console.error('Error fetching owners data:', error);
+  }
+
+  // Fetch services data from WordPress
+  let servicesData: ServicesResponse | null = null;
+  
+  try {
+    const response = await fetchWordPressGraphQL(GET_ALL_SERVICES);
+    servicesData = response.data as ServicesResponse;
+  } catch (error) {
+    console.error('Error fetching services data:', error);
   }
 
   // Use WordPress data if available, otherwise use fallbacks
@@ -246,47 +258,57 @@ function stripHtml(html: string): string {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <ServiceCard
-              icon={<CorporateFare className="text-4xl" />}
-              title="Commercial TIs"
-              description="Expert build-outs and improvements for retail, office, and industrial spaces across the corridor."
-              link="#commercial-tis"
-            />
-            
-            <ServiceCard
-              icon={<ElectricBolt className="text-4xl" />}
-              title="Wiring & Rewiring"
-              description="Modernizing outdated electrical systems for safety, efficiency, and code compliance."
-              link="#wiring-rewiring"
-            />
-            
-            <ServiceCard
-              icon={<GridView className="text-4xl" />}
-              title="Panel Upgrades"
-              description="Support high-demand appliances and ensure modern safety standards with panel replacements."
-              link="#panel-upgrades"
-            />
-            
-            <ServiceCard
-              icon={<Light className="text-4xl" />}
-              title="Lighting Solutions"
-              description="Custom LED design, landscape lighting, and smart home lighting controls for security."
-              link="#lighting-solutions"
-            />
-            
-            <ServiceCard
-              icon={<ChargingStation className="text-4xl" />}
-              title="EV Chargers"
-              description="Fast, certified installation of Tesla, JuiceBox, and ChargePoint residential chargers."
-              link="#ev-chargers"
-            />
-            
-            <ServiceCard
-              icon={<Construction className="text-4xl" />}
-              title="Emergency Repair"
-              description="Rapid response for electrical failures and proactive preventative maintenance."
-              link="#emergency-repair"
-            />
+            {servicesData?.services?.nodes?.slice(0, 6).map((service) => (
+              <ServiceCard
+                key={service.id}
+                service={service}
+                icon={<ElectricBolt className="text-4xl" />}
+              />
+            )) || (
+              <>
+                <ServiceCard
+                  icon={<CorporateFare className="text-4xl" />}
+                  title="Commercial TIs"
+                  description="Expert build-outs and improvements for retail, office, and industrial spaces across the corridor."
+                  link="#commercial-tis"
+                />
+                
+                <ServiceCard
+                  icon={<ElectricBolt className="text-4xl" />}
+                  title="Wiring & Rewiring"
+                  description="Modernizing outdated electrical systems for safety, efficiency, and code compliance."
+                  link="#wiring-rewiring"
+                />
+                
+                <ServiceCard
+                  icon={<GridView className="text-4xl" />}
+                  title="Panel Upgrades"
+                  description="Support high-demand appliances and ensure modern safety standards with panel replacements."
+                  link="#panel-upgrades"
+                />
+                
+                <ServiceCard
+                  icon={<Light className="text-4xl" />}
+                  title="Lighting Solutions"
+                  description="Custom LED design, landscape lighting, and smart home lighting controls for security."
+                  link="#lighting-solutions"
+                />
+                
+                <ServiceCard
+                  icon={<ChargingStation className="text-4xl" />}
+                  title="EV Chargers"
+                  description="Fast, certified installation of Tesla, JuiceBox, and ChargePoint residential chargers."
+                  link="#ev-chargers"
+                />
+                
+                <ServiceCard
+                  icon={<Construction className="text-4xl" />}
+                  title="Emergency Repair"
+                  description="Rapid response for electrical failures and proactive preventative maintenance."
+                  link="#emergency-repair"
+                />
+              </>
+            )}
           </div>
           
           <div className="text-center mt-16">

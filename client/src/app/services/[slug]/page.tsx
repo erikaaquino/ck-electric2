@@ -1,87 +1,95 @@
 import { Metadata } from 'next';
 import DetailView from '@/components/DetailView';
+import { fetchWordPressGraphQL } from '@/lib/wordpress-graphql';
+import { GET_SERVICE_BY_SLUG } from '@/lib/wordpress-queries';
+import { ServiceDetailResponse } from '@/lib/wordpress-types';
 
-// Generate metadata for service detail pages - SSR
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: 'Commercial Electrical Services | CK Electric',
-    description: 'Professional commercial electrical solutions including tenant improvements, new construction, and system upgrades across Puget Sound.',
-    keywords: 'commercial electrical, tenant improvements, business electrical, commercial wiring, CK Electric',
-  };
+// Helper function to strip HTML tags
+function stripHtml(html: string | null | undefined): string {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').trim();
 }
 
-export default function CommercialElectricalPage() {
-  const specifications = [
-    {
-      label: 'Type',
-      value: 'Electrical Contracting'
-    },
-    {
-      label: 'Response Time',
-      value: 'Under 24 Hours'
-    },
-    {
-      label: 'Warranty',
-      value: 'Lifetime Workmanship'
-    },
-    {
-      label: 'Coverage Area',
-      value: 'Greater Kirkland Area'
+// Generate metadata for service detail pages - SSR
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  try {
+    const { slug } = await params;
+    const response = await fetchWordPressGraphQL<ServiceDetailResponse>(GET_SERVICE_BY_SLUG, { slug });
+    const service = response.data?.service;
+
+    return {
+      title: service?.title || 'Service | CK Electric',
+      description: service?.seo?.metaDesc || 'Professional electrical services across Puget Sound.',
+      keywords: service?.seo?.metaKeywords || 'electrical services, CK Electric, Puget Sound',
+    };
+  } catch (error) {
+    console.error('Error generating service metadata:', error);
+    return {
+      title: 'Service | CK Electric',
+      description: 'Professional electrical services across Puget Sound.',
+    };
+  }
+}
+
+export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  try {
+    const { slug } = await params;
+    const response = await fetchWordPressGraphQL<ServiceDetailResponse>(GET_SERVICE_BY_SLUG, { slug });
+    const service = response.data?.service;
+
+    if (!service) {
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Service Not Found</h2>
+            <a href="/services" className="text-blue-600 hover:text-blue-700">Back to Services</a>
+          </div>
+        </div>
+      );
     }
-  ];
 
-  const content = (
-    <>
-      <p>
-        At CK Electric, we pride ourselves on delivering top-tier electrical services across the Kirkland region. Our team of certified professionals ensures that every project, whether large-scale commercial upgrades or intricate residential repairs, is handled with the utmost precision and care.
-      </p>
-      <p>
-        We utilize the latest diagnostic technology and adhere to the strictest National Electrical Code (NEC) safety standards to provide you with peace of mind and high-quality results. Our commitment to excellence has made us the trusted partner for local homeowners and business managers alike.
-      </p>
-      <p>
-        From initial consultation to final inspection, we maintain transparent communication and project management, ensuring your electrical systems are efficient, safe, and ready for the future.
-      </p>
-    </>
-  );
+    // Extract specifications
+    const specifications = [
+      {
+        label: 'Type',
+        value: service.servicesFields.specifications.type?.join(', ') || 'Electrical Contracting'
+      },
+      {
+        label: 'Response Time',
+        value: service.servicesFields.specifications.responseTime || 'Under 24 Hours'
+      },
+      {
+        label: 'Warranty',
+        value: service.servicesFields.specifications.warranty || 'Lifetime Workmanship'
+      },
+      {
+        label: 'Coverage Area',
+        value: service.servicesFields.specifications.coverageArea || 'Greater Puget Sound Area'
+      }
+    ];
 
-  const relatedServices = [
-    {
-      id: '1',
-      title: 'Residential Wiring',
-      description: 'Professional home wiring services including new installations, rewiring, and electrical system upgrades.',
-      image: 'https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=400&h=300&fit=crop',
-      link: '/services/residential-wiring'
-    },
-    {
-      id: '2',
-      title: 'Panel Upgrades',
-      description: 'Modern electrical panel installations to handle today\'s power demands and improve safety.',
-      image: 'https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=400&h=300&fit=crop',
-      link: '/services/panel-upgrades'
-    },
-    {
-      id: '3',
-      title: 'EV Charger Installation',
-      description: 'Certified installation of electric vehicle charging stations for homes and businesses.',
-      image: 'https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=400&h=300&fit=crop',
-      link: '/services/ev-chargers'
-    }
-  ];
-
-  return (
-    <DetailView
-      title="Commercial Electrical Services"
-      subtitle="Professional electrical solutions for commercial businesses. Reliable, efficient, and built to the highest safety standards in Kirkland."
-      backgroundImage="https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=1920&h=1080&fit=crop"
-      primaryButtonText="Get Started"
-      primaryButtonHref="/request-estimate"
-      contentTitle="Expert Commercial Electrical Solutions"
-      content={content}
-      specifications={specifications}
-      ctaText="REQUEST ESTIMATE"
-      ctaHref="/request-estimate"
-      relatedItems={relatedServices}
-      relatedSectionType="services"
-    />
-  );
+    return (
+      <DetailView
+        title={service.title}
+        subtitle={stripHtml(service.content)}
+        contentTitle="Service Details"
+        content={null}
+        specifications={specifications}
+        primaryButtonText={service.servicesFields.heroSection.primaryCatText || "Get a Free Estimate"}
+        primaryButtonHref={service.servicesFields.heroSection.primaryCtaLink || "/request-estimate"}
+        backgroundImage={service.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=1920&h=1080&fit=crop"}
+      />
+    );
+  } catch (error) {
+    console.error('Error loading service:', error);
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Service</h2>
+          <p className="text-gray-600 mb-4">There was an error loading this service. Please try again later.</p>
+          <a href="/services" className="text-blue-600 hover:text-blue-700">Back to Services</a>
+        </div>
+      </div>
+    );
+  }
 }

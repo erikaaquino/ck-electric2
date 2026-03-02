@@ -417,6 +417,110 @@ export const GET_OWNERS = `
   }
 `;
 
+export const GET_ALL_SERVICES = `
+  query GetAllServices {
+    services {
+      nodes {
+        id
+        title
+        slug
+        content
+        servicesFields {
+          heroSection {
+            primaryCatText
+            primaryCtaLink
+            secondaryCtaLink
+            secondaryCtaText
+            tags {
+              nodes {
+                name
+              }
+            }
+            phoneNumber
+          }
+          smallDescription
+          specifications {
+            coverageArea
+            responseTime
+            type
+            warranty
+          }
+        }
+        seo {
+          metaDesc
+          metaKeywords
+          opengraphDescription
+        }
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_SERVICE_BY_SLUG = `
+  query GetServiceBySlug($slug: ID!) {
+    service(id: $slug, idType: SLUG) {
+      content
+      title
+      slug
+      seo {
+        canonical
+        cornerstone
+        focuskw
+        fullHead
+        metaDesc
+        metaKeywords
+        metaRobotsNofollow
+        metaRobotsNoindex
+        opengraphAuthor
+        opengraphDescription
+        readingTime
+      }
+      servicesFields {
+        specifications {
+          coverageArea
+          responseTime
+          type
+          warranty
+        }
+        heroSection {
+          primaryCatText
+          primaryCtaLink
+          secondaryCtaLink
+          secondaryCtaText
+          tags {
+            nodes {
+              name
+            }
+          }
+          phoneNumber
+        }
+      }
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+    }
+    services {
+      nodes {
+        servicesFields {
+          heroSection {
+            fieldGroupName
+          }
+          smallDescription
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PROJECT_BY_SLUG = `
   query GetProjectBySlug($slug: ID!) {
     project(id: $slug, idType: SLUG) {
