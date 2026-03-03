@@ -739,8 +739,57 @@ export const GET_BLOGS = `
             }
           }
         }
+        slug
         date
       }
+    }
+  }
+`;
+
+export const GET_BLOG_BY_SLUG = `
+  query GetBlogBySlug($slug: ID!) {
+    blog(id: $slug, idType: SLUG) {
+      content
+      blogEntry {
+        featuredImage {
+          node {
+            mediaItemUrl
+          }
+        }
+        authorFirstName
+        authorLastName
+        categories {
+          nodes {
+            name
+          }
+        }
+        authorProfileImage {
+          node {
+            mediaItemUrl
+          }
+        }
+        ctaSection {
+          ctaText
+          primaryCtaLink
+          primaryCtaText
+          secondaryCtaLink
+          secondaryCtaText
+        }
+      }
+      title
+      seo {
+        focuskw
+        metaDesc
+        metaKeywords
+        cornerstone
+        canonical
+        opengraphTitle
+        opengraphSiteName
+        title
+        readingTime
+      }
+      date
+      slug
     }
   }
 `;
@@ -753,5 +802,6 @@ export type {
   LandingPageData,
   OwnersData,
   TestimonialsData,
-  BlogsData
+  BlogsData,
+  BlogDetailData
 } from './wordpress-types';

@@ -431,10 +431,76 @@ export interface BlogNode {
   seo: BlogSeo;
   blogEntry: BlogEntry;
   date: string;
+  slug: string;
 }
 
 export interface BlogsData {
   blogs: {
     nodes: BlogNode[];
   };
+}
+
+// Single Blog interfaces
+export interface BlogAuthorProfileImage {
+  node: {
+    mediaItemUrl: string;
+  };
+}
+
+export interface BlogCtaSection {
+  ctaText: string;
+  primaryCtaLink: string | null;
+  primaryCtaText: string;
+  secondaryCtaLink: string | null;
+  secondaryCtaText: string;
+}
+
+export interface BlogEntryDetail {
+  featuredImage: {
+    node: {
+      mediaItemUrl: string;
+    };
+  };
+  authorFirstName: string;
+  authorLastName: string;
+  categories: {
+    nodes: Array<{
+      name: string;
+    }>;
+  };
+  authorProfileImage: {
+    node: {
+      mediaItemUrl: string;
+    };
+  };
+  ctaSection: BlogCtaSection;
+}
+
+export interface BlogSeoDetail {
+  focuskw: string;
+  metaDesc: string;
+  metaKeywords: string;
+  cornerstone: boolean;
+  canonical: string;
+  opengraphTitle: string;
+  opengraphSiteName: string;
+  title: string;
+  readingTime: number;
+}
+
+export interface BlogDetailNode {
+  content: string;
+  featuredImage: {
+    node: {
+      mediaItemUrl: string;
+    };
+  };
+  blogEntry: BlogEntryDetail;
+  title: string;
+  seo: BlogSeoDetail;
+  date: string;
+}
+
+export interface BlogDetailData {
+  blog: BlogDetailNode;
 }

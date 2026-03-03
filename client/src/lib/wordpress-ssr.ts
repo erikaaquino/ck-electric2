@@ -10,37 +10,41 @@ export async function fetchWordPressGraphQL<T>(
 ): Promise<T | null> {
   const endpoint = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
   
-  console.log('🔍 [GraphQL] Iniciando llamada...');
-  console.log('📍 [GraphQL] Endpoint:', endpoint);
-  console.log('📝 [GraphQL] Variables:', variables);
-  console.log('📋 [GraphQL] Query:', query.substring(0, 200) + '...');
+  console.log(' [GraphQL] Iniciando llamada...');
+  console.log(' [GraphQL] Endpoint:', endpoint);
+  console.log(' [GraphQL] Variables:', JSON.stringify(variables, null, 2));
+  console.log(' [GraphQL] Query:', query.substring(0, 200) + '...');
   
   if (!endpoint) {
-    console.error('❌ [GraphQL] WordPress GraphQL endpoint not configured');
+    console.error(' [GraphQL] WordPress GraphQL endpoint not configured');
     return null;
   }
 
   try {
+    const requestBody = {
+      query,
+      variables,
+    };
+    
+    console.log(' [GraphQL] Request body:', JSON.stringify(requestBody, null, 2));
+    
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'Next.js SSR Client',
       },
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
+      body: JSON.stringify(requestBody),
       // Important for SSR: use revalidate instead of cache options
       next: { revalidate: 60 }, // Revalidate every 60 seconds
     });
 
-    console.log('📡 [GraphQL] Response Status:', response.status);
+    console.log(' [GraphQL] Response Status:', response.status);
 
     if (!response.ok) {
-      console.error('❌ [GraphQL] Request failed:', response.status, response.statusText);
+      console.error(' [GraphQL] Request failed:', response.status, response.statusText);
       const errorText = await response.text();
-      console.error('❌ [GraphQL] Error response:', errorText);
+      console.error(' [GraphQL] Error response:', errorText);
       return null;
     }
 

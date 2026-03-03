@@ -34,6 +34,8 @@ export default async function BlogPage() {
       GET_BLOG_PAGE
     );
 
+    const pageData = pageDataResponse?.page;
+
     // Fetch blogs data from WordPress
     const blogsDataResponse = await fetchWordPressGraphQL<BlogsData>(
       GET_BLOGS
@@ -43,7 +45,7 @@ export default async function BlogPage() {
     console.log('🔍 Blogs Data - WordPress Response:', blogsDataResponse);
 
     // Transform WordPress blog data to match BlogPageContent expected format
-    const blogPosts = blogsDataResponse?.blogs?.nodes?.map((blog, index) => {
+    const blogPosts = blogsDataResponse?.blogs?.nodes?.map((blog: any, index: any) => {
       const date = new Date(blog.date);
       const formattedDate = date.toLocaleDateString('en-US', { 
         month: 'short', 
@@ -62,7 +64,7 @@ export default async function BlogPage() {
         readTime: readTime,
         title: blog.seo.title,
         description: blog.blogEntry.shortDescription,
-        link: `/blog/${blog.seo.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`
+        link: `/blog/${blog.slug}`
       };
     }) || [];
 
