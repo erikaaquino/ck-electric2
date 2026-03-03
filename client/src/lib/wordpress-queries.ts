@@ -642,6 +642,58 @@ export const GET_CONTACT_PAGE = `
   }
 `;
 
+export const GET_SERVICE_AREAS = `
+  query GetServiceAreas {
+    serviceAreas {
+      nodes {
+        servicesArea {
+          location
+          introduction
+        }
+        featuredImage {
+          node {
+            mediaItemUrl
+          }
+        }
+        slug
+        id
+      }
+    }
+  }
+`;
+
+export const GET_SERVICE_AREA = `
+  query GetServiceArea($id: ID!) {
+    serviceArea(id: $id, idType: SLUG) {
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      content
+      seo {
+        metaDesc
+        metaKeywords
+        focuskw
+        cornerstone
+        canonical
+        opengraphTitle
+        opengraphSiteName
+        title
+      }
+      servicesArea {
+        content
+        introduction
+        location
+        primaryCtaLink
+        primaryCtaText
+        secondaryCtaLink
+        secondaryCtaText
+      }
+    }
+  }
+`;
+
 // Re-export types from wordpress-types for convenience
 export type { 
   BlogPageData, 

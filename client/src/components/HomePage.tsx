@@ -10,7 +10,7 @@ import TestimonialCard from './TestimonialCard';
 import CtaBox from './CtaBox';
 import EstimateForm from './EstimateForm';
 import { fetchWordPressGraphQL } from '../lib/wordpress-graphql';
-import { GET_LANDING_PAGE, LandingPageData, GET_OWNERS, OwnersData } from '../lib/wordpress-queries';
+import { GET_LANDING_PAGE, LandingPageData, GET_OWNERS, OwnersData, GET_SERVICE_AREAS } from '../lib/wordpress-queries';
 import { GET_ALL_SERVICES, GET_ALL_PROJECTS } from '../lib/wordpress-queries';
 import { ServicesResponse, ProjectsResponse } from '../lib/wordpress-types';
 
@@ -59,6 +59,19 @@ function stripHtml(html: string): string {
   } catch (error) {
     console.error('Error fetching projects data:', error);
   }
+
+  // Fetch service areas data from WordPress
+  let serviceAreasData: any = null;
+  
+  try {
+    const response = await fetchWordPressGraphQL(GET_SERVICE_AREAS);
+    serviceAreasData = response.data;
+    console.log('Service areas data:', serviceAreasData);
+  } catch (error) {
+    console.error('Error fetching service areas data:', error);
+  }
+
+  const serviceAreas = serviceAreasData?.serviceAreas?.nodes || [];
 
   // Use WordPress data if available, otherwise use fallbacks
   const heroTitle = landingPageData?.page.title || "Efficiency and Quality.";
@@ -290,6 +303,71 @@ function stripHtml(html: string): string {
               variant="secondary"
               href="/services"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Service Areas Section */}
+      <section className="py-20 bg-white" id="service-areas">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4">SERVICE AREAS</h2>
+            <h3 className="text-neutral-950 text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              Serving the Entire Puget Sound Region
+            </h3>
+            <p className="text-neutral-700 text-lg max-w-3xl mx-auto mb-8">
+              From Tacoma to Skagit Valley, we provide professional electrical services to homes and businesses across the greater Seattle area.
+            </p>
+            <div className="text-sm text-neutral-600 max-w-4xl mx-auto">
+              <p className="mb-2">Service areas include: Bellevue, Bothell, Burien, Carnation, Edmonds, Everett, Federal Way, Gold Bar, Issaquah, Kenmore, Kent, Kirkland, Lake Forest Park, Lake Stevens, Lynnwood, Marysville, Medina, Mercer Island, Mill Creek, Mt. Lake Terrace, Mukilteo, Newcastle, North Bend, Redmond, Renton, Sammamish, Seattle, Snohomish, Tacoma, Tukwila, Woodinville</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {serviceAreas.length > 0 ? (
+              serviceAreas.map((area: any) => (
+                <ServiceCard
+                  key={area.id}
+                  icon={<LocationOn className="text-4xl" />}
+                  title={area.servicesArea.location}
+                  description={area.servicesArea.introduction || "Professional electrical services for this area."}
+                  link={`/service-areas/${area.slug}`}
+                  service={{
+                    id: area.id,
+                    title: area.servicesArea?.location || "Service Area",
+                    slug: area.slug,
+                    content: area.servicesArea?.introduction || "",
+                    featuredImage: {
+                      node: {
+                        sourceUrl: area.featuredImage?.node?.mediaItemUrl || "https://images.unsplash.com/photo-1603796826034-5910d5b6b2e?w=400&h=300&fit=crop",
+                        altText: area.servicesArea?.location || "Service area image"
+                      }
+                    },
+                    servicesFields: {
+                      heroSection: {
+                        primaryCatText: "Learn More",
+                        primaryCtaLink: `/service-areas/${area.slug}`,
+                        secondaryCtaLink: "/estimate",
+                        secondaryCtaText: "Get Estimate",
+                        tags: { nodes: [] },
+                        phoneNumber: "206-295-6363"
+                      },
+                      smallDescription: area.servicesArea?.introduction || "Professional electrical services",
+                      specifications: {
+                      coverageArea: [area.servicesArea?.location || "Puget Sound"],
+                      responseTime: ["Fast Response"],
+                      type: ["Professional Services"],
+                      warranty: ["Quality Guaranteed"]
+                    }
+                    }
+                  }}
+                />
+              ))
+            ) : (
+              <div className="col-span-full text-center text-neutral-600">
+                <p>Loading service areas...</p>
+              </div>
+            )}
           </div>
         </div>
       </section>

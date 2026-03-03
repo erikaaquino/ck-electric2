@@ -1,4 +1,4 @@
-import { GET_PROJECT_BY_SLUG } from '@/lib/wordpress-queries';
+import { GET_PROJECT_BY_SLUG, GET_ALL_PROJECTS } from '@/lib/wordpress-queries';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import Link from 'next/link';
 import { Metadata } from 'next';
@@ -186,6 +186,26 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     console.log('🖼️ [PAGE] Imagen:', !!project.featuredImage?.node?.sourceUrl);
     console.log('📝 [PAGE] Content length:', project.projectFields?.mainContentSection?.length || 0);
     
+    // Fetch all projects for related section
+    const allProjectsResponse = await fetchWordPressGraphQL(GET_ALL_PROJECTS);
+    const allProjects = (allProjectsResponse as any)?.projects?.nodes || [];
+    
+    // Filter out current project and get related projects
+    const relatedProjects = allProjects
+      .filter((p: any) => p.slug !== resolvedParams.slug)
+      .slice(0, 3) // Take first 3 related projects
+      .map((p: any) => ({
+        id: p.id,
+        title: p.title,
+        description: p.projectFields?.mainContentSection ? 
+          p.projectFields.mainContentSection.replace(/<[^>]*>/g, '').substring(0, 150) + '...' :
+          'Professional electrical project completed with precision and quality.',
+        image: p.featuredImage?.node?.mediaItemUrl || 'https://images.unsplash.com/photo-1603796826034-2a34491c3b2e?w=400&h=300&fit=crop',
+        link: `/projects/${p.slug}`,
+        category: p.projectFields?.specifications?.coverageArea || 'Project',
+        readTime: '5 min read'
+      }));
+    
     // Logging específico de specifications
     if (project.projectFields?.specifications) {
       console.log('📋 [PAGE] Specifications completas:', project.projectFields.specifications);
@@ -242,32 +262,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         // Related Section Props
         relatedTitle="Related Projects"
         relatedSectionType="projects"
-        relatedItems={[
-          {
-            id: '1',
-            title: 'Commercial Office Renovation',
-            description: 'Complete electrical overhaul of downtown office building with modern energy-efficient systems.',
-            image: 'https://images.unsplash.com/photo-1603796826034-2a34491c3b2e?w=400&h=300&fit=crop',
-            link: '/projects/commercial-office-renovation',
-            category: 'Commercial'
-          },
-          {
-            id: '2',
-            title: 'Industrial Warehouse Installation',
-            description: 'Large-scale electrical installation for new industrial facility with advanced safety systems.',
-            image: 'https://images.unsplash.com/photo-1603796826034-2a34491c3b2e?w=400&h=300&fit=crop',
-            link: '/projects/industrial-warehouse',
-            category: 'Industrial'
-          },
-          {
-            id: '3',
-            title: 'Residential Upgrade Project',
-            description: 'Complete home electrical system upgrade with modern panel and smart home integration.',
-            image: 'https://images.unsplash.com/photo-1603796826034-2a34491c3b2e?w=400&h=300&fit=crop',
-            link: '/projects/residential-upgrade',
-            category: 'Residential'
-          }
-        ]}
+        relatedItems={relatedProjects}
       />
     );
   } catch (error) {
