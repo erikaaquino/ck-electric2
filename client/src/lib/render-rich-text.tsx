@@ -158,25 +158,22 @@ export function renderRichText(content: string, className?: string): React.React
 }
 
 // Fallback function for server-side rendering where DOMParser might not be available
-export function renderRichTextSSR(content: string, className?: string): React.ReactNode {
-  if (!content) return null;
+export function renderRichTextSSR(content: string, className?: string): string {
+  if (!content) return '';
 
   // Simple regex-based parsing for server-side
   let processedContent = content;
   
-  // Convert WordPress blockquotes
+  // Convert WordPress blockquotes with proper styling
   processedContent = processedContent.replace(
-    /<blockquote[^>]*class="[^"]*wp-block-quote[^"]*"[^>]*>(.*?)<\/blockquote>/g,
-    (match, content) => {
-      const textContent = content.replace(/<[^>]*>/g, '').trim();
-      return `<blockquote class="my-12 py-10 px-8 bg-primary-50 border-t-2 border-b-2 border-primary-500 text-center"><p class="text-display-4 font-bold text-neutral-950 mb-4 italic">${textContent}</p></blockquote>`;
+    /<blockquote class="wp-block-quote[^"]*">([\s\S]*?)<\/blockquote>/g,
+    (match, innerContent) => {
+      // Extract the text content from inside the blockquote
+      const textMatch = innerContent.match(/<p[^>]*>([\s\S]*?)<\/p>/);
+      const textContent = textMatch ? textMatch[1].replace(/<[^>]*>/g, '').trim() : innerContent.replace(/<[^>]*>/g, '').trim();
+      
+      return `<blockquote class="my-12 py-10 px-8 bg-primary-50 border-t-2 border-b-2 border-primary-500 text-center"><p class="text-display-4 font-bold text-neutral-950 mb-4 italic">${textContent}</p><cite class="text-xs font-bold uppercase tracking-widest text-primary-500">— Matt Cheshier, Co-Owner</cite></blockquote>`;
     }
-  );
-  
-  // Convert other blockquotes
-  processedContent = processedContent.replace(
-    /<blockquote[^>]*>(.*?)<\/blockquote>/g,
-    '<blockquote class="border-l-4 border-primary-500 pl-6 my-6 italic text-neutral-700">$1</blockquote>'
   );
   
   // Convert headings
@@ -216,10 +213,5 @@ export function renderRichTextSSR(content: string, className?: string): React.Re
   // Convert line breaks
   processedContent = processedContent.replace(/<br\s*\/?>/gi, '<br />');
   
-  return (
-    <div 
-      className={className}
-      dangerouslySetInnerHTML={{ __html: processedContent }}
-    />
-  );
+  return processedContent;
 }

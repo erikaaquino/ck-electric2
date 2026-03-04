@@ -24,7 +24,7 @@ export default function BlogArticle({
   heroImage
 }: BlogArticleProps) {
   return (
-    <article className="max-w-4xl mx-auto text-center mb-12">
+    <article className="max-w-4xl mx-auto text-left mb-12">
       <div className="flex justify-center gap-2 mb-6">
         {categories.map((category) => (
           <span 
@@ -36,7 +36,7 @@ export default function BlogArticle({
         ))}
       </div>
       
-      <h1 className="text-display-2 text-neutral-950 mb-8 leading-tight">{title}</h1>
+      <h1 className="text-display-2 text-neutral-950 mb-8 leading-tight text-left">{title}</h1>
       
       <div className="flex flex-col md:flex-row items-center justify-center gap-6 border-y border-primary-500/20 py-6">
         <div className="flex items-center gap-3">
@@ -74,10 +74,10 @@ export default function BlogArticle({
       </div>
       
       {/* Article Content */}
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto text-left">
         <BlogShareButtons />
         
-        {content}
+        <div dangerouslySetInnerHTML={{ __html: content as string }} />
       </div>
     </article>
   );
