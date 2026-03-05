@@ -715,6 +715,65 @@ export const GET_TESTIMONIALS = `
   }
 `;
 
+export const GET_CLIENTS = `
+  query GetClients {
+    clients {
+      nodes {
+        title
+        data {
+          clientUrl
+        }
+        featuredImage {
+          node {
+            mediaItemUrl
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_REQUEST_ESTIMATE_PAGE = `
+  query GetRequestEstimatePage {
+    page(id: "cG9zdDozOTA=") {
+      content
+      title
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
+      seo {
+        canonical
+        cornerstone
+        focuskw
+        metaDesc
+        metaKeywords
+        metaRobotsNofollow
+        metaRobotsNoindex
+      }
+      requestEstimate {
+        step1 {
+          description
+          title
+        }
+        step2 {
+          description
+          title
+        }
+        step3 {
+          subtitle
+          title
+        }
+        step4 {
+          subtitle
+          title
+        }
+      }
+    }
+  }
+`;
+
 export const GET_BLOGS = `
   query blogs {
     blogs {

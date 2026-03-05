@@ -455,6 +455,61 @@ export interface BlogCtaSection {
   secondaryCtaText: string;
 }
 
+export interface ClientData {
+  clientUrl: string | null;
+}
+
+export interface Client {
+  title: string;
+  data: ClientData;
+  featuredImage: {
+    node: {
+      mediaItemUrl: string;
+    };
+  };
+}
+
+export interface ClientsData {
+  clients: {
+    nodes: Client[];
+  };
+}
+
+export interface RequestEstimateStep {
+  description?: string;
+  title?: string;
+  subtitle?: string;
+}
+
+export interface RequestEstimateData {
+  step1?: RequestEstimateStep;
+  step2?: RequestEstimateStep;
+  step3?: RequestEstimateStep;
+  step4?: RequestEstimateStep;
+}
+
+export interface RequestEstimatePageData {
+  page: {
+    content?: string;
+    title?: string;
+    featuredImage?: {
+      node?: {
+        mediaItemUrl?: string;
+      };
+    };
+    seo?: {
+      canonical?: string;
+      cornerstone?: boolean;
+      focuskw?: string;
+      metaDesc?: string;
+      metaKeywords?: string;
+      metaRobotsNofollow?: string;
+      metaRobotsNoindex?: string;
+    };
+    requestEstimate?: RequestEstimateData;
+  };
+}
+
 export interface BlogEntryDetail {
   featuredImage: {
     node: {

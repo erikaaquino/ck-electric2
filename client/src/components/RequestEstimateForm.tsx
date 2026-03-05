@@ -16,8 +16,7 @@ export default function RequestEstimateForm({ pageData }: RequestEstimateFormPro
     name: '',
     phone: '',
     email: '',
-    project: '',
-    address: ''
+    project: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
@@ -51,8 +50,7 @@ export default function RequestEstimateForm({ pageData }: RequestEstimateFormPro
           name: '',
           phone: '',
           email: '',
-          project: '',
-          address: ''
+          project: ''
         });
       } else {
         setStatusMessage(data.error || 'Failed to submit estimate request. Please try again.');
@@ -70,13 +68,18 @@ export default function RequestEstimateForm({ pageData }: RequestEstimateFormPro
     { icon: <Facebook className="text-xl" />, href: "#facebook", label: "Facebook" },
   ];
 
+  // Helper function to strip HTML tags
+  const stripHtml = (html: string): string => {
+    return html.replace(/<[^>]*>/g, '').trim();
+  };
+
   return (
     <>
       <HeroSection
-        title="Request a Free Estimate for electrical services"
-        subtitle="We specialize in Commercial TIs, Panel Upgrades, and EV Chargers throughout Tacoma and nearby areas. If you're searching for a trusted contractor offering fair pricing and professional results, our team is ready to help."
+        title={pageData?.page?.title || "Request a Free Estimate for electrical services"}
+        subtitle={stripHtml(pageData?.page?.content || "We specialize in Commercial TIs, Panel Upgrades, and EV Chargers throughout Tacoma and nearby areas. If you're searching for a trusted contractor offering fair pricing and professional results, our team is ready to help.")}
         hideCTA={true}
-        backgroundImage="https://images.unsplash.com/photo-1603796826034-2a34491c3b2e?w=1920&h=1080&fit=crop"
+        backgroundImage={pageData?.page?.featuredImage?.node?.mediaItemUrl || "https://images.unsplash.com/photo-1603796826034-2a34491c3b2e?w=1920&h=1080&fit=crop"}
       />
       
       <section className="py-20 bg-neutral-50">
@@ -93,8 +96,8 @@ export default function RequestEstimateForm({ pageData }: RequestEstimateFormPro
                           <span className="text-xl font-bold text-primary-500">1</span>
                         </div>
                         <div>
-                          <p className="text-base-bold text-neutral-950">Submit your request</p>
-                          <p className="text-base text-neutral-600">Fill out our estimate form with your project details and contact information</p>
+                          <p className="text-base-bold text-neutral-950">{pageData?.page?.requestEstimate?.step1?.title || "Submit your request"}</p>
+                          <p className="text-base text-neutral-600">{pageData?.page?.requestEstimate?.step1?.description || "Fill out our estimate form with your project details and contact information"}</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
@@ -102,8 +105,8 @@ export default function RequestEstimateForm({ pageData }: RequestEstimateFormPro
                           <span className="text-xl font-bold text-primary-500">2</span>
                         </div>
                         <div>
-                          <p className="text-base-bold text-neutral-950">We review your project details</p>
-                          <p className="text-base text-neutral-600">Our team analyzes your requirements and prepares for consultation</p>
+                          <p className="text-base-bold text-neutral-950">{pageData?.page?.requestEstimate?.step2?.title || "We review your project details"}</p>
+                          <p className="text-base text-neutral-600">{pageData?.page?.requestEstimate?.step2?.description || "Our team analyzes your requirements and prepares for consultation"}</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
@@ -111,8 +114,8 @@ export default function RequestEstimateForm({ pageData }: RequestEstimateFormPro
                           <span className="text-xl font-bold text-primary-500">3</span>
                         </div>
                         <div>
-                          <p className="text-base-bold text-neutral-950">Schedule a consultation (if needed)</p>
-                          <p className="text-base text-neutral-600">We may schedule a site visit to better understand your project scope</p>
+                          <p className="text-base-bold text-neutral-950">{pageData?.page?.requestEstimate?.step3?.title || "Schedule a consultation (if needed)"}</p>
+                          <p className="text-base text-neutral-600">{pageData?.page?.requestEstimate?.step3?.subtitle || "We may schedule a site visit to better understand your project scope"}</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
@@ -120,8 +123,8 @@ export default function RequestEstimateForm({ pageData }: RequestEstimateFormPro
                           <span className="text-xl font-bold text-primary-500">4</span>
                         </div>
                         <div>
-                          <p className="text-base-bold text-neutral-950">Receive a clear, written estimate</p>
-                          <p className="text-base text-neutral-600">Get detailed pricing and timeline for your electrical project</p>
+                          <p className="text-base-bold text-neutral-950">{pageData?.page?.requestEstimate?.step4?.title || "Receive a clear, written estimate"}</p>
+                          <p className="text-base text-neutral-600">{pageData?.page?.requestEstimate?.step4?.subtitle || "Get detailed pricing and timeline for your electrical project"}</p>
                         </div>
                       </div>
                     </div>
@@ -181,15 +184,6 @@ export default function RequestEstimateForm({ pageData }: RequestEstimateFormPro
                         onChange={handleChange}
                       />
                     </div>
-                    <Input
-                      label="Project Address"
-                      name="address"
-                      placeholder="Enter the project location address"
-                      type="text"
-                      required
-                      value={formData.address}
-                      onChange={handleChange}
-                    />
                     <div className="mt-4">
                       <Button
                         label={isSubmitting ? "Submitting..." : "Request Free Estimate"}

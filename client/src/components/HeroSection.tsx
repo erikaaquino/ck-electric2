@@ -32,7 +32,7 @@ export default function HeroSection({
             src={backgroundImage}
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/80 via-neutral-950/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-neutral-950/75"></div>
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 md:py-24">
         <h2 className="text-display-2 text-primary-500 mb-6 italic drop-shadow-lg">{title}</h2>

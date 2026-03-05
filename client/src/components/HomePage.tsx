@@ -9,60 +9,59 @@ import FeaturedProjectCard from './FeaturedProjectCard';
 import TestimonialCard from './TestimonialCard';
 import CtaBox from './CtaBox';
 import EstimateForm from './EstimateForm';
+import ClientLogo from '@/components/ClientLogo';
 import { fetchWordPressGraphQL } from '../lib/wordpress-graphql';
-import { GET_LANDING_PAGE, LandingPageData, GET_OWNERS, OwnersData, GET_SERVICE_AREAS, GET_TESTIMONIALS, TestimonialsData } from '../lib/wordpress-queries';
+import { GET_LANDING_PAGE, LandingPageData, GET_OWNERS, OwnersData, GET_SERVICE_AREAS, GET_TESTIMONIALS, TestimonialsData, GET_CLIENTS, ClientsData } from '../lib/wordpress-queries';
 import { GET_ALL_SERVICES, GET_ALL_PROJECTS } from '../lib/wordpress-queries';
 import { ServicesResponse, ProjectsResponse } from '../lib/wordpress-types';
 
 export default async function HomePage() {
   // Helper function to strip HTML tags
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, '').trim();
-}
+  function stripHtml(html: string): string {
+    return html.replace(/<[^>]*>/g, '').trim();
+  }
 
-// Fetch landing page data from WordPress
+  // Fetch landing page data from WordPress
   let landingPageData: LandingPageData | null = null;
-  
-  try {
-    const response = await fetchWordPressGraphQL(GET_LANDING_PAGE);
-    landingPageData = response.data as LandingPageData;
-  } catch (error) {
-    console.error('Error fetching landing page data:', error);
-  }
-
-  // Fetch owners data from WordPress
   let ownersData: OwnersData | null = null;
-  
-  try {
-    const response = await fetchWordPressGraphQL(GET_OWNERS);
-    ownersData = response.data as OwnersData;
-  } catch (error) {
-    console.error('Error fetching owners data:', error);
-  }
-
-  // Fetch services data from WordPress
+  let serviceAreasData: any = null;
+  let testimonialsData: TestimonialsData | null = null;
+  let clientsData: ClientsData | null = null;
   let servicesData: ServicesResponse | null = null;
-  
-  try {
-    const response = await fetchWordPressGraphQL(GET_ALL_SERVICES);
-    servicesData = response.data as ServicesResponse;
-  } catch (error) {
-    console.error('Error fetching services data:', error);
-  }
-
-  // Fetch projects data from WordPress
   let projectsData: ProjectsResponse | null = null;
-  
+
   try {
-    const response = await fetchWordPressGraphQL(GET_ALL_PROJECTS);
-    projectsData = response.data as ProjectsResponse;
+    // Fetch all data in parallel
+    const [
+      landingPageResponse,
+      ownersResponse,
+      serviceAreasResponse,
+      testimonialsResponse,
+      clientsResponse,
+      servicesResponse,
+      projectsResponse
+    ] = await Promise.all([
+      fetchWordPressGraphQL<LandingPageData>(GET_LANDING_PAGE),
+      fetchWordPressGraphQL<OwnersData>(GET_OWNERS),
+      fetchWordPressGraphQL<any>(GET_SERVICE_AREAS),
+      fetchWordPressGraphQL<TestimonialsData>(GET_TESTIMONIALS),
+      fetchWordPressGraphQL<ClientsData>(GET_CLIENTS),
+      fetchWordPressGraphQL<ServicesResponse>(GET_ALL_SERVICES),
+      fetchWordPressGraphQL<ProjectsResponse>(GET_ALL_PROJECTS)
+    ]);
+
+    landingPageData = landingPageResponse?.data || null;
+    ownersData = ownersResponse?.data || null;
+    serviceAreasData = serviceAreasResponse?.data || null;
+    testimonialsData = testimonialsResponse?.data || null;
+    clientsData = clientsResponse?.data || null;
+    servicesData = servicesResponse?.data || null;
+    projectsData = projectsResponse?.data || null;
   } catch (error) {
-    console.error('Error fetching projects data:', error);
+    console.error('Error fetching data:', error);
   }
 
   // Fetch service areas data from WordPress
-  let serviceAreasData: any = null;
-  
   try {
     const response = await fetchWordPressGraphQL(GET_SERVICE_AREAS);
     serviceAreasData = response.data;
@@ -72,8 +71,6 @@ function stripHtml(html: string): string {
   }
 
   // Fetch testimonials data from WordPress
-  let testimonialsData: TestimonialsData | null = null;
-  
   try {
     const response = await fetchWordPressGraphQL(GET_TESTIMONIALS);
     testimonialsData = response.data as TestimonialsData;
@@ -121,8 +118,11 @@ function stripHtml(html: string): string {
             
             <h1 className="hero-title text-neutral-950 leading-[0.9] mb-8 tracking-tighter font-bold">
               {heroTitle.split(' ').map((word, index) => 
-                word.includes('Quality') ? (
-                  <span key={index} className="text-primary-500 italic underline decoration-primary-400">{word}</span>
+                index === 0 ? (
+                  <>
+                    <span key={index} className="text-primary-500 italic underline decoration-primary-400">{word}</span>
+                    <span> </span>
+                  </>
                 ) : (
                   <span key={index}>{word} </span>
                 )
@@ -364,10 +364,10 @@ function stripHtml(html: string): string {
                       },
                       smallDescription: area.servicesArea?.introduction || "Professional electrical services",
                       specifications: {
-                      coverageArea: [area.servicesArea?.location || "Puget Sound"],
-                      responseTime: ["Fast Response"],
+                      coverageArea: area.servicesArea?.location || "Puget Sound",
+                      responseTime: "Fast Response",
                       type: ["Professional Services"],
-                      warranty: ["Quality Guaranteed"]
+                      warranty: "Quality Guaranteed"
                     }
                     }
                   }}
@@ -538,6 +538,40 @@ function stripHtml(html: string): string {
               variant="secondary"
               href="/projects"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Clients Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center text-center mb-16">
+            <h2 className="text-primary-500 font-black text-xs tracking-[0.4em] uppercase mb-4 md:text-sm lg:text-base">Our Clients</h2>
+            <h3 className="testimonials-title text-neutral-950 text-lg md:text-2xl lg:text-3xl">Trusted by Industry Leaders</h3>
+          </div>
+          
+          <div className="relative overflow-hidden">
+            <div className="flex animate-scroll-x items-center">
+              {clientsData?.clients?.nodes?.map((client: any, index: number) => (
+                <div key={index} className="flex-shrink-0 px-4 flex items-center justify-center">
+                  <ClientLogo
+                    title={client.title}
+                    imageUrl={client.featuredImage.node.mediaItemUrl}
+                    clientUrl={client.data.clientUrl}
+                  />
+                </div>
+              ))}
+              {/* Duplicate items for continuous scroll */}
+              {clientsData?.clients?.nodes?.map((client: any, index: number) => (
+                <div key={`duplicate-${index}`} className="flex-shrink-0 px-4 flex items-center justify-center">
+                  <ClientLogo
+                    title={client.title}
+                    imageUrl={client.featuredImage.node.mediaItemUrl}
+                    clientUrl={client.data.clientUrl}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
