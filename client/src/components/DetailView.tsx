@@ -173,7 +173,7 @@ export default function DetailView({
               <Button
                 label={ctaText}
                 variant="primary"
-                href={ctaHref}
+                href={ctaHref || "/request-estimate"}
                 className="mt-8 w-full"
               />
             </div>

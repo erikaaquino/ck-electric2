@@ -53,12 +53,12 @@ export default async function BlogPage() {
         year: 'numeric' 
       });
       
-      const category = blog.blogEntry.categories.nodes[0]?.name || 'General';
+      const category = blog.blogEntry.categories?.nodes?.[0]?.name || 'General';
       const readTime = `${blog.seo.readingTime} Min Read`;
       
       return {
         id: index + 1,
-        image: blog.blogEntry.featuredImage.node.mediaItemUrl,
+        image: blog.featuredImage?.node?.mediaItemUrl || '/images/default-blog.jpg',
         category: category,
         date: formattedDate,
         readTime: readTime,

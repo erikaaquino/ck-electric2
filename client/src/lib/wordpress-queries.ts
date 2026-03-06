@@ -318,8 +318,8 @@ export const GET_PROJECTS_PAGE = `
 `;
 
 export const GET_BLOG_PAGE = `
-  query GetBlogPage($id: ID!) {
-    page(id: $id) {
+  query GetBlogPage {
+    page(id: "/blog", idType: URI) {
       featuredImage {
         node {
           mediaItemUrl
@@ -788,16 +788,16 @@ export const GET_BLOGS = `
           readingTime
           title
         }
-        blogEntry {
-          shortDescription
-          featuredImage {
-            node {
-              mediaItemUrl
-              seo {
-                metaDesc
-              }
+        featuredImage {
+          node {
+            mediaItemUrl
+            seo {
+              metaDesc
             }
           }
+        }
+        blogEntry {
+          shortDescription
           categories {
             nodes {
               name
@@ -815,12 +815,12 @@ export const GET_BLOG_BY_SLUG = `
   query GetBlogBySlug($slug: ID!) {
     blog(id: $slug, idType: SLUG) {
       content
-      blogEntry {
-        featuredImage {
-          node {
-            mediaItemUrl
-          }
+      featuredImage {
+        node {
+          mediaItemUrl
         }
+      }
+      blogEntry {
         authorFirstName
         authorLastName
         categories {

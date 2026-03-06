@@ -77,6 +77,8 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         specifications={specifications}
         primaryButtonText={service.servicesFields.heroSection.primaryCatText || "Get a Free Estimate"}
         primaryButtonHref={service.servicesFields.heroSection.primaryCtaLink || "/request-estimate"}
+        ctaText={service.servicesFields.heroSection.primaryCatText || "Get a Free Estimate"}
+        ctaHref={service.servicesFields.heroSection.primaryCtaLink || "/request-estimate"}
         backgroundImage={service.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=1920&h=1080&fit=crop"}
         showCtaBox={true}
         ctaBoxTitle="Ready to get started?"

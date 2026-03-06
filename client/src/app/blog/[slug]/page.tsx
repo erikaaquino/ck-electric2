@@ -87,7 +87,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     const readingTime = `${blogData.seo.readingTime} min read`;
     
     // Hero image (use featured image or fallback)
-    const heroImage = blogData?.blogEntry?.featuredImage?.node?.mediaItemUrl || 
+    const heroImage = blogData?.featuredImage?.node?.mediaItemUrl || 
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBy5eF_MA3ugvzaD0FOYPHtoMmx-f1jyyBVb5ba42qOaIkVaWGymVEeD7iuIZ0fjCm-rPUwkujJ2HPqOTtLFYdCu4nDVOCNSx_l9RkkF6bnIGLRi9FXOo9kV1T_Az9Ook_1WHhk0GdL1-H50s9mnV8PAiHPu_DESQOj8a2CQKeW75_MrxRy26IPKx2XUDOVYabgQ3AlRv22ZYQqrslzWZVF60-Thws_urQQmJOnDI-mSJ_xBa9_BhGm5SRngWQzS1jY3JzIgMX7Io";
 
     const breadcrumbs = [
