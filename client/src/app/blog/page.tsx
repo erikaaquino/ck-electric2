@@ -1,4 +1,4 @@
-import { GET_BLOG_PAGE, BlogPageData, GET_BLOGS, BlogsData } from '@/lib/wordpress-queries';
+import { GET_BLOG_PAGE, BlogPageData, GET_BLOGS, BlogsData, GET_HEADER_DATA } from '@/lib/wordpress-queries';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import { Metadata } from 'next';
 import BlogPageContent from '@/components/BlogPageContent';

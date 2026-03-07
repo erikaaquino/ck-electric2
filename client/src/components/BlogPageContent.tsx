@@ -69,7 +69,7 @@ interface BlogPageContentProps {
 }
 
 export default function BlogPageContent({ blogPosts, blogPageData }: BlogPageContentProps) {
-  const categories = ['All Topics', 'Residential', 'Commercial', 'Electrical Safety', 'Lighting Design'];
+  const categories = ['All Topics', 'Residential', 'Commercial'];
   const [activeCategory, setActiveCategory] = React.useState('All Topics');
   const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -90,8 +90,12 @@ export default function BlogPageContent({ blogPosts, blogPageData }: BlogPageCon
     <>
       <BlogHero
         title={blogPageData?.title || "Electrical Insights & Tips"}
-        subtitle={cleanContent || "Your source for the latest trends in residential and commercial electrical solutions. From safety tips to high-end lighting design, CK Electric shares professional insights to illuminate your space."}
+        subtitle={cleanContent || "Your source for the latest trends in residential and commercial electrical solutions. CK Electric shares professional insights to help you make the best decisions for your home or business."}
         backgroundImage={blogPageData?.featuredImage?.node?.mediaItemUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuBevz4X8_qCwm5nQKKnaWVl-Vxj6iUW5VFoBc8V2CfGSXsQzGB8pOngUro1y0kXl1Y81gvhwy8vWeq8SSYpgf7oHEmIzLDaECh-QEOgGeiFImrWHxOKub4YEyOGHjmLVJe_P6d097l2hsacY2gPUZgbJfX1YEdjANsbDOG1GObiPvpyTntmbyiFCujgDFL0KCidSElT01APFrpibQru1ZkMNHt4ozYxf5RiSKLjI23KE9Jyj7feBRWdtR7n3M60ZkxVvbb4m_8fEW0"}
+        primaryButtonText={blogPageData?.ctaButtonsHero?.primaryCtaText || "Request Estimate"}
+        primaryButtonHref={blogPageData?.ctaButtonsHero?.primaryCtaLink || "/request-estimate"}
+        secondaryButtonText={blogPageData?.ctaButtonsHero?.secondaryCtaText || "Call Us Now"}
+        secondaryButtonHref={blogPageData?.ctaButtonsHero?.secondaryCtaLink || "tel:2062956363"}
       />
       
       <section className="py-20 bg-white">
