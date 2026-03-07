@@ -1,51 +1,96 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import DetailView from '@/components/DetailView';
-import Button from '@/components/Button';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import { GET_SERVICE_AREA, GET_SERVICE_AREAS, GET_LANDING_PAGE } from '@/lib/wordpress-queries';
 
-interface Specification {
-  label: string;
-  value: string;
+interface ServiceAreaNode {
+  id: string;
+  slug: string;
+  seo?: {
+    metaDesc?: string;
+    metaKeywords?: string;
+    focuskw?: string;
+    canonical?: string;
+    opengraphTitle?: string;
+    opengraphSiteName?: string;
+    title?: string;
+  };
+  servicesArea: {
+    location: string;
+    introduction?: string;
+    content?: string;
+    primaryCtaText?: string;
+    primaryCtaLink?: string;
+    secondaryCtaText?: string;
+    secondaryCtaLink?: string;
+  };
+  featuredImage?: {
+    node?: {
+      mediaItemUrl?: string;
+    };
+  };
 }
 
-interface ServiceAreaPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
+interface ServiceAreasListData {
+  serviceAreas: {
+    nodes: Array<{
+      id: string;
+      slug: string;
+      servicesArea: {
+        location: string;
+        introduction?: string;
+      };
+      featuredImage?: {
+        node?: {
+          mediaItemUrl?: string;
+        };
+      };
+    }>;
+  };
 }
 
-// Helper function to strip HTML tags
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, '').trim();
 }
 
-export async function generateMetadata({ params }: ServiceAreaPageProps): Promise<Metadata> {
+export async function generateStaticParams() {
+  const data = await fetchWordPressGraphQL<ServiceAreasListData>(GET_SERVICE_AREAS);
+  return (data?.serviceAreas?.nodes || []).map((area) => ({
+    slug: area.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const response = await fetchWordPressGraphQL(GET_SERVICE_AREA, { id: slug });
-    const serviceArea = (response as any)?.serviceArea;
+    const response = await fetchWordPressGraphQL<{ serviceArea: ServiceAreaNode }>(GET_SERVICE_AREA, { id: slug });
+    const serviceArea = response?.serviceArea;
 
     if (!serviceArea) {
-      return {
-        title: 'Service Area | CK Electric',
-        description: 'Professional electrical services across Puget Sound.',
-      };
+      return { title: 'Service Area | CK Electric' };
     }
 
+    const locationName = serviceArea.servicesArea?.location || slug;
+
     return {
-      title: serviceArea.seo?.title || `${serviceArea.servicesArea?.location || slug} | CK Electric`,
-      description: serviceArea.seo?.metaDesc || serviceArea.servicesArea?.introduction || 'Professional electrical services.',
-      keywords: serviceArea.seo?.metaKeywords || '',
+      title: serviceArea.seo?.title || `Electrical Services in ${locationName}`,
+      description:
+        serviceArea.seo?.metaDesc ||
+        serviceArea.servicesArea?.introduction ||
+        `CK Electric provides professional electrical services in ${locationName}, WA. Licensed contractors for residential and commercial work.`,
+      keywords: serviceArea.seo?.metaKeywords || `electrician ${locationName}, electrical contractor ${locationName}, ${locationName} electrical services`,
+      alternates: {
+        canonical: serviceArea.seo?.canonical || `/service-areas/${slug}`,
+      },
       openGraph: {
         title: serviceArea.seo?.opengraphTitle || serviceArea.servicesArea?.location || slug,
-        description: serviceArea.seo?.metaDesc || serviceArea.servicesArea?.introduction,
+        description: serviceArea.seo?.metaDesc || serviceArea.servicesArea?.introduction || '',
         siteName: serviceArea.seo?.opengraphSiteName || 'CK Electric',
         type: 'website',
       },
     };
-  } catch (error) {
-    console.error('Error generating service area metadata:', error);
+  } catch {
     return {
       title: 'Service Area | CK Electric',
       description: 'Professional electrical services across Puget Sound.',
@@ -53,115 +98,64 @@ export async function generateMetadata({ params }: ServiceAreaPageProps): Promis
   }
 }
 
-export default async function ServiceAreaPage({ params }: ServiceAreaPageProps) {
+export default async function ServiceAreaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  try {
-    const response = await fetchWordPressGraphQL(GET_SERVICE_AREA, { id: slug });
-    const serviceArea = (response as any)?.serviceArea;
 
-    if (!serviceArea) {
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-neutral-950 mb-4">Service Area Not Found</h1>
-            <p className="text-neutral-600 mb-8">The service area you're looking for doesn't exist or has been removed.</p>
-            <Button
-              label="Back to Home"
-              href="/"
-              variant="secondary"
-            />
-          </div>
-        </div>
-      );
-    }
+  const [response, serviceAreasResponse, headerResponse] = await Promise.all([
+    fetchWordPressGraphQL<{ serviceArea: ServiceAreaNode }>(GET_SERVICE_AREA, { id: slug }),
+    fetchWordPressGraphQL<ServiceAreasListData>(GET_SERVICE_AREAS),
+    fetchWordPressGraphQL<{ page: { landingPage: { headerInfo: { contactPhoneNumber: string } } } }>(GET_LANDING_PAGE),
+  ]);
 
-    // Extract specifications from servicesArea data
-    const specifications: Specification[] = [
-      {
-        label: "Service Area",
-        value: serviceArea.servicesArea?.location || "Puget Sound"
-      },
-      {
-        label: "Primary Service",
-        value: "Professional Electrical Services"
-      },
-      {
-        label: "Service Coverage",
-        value: "Residential & Commercial"
-      }
-    ];
+  const serviceArea = response?.serviceArea;
 
-    // Fetch header data to get contact phone
-    let contactPhone = "2062956363"; // fallback
-    try {
-      const headerResponse = await fetchWordPressGraphQL<any>(GET_LANDING_PAGE);
-      if (headerResponse?.data?.page?.landingPage?.headerInfo?.contactPhoneNumber) {
-        contactPhone = headerResponse.data.page.landingPage.headerInfo.contactPhoneNumber;
-      }
-    } catch (error) {
-      console.error('Error fetching header data:', error);
-    }
-
-    // Fetch all service areas for related section
-    const serviceAreasResponse = await fetchWordPressGraphQL(GET_SERVICE_AREAS);
-    const serviceAreas = (serviceAreasResponse as any)?.serviceAreas?.nodes || [];
-
-    return (
-      <DetailView
-        // Hero Section Props
-        title={serviceArea.servicesArea?.location || "Service Area"}
-        subtitle={serviceArea.servicesArea?.introduction || "Professional electrical services for this area."}
-        backgroundImage={serviceArea.featuredImage?.node?.mediaItemUrl || "https://images.unsplash.com/photo-1603796826034-5910d5b6b2e?w=1920&h=1080&fit=crop"}
-        primaryButtonText={serviceArea.servicesArea?.primaryCtaText || "Get a Free Estimate"}
-        primaryButtonHref={serviceArea.servicesArea?.primaryCtaLink || "/estimate"}
-
-        // Content Section Props
-        contentTitle={`${serviceArea.servicesArea?.location} Electrical Services`}
-        content={serviceArea.servicesArea?.content || '<p>Professional electrical services for this area.</p>'}
-
-        // Sidebar Props
-        specifications={specifications}
-        ctaText={serviceArea.servicesArea?.secondaryCtaText || "Request Service"}
-        ctaHref={serviceArea.servicesArea?.secondaryCtaLink || "/estimate"}
-
-        // CtaBox Props
-        showCtaBox={true}
-        ctaBoxTitle="Ready to Get Started?"
-        ctaBoxPrimaryButtonText={serviceArea.servicesArea?.primaryCtaText || "Get a Free Estimate"}
-        ctaBoxPrimaryButtonHref={serviceArea.servicesArea?.primaryCtaLink || "/estimate"}
-        ctaBoxSecondaryButtonText="Call Us Now"
-        ctaBoxSecondaryButtonHref={`tel:${contactPhone}`}
-
-        // Related Section Props - Show other service areas as related
-        relatedTitle="Other Service Areas"
-        relatedSectionType="areas"
-        relatedItems={serviceAreas
-          .filter((area: any) => area.servicesArea?.introduction && area.slug !== slug)
-          .map((area: any) => ({
-            id: area.id,
-            title: area.servicesArea.location,
-            description: stripHtml(area.servicesArea.introduction),
-            link: `/service-areas/${area.slug}`,
-            image: area.featuredImage?.node?.mediaItemUrl || 'https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=400&h=300&fit=crop',
-            category: 'Service Area',
-            readTime: '3 min read'
-          }))}
-      />
-    );
-  } catch (error) {
-    console.error('Error fetching service area data:', error);
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-neutral-950 mb-4">Error Loading Service Area</h1>
-          <p className="text-neutral-600 mb-8">There was an error loading the service area information.</p>
-          <Button
-            label="Back to Home"
-            href="/"
-            variant="secondary"
-          />
-        </div>
-      </div>
-    );
+  if (!serviceArea) {
+    notFound();
   }
+
+  const contactPhone =
+    headerResponse?.page?.landingPage?.headerInfo?.contactPhoneNumber || '2062956363';
+  const serviceAreas = serviceAreasResponse?.serviceAreas?.nodes || [];
+
+  const specifications = [
+    { label: 'Service Area', value: serviceArea.servicesArea?.location || 'Puget Sound' },
+    { label: 'Primary Service', value: 'Professional Electrical Services' },
+    { label: 'Service Coverage', value: 'Residential & Commercial' },
+  ];
+
+  const relatedItems = serviceAreas
+    .filter((area) => area.servicesArea?.introduction && area.slug !== slug)
+    .map((area) => ({
+      id: area.id,
+      title: area.servicesArea.location,
+      description: stripHtml(area.servicesArea.introduction || ''),
+      link: `/service-areas/${area.slug}`,
+      image: area.featuredImage?.node?.mediaItemUrl || 'https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=400&h=300&fit=crop',
+      category: 'Service Area',
+      readTime: '3 min read',
+    }));
+
+  return (
+    <DetailView
+      title={serviceArea.servicesArea?.location || 'Service Area'}
+      subtitle={serviceArea.servicesArea?.introduction || 'Professional electrical services for this area.'}
+      backgroundImage={serviceArea.featuredImage?.node?.mediaItemUrl || 'https://images.unsplash.com/photo-1603796826034-5910d5b6b2e?w=1920&h=1080&fit=crop'}
+      primaryButtonText={serviceArea.servicesArea?.primaryCtaText || 'Get a Free Estimate'}
+      primaryButtonHref={serviceArea.servicesArea?.primaryCtaLink || '/request-estimate'}
+      contentTitle={`${serviceArea.servicesArea?.location} Electrical Services`}
+      content={serviceArea.servicesArea?.content || '<p>Professional electrical services for this area.</p>'}
+      specifications={specifications}
+      ctaText={serviceArea.servicesArea?.secondaryCtaText || 'Request Service'}
+      ctaHref={serviceArea.servicesArea?.secondaryCtaLink || '/request-estimate'}
+      showCtaBox={true}
+      ctaBoxTitle="Ready to Get Started?"
+      ctaBoxPrimaryButtonText={serviceArea.servicesArea?.primaryCtaText || 'Get a Free Estimate'}
+      ctaBoxPrimaryButtonHref={serviceArea.servicesArea?.primaryCtaLink || '/request-estimate'}
+      ctaBoxSecondaryButtonText="Call Us Now"
+      ctaBoxSecondaryButtonHref={`tel:${contactPhone}`}
+      relatedTitle="Other Service Areas"
+      relatedSectionType="areas"
+      relatedItems={relatedItems}
+    />
+  );
 }

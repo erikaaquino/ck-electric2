@@ -429,8 +429,10 @@ export interface BlogSeo {
 }
 
 export interface BlogNode {
+  title: string;
   seo: BlogSeo;
   blogEntry: BlogEntry;
+  featuredImage?: BlogFeaturedImage;
   date: string;
   slug: string;
 }

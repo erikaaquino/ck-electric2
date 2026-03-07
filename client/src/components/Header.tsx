@@ -23,10 +23,10 @@ export default function Header() {
     companyLogo: CompanyLogo | null;
     loading: boolean;
   }>({
-    serviceArea: "Not Available",
-    slogan: "Not Available", 
-    contactEmail: "Not Available",
-    contactPhone: "Not Available",
+    serviceArea: "",
+    slogan: "",
+    contactEmail: "",
+    contactPhone: "",
     companyLogo: null,
     loading: true
   });
@@ -44,10 +44,10 @@ export default function Header() {
           const page = response.data.page;
           
           setHeaderData({
-            serviceArea: page.landingPage?.headerInfo?.serviceArea || "Not Available",
-            slogan: page.landingPage?.headerInfo?.slogan || "Not Available", 
-            contactEmail: page.landingPage?.headerInfo?.contactEmail || "Not Available",
-            contactPhone: page.landingPage?.headerInfo?.contactPhoneNumber || "Not Available",
+            serviceArea: page.landingPage?.headerInfo?.serviceArea || "",
+            slogan: page.landingPage?.headerInfo?.slogan || "",
+            contactEmail: page.landingPage?.headerInfo?.contactEmail || "",
+            contactPhone: page.landingPage?.headerInfo?.contactPhoneNumber || "2062956363",
             companyLogo: page.landingPage?.headerInfo?.companyLogo || null,
             loading: false
           });
@@ -64,7 +64,7 @@ export default function Header() {
     fetchHeaderData();
   }, []);
 
-  const { serviceArea, slogan, contactEmail, contactPhone, companyLogo, loading } = headerData;
+  const { serviceArea, slogan, contactEmail, contactPhone, companyLogo } = headerData;
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -95,11 +95,11 @@ export default function Header() {
               className="text-small-bold text-white whitespace-nowrap hover:underline"
               aria-label={`Email us at ${contactEmail}`}
             >
-              {loading ? "Loading..." : contactEmail}
+              {contactEmail}
             </a>
           </div>
           <span className="text-small text-white whitespace-nowrap">
-            {loading ? "Loading..." : serviceArea}
+            {serviceArea}
           </span>
         </div>
         
@@ -120,11 +120,11 @@ export default function Header() {
               className="text-small-bold text-white whitespace-nowrap hover:underline"
               aria-label={`Email us at ${contactEmail}`}
             >
-              {loading ? "Loading..." : contactEmail}
+              {contactEmail}
             </a>
           </div>
           <span className="text-small text-white whitespace-nowrap">
-            {loading ? "Loading..." : serviceArea}
+            {serviceArea}
           </span>
         </div>
       </div>
@@ -155,32 +155,34 @@ export default function Header() {
               </div>
               <div className="flex items-start self-stretch w-full flex-col relative flex-[0_0_auto]">
                 <span className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small text-primary-500 whitespace-nowrap">
-                  {loading ? "Loading..." : slogan}
+                  {slogan}
                 </span>
               </div>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <ul className="hidden lg:flex flex-wrap items-center gap-[8px_8px] relative list-none m-0 p-0">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className={`inline-flex items-center gap-2 p-2 flex-[0_0_auto] rounded-lg justify-center relative transition-colors ${
-                    pathname === item.href 
-                      ? 'bg-primary-300 text-black' 
-                      : 'hover:bg-primary-100'
-                  }`}
-                >
-                  <span className={`relative flex items-center justify-center w-fit mt-[-1.00px] text-base whitespace-nowrap ${
-                    pathname === item.href ? 'text-black' : 'text-neutral-950'
-                  }`}>
-                    {item.label}
-                  </span>
-                </Link>
-              </li>
-            ))}
+          <ul className="hidden lg:flex flex-wrap items-center gap-[8px_8px] relative list-none m-0 p-0" role="menubar">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <li key={item.label} role="none">
+                  <Link
+                    href={item.href}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`inline-flex items-center gap-2 p-2 flex-[0_0_auto] rounded-lg justify-center relative transition-colors ${
+                      isActive ? 'bg-primary-300 text-black' : 'hover:bg-primary-100'
+                    }`}
+                  >
+                    <span className={`relative flex items-center justify-center w-fit mt-[-1.00px] text-base whitespace-nowrap ${
+                      isActive ? 'text-black' : 'text-neutral-950'
+                    }`}>
+                      {item.label}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="hidden lg:flex items-center gap-4">
@@ -192,7 +194,7 @@ export default function Header() {
                 className="relative flex items-center justify-center w-fit mt-[-1.00px] text-base-bold text-neutral-950 whitespace-nowrap hover:underline"
                 aria-label={`Call us at ${contactPhone}`}
               >
-                {loading ? "Loading..." : contactPhone}
+                {contactPhone}
               </a>
             </div>
           </div>
@@ -257,7 +259,7 @@ export default function Header() {
                       CK Electric
                     </span>
                     <span className="text-small text-primary-500 whitespace-nowrap">
-                      {loading ? "Loading..." : slogan}
+                      {slogan}
                     </span>
                   </div>
                 </div>
@@ -282,27 +284,29 @@ export default function Header() {
               </div>
 
               {/* Navigation Links */}
-              <nav className="flex-1 overflow-y-auto p-4">
+              <nav className="flex-1 overflow-y-auto p-4" aria-label="Mobile navigation">
                 <ul className="flex flex-col space-y-2 list-none m-0 p-0">
-                  {navItems.map((item) => (
-                    <li key={item.label}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`block w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                          pathname === item.href 
-                            ? 'bg-primary-300 text-black' 
-                            : 'hover:bg-primary-300'
-                        }`}
-                      >
-                        <span className={`text-base whitespace-nowrap ${
-                          pathname === item.href ? 'text-black' : 'text-neutral-950'
-                        }`}>
-                          {item.label}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
+                  {navItems.map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                      <li key={item.label}>
+                        <Link
+                          href={item.href}
+                          aria-current={isActive ? 'page' : undefined}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`block w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                            isActive ? 'bg-primary-300 text-black' : 'hover:bg-primary-300'
+                          }`}
+                        >
+                          <span className={`text-base whitespace-nowrap ${
+                            isActive ? 'text-black' : 'text-neutral-950'
+                          }`}>
+                            {item.label}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </nav>
 
@@ -314,14 +318,14 @@ export default function Header() {
                     className="flex items-center gap-3 text-neutral-950 hover:text-primary-500 transition-colors"
                   >
                     <PhoneIcon sx={{ fontSize: '20px' }} />
-                    <span className="text-base-bold">{loading ? "Loading..." : contactPhone}</span>
+                    <span className="text-base-bold">{contactPhone}</span>
                   </a>
                   <a
                     href={`mailto:${contactEmail}`}
                     className="flex items-center gap-3 text-neutral-950 hover:text-primary-500 transition-colors"
                   >
                     <EmailIcon sx={{ fontSize: '20px' }} />
-                    <span className="text-base-bold">{loading ? "Loading..." : contactEmail}</span>
+                    <span className="text-base-bold">{contactEmail}</span>
                   </a>
                 </div>
               </div>

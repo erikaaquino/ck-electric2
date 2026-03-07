@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Phone, Mail, LocationOn, Facebook } from '@mui/icons-material';
 import SocialLinks from './SocialLinks';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
@@ -6,11 +7,6 @@ import { GET_HEADER_DATA, GET_FOOTER_SERVICES } from '@/lib/wordpress-queries';
 interface FooterLink {
   label: string;
   href: string;
-}
-
-interface FooterSection {
-  title: string;
-  links: FooterLink[];
 }
 
 interface FooterProps {
@@ -37,9 +33,9 @@ export default async function Footer({ headerData, servicesData }: FooterProps) 
     href: `/services/${service.slug}`,
   }));
 
-  const socialLinks = [
-    { icon: <Facebook className="text-xl" />, href: headerInfo?.facebookLink || "#facebook", label: "Facebook" },
-  ];
+  const socialLinks = headerInfo?.facebookLink
+    ? [{ icon: <Facebook className="text-xl" />, href: headerInfo.facebookLink, label: "Facebook" }]
+    : [];
 
   return (
     <footer className="bg-neutral-950 text-white">
@@ -85,12 +81,12 @@ export default async function Footer({ headerData, servicesData }: FooterProps) 
             <ul className="space-y-3">
               {companyLinks.map((link) => (
                 <li key={link.href}>
-                  <a 
+                  <Link
                     href={link.href}
                     className="text-small text-neutral-400 hover:text-primary-500 transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -102,12 +98,12 @@ export default async function Footer({ headerData, servicesData }: FooterProps) 
             <ul className="space-y-3">
               {servicesLinks.map((link) => (
                 <li key={link.href}>
-                  <a 
+                  <Link
                     href={link.href}
                     className="text-small text-neutral-400 hover:text-primary-500 transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

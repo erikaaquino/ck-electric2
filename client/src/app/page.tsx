@@ -1,17 +1,43 @@
 import { Metadata } from 'next';
 import HomePage from '@/components/HomePage';
+import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
+import {
+  GET_LANDING_PAGE,
+  GET_OWNERS,
+  GET_SERVICE_AREAS,
+  GET_TESTIMONIALS,
+  GET_CLIENTS,
+  GET_ALL_SERVICES,
+  GET_ALL_PROJECTS,
+} from '@/lib/wordpress-queries';
+import type {
+  LandingPageData,
+  OwnersData,
+  TestimonialsData,
+  ClientsData,
+  ServicesResponse,
+  ProjectsResponse,
+} from '@/lib/wordpress-types';
 
-// Generate metadata for the home page - SSR
 export async function generateMetadata(): Promise<Metadata> {
+  const landingPage = await fetchWordPressGraphQL<LandingPageData>(GET_LANDING_PAGE);
+  const page = landingPage?.page;
+
   return {
-    title: 'CK Electric | Premier Electrical Contractor Puget Sound',
-    description: 'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality for every project in Tacoma to Skagit Valley.',
-    keywords: 'electrical contractor, licensed electrician, commercial electrical, residential electrical, EV charger installation, panel upgrades, Puget Sound',
+    title: page?.seo?.title || 'CK Electric | Premier Electrical Contractor Puget Sound',
+    description:
+      page?.seo?.metaDesc ||
+      'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality for every project in the Puget Sound.',
+    keywords:
+      page?.seo?.metaKeywords ||
+      'electrical contractor, licensed electrician, commercial electrical, residential electrical, EV charger installation, panel upgrades, Puget Sound',
     openGraph: {
-      title: 'CK Electric | Premier Electrical Contractor Puget Sound',
-      description: 'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality for every project.',
+      title: page?.seo?.opengraphTitle || 'CK Electric | Premier Electrical Contractor Puget Sound',
+      description:
+        page?.seo?.opengraphDescription ||
+        'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality for every project.',
       type: 'website',
-      url: '/',
+      url: 'https://ck-electric.com',
       images: [
         {
           url: '/images/og-home.jpg',
@@ -23,13 +49,47 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'CK Electric | Premier Electrical Contractor Puget Sound',
-      description: 'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality.',
+      title: page?.seo?.opengraphTitle || 'CK Electric | Premier Electrical Contractor Puget Sound',
+      description:
+        page?.seo?.opengraphDescription ||
+        'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality.',
       images: ['/images/og-home.jpg'],
     },
   };
 }
 
-export default function Home() {
-  return <HomePage />;
+export default async function Home() {
+  const [
+    landingPageData,
+    ownersData,
+    serviceAreasData,
+    testimonialsData,
+    clientsData,
+    servicesData,
+    projectsData,
+  ] = await Promise.all([
+    fetchWordPressGraphQL<LandingPageData>(GET_LANDING_PAGE),
+    fetchWordPressGraphQL<OwnersData>(GET_OWNERS),
+    fetchWordPressGraphQL<{ serviceAreas: { nodes: unknown[] } }>(GET_SERVICE_AREAS),
+    fetchWordPressGraphQL<TestimonialsData>(GET_TESTIMONIALS),
+    fetchWordPressGraphQL<ClientsData>(GET_CLIENTS),
+    fetchWordPressGraphQL<ServicesResponse>(GET_ALL_SERVICES),
+    fetchWordPressGraphQL<ProjectsResponse>(GET_ALL_PROJECTS),
+  ]);
+
+  const contactPhone =
+    landingPageData?.page?.landingPage?.headerInfo?.contactPhoneNumber || '2062956363';
+
+  return (
+    <HomePage
+      landingPageData={landingPageData}
+      ownersData={ownersData}
+      serviceAreasData={serviceAreasData}
+      testimonialsData={testimonialsData}
+      clientsData={clientsData}
+      servicesData={servicesData}
+      projectsData={projectsData}
+      contactPhone={contactPhone}
+    />
+  );
 }

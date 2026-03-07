@@ -1,43 +1,45 @@
 import { Metadata } from 'next';
 import ContactForm from '@/components/ContactForm';
-import { fetchWordPressGraphQL } from '@/lib/wordpress-graphql';
-import { GET_PAGE_BY_SLUG, GET_CONTACT_PAGE } from '@/lib/wordpress-queries';
+import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
+import { GET_CONTACT_PAGE } from '@/lib/wordpress-queries';
 
-// Generate metadata for the contact page - SSR
+interface ContactPageData {
+  page: {
+    title: string;
+    content: string;
+    seo: {
+      metaDesc: string;
+      metaKeywords: string;
+    };
+    contactInformation: {
+      businessHours: string;
+      facebookLink: string;
+      location: string;
+      mattPhoneNumber: string;
+      principalEmail: string;
+      robPhoneNumber: string;
+      extraInfo: { subtitle: string; title: string };
+      forwardedTo: { mattEmail: string; robEmail: string };
+      googleMapsRating: { locationLink: string; rating: string };
+    };
+    slug: string;
+  };
+}
+
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const response = await fetchWordPressGraphQL(GET_CONTACT_PAGE);
-    const pageData = (response as any)?.data?.page;
+  const data = await fetchWordPressGraphQL<ContactPageData>(GET_CONTACT_PAGE);
+  const page = data?.page;
 
-    if (!pageData) {
-      return {
-        title: 'Contact CK Electric | Licensed Electricians in Puget Sound',
-        description: 'Contact CK Electric for expert commercial and residential electrical services across Puget Sound. Competitive pricing and reliable service.',
-      };
-    }
-
-    return {
-      title: pageData.title || 'Contact CK Electric',
-      description: pageData.seo?.metaDesc || 'Contact CK Electric for expert electrical services across Puget Sound.',
-      keywords: pageData.seo?.metaKeywords || '',
-    };
-  } catch (error) {
-    console.error('Error generating metadata:', error);
-    return {
-      title: 'Contact CK Electric | Licensed Electricians in Puget Sound',
-      description: 'Contact CK Electric for expert commercial and residential electrical services across Puget Sound. Competitive pricing and reliable service.',
-    };
-  }
+  return {
+    title: page?.title || 'Contact Us',
+    description:
+      page?.seo?.metaDesc ||
+      'Contact CK Electric for expert commercial and residential electrical services across Puget Sound. Licensed, bonded, and ready to help.',
+    keywords: page?.seo?.metaKeywords || 'contact electrician, hire electrician Puget Sound, CK Electric contact',
+  };
 }
 
 export default async function ContactPage() {
-  try {
-    const response = await fetchWordPressGraphQL(GET_CONTACT_PAGE);
-    const pageData = (response as any)?.data?.page;
-
-    return <ContactForm pageData={pageData} />;
-  } catch (error) {
-    console.error('Error fetching contact page data:', error);
-    return <ContactForm pageData={null} />;
-  }
+  const data = await fetchWordPressGraphQL<ContactPageData>(GET_CONTACT_PAGE);
+  return <ContactForm pageData={data?.page ?? null} />;
 }
