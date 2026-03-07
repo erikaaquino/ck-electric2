@@ -4,7 +4,7 @@ import BlogArticle from '@/components/BlogArticle';
 import CtaBox from '@/components/CtaBox';
 import RelatedArticles from '@/components/RelatedArticles';
 import { ArrowRightAlt } from '@mui/icons-material';
-import { GET_BLOG_BY_SLUG, BlogDetailData } from '@/lib/wordpress-queries';
+import { GET_BLOG_BY_SLUG, BlogDetailData, GET_LANDING_PAGE } from '@/lib/wordpress-queries';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import { renderRichTextSSR } from '@/lib/render-rich-text';
 
@@ -48,6 +48,17 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   if (!resolvedParams.slug) {
     console.log('❌ No slug provided');
     return <div>Error: No slug parameter provided</div>;
+  }
+
+  // Fetch header data to get contact phone
+  let contactPhone = "2062956363"; // fallback
+  try {
+    const headerResponse = await fetchWordPressGraphQL<any>(GET_LANDING_PAGE);
+    if (headerResponse?.data?.page?.landingPage?.headerInfo?.contactPhoneNumber) {
+      contactPhone = headerResponse.data.page.landingPage.headerInfo.contactPhoneNumber;
+    }
+  } catch (error) {
+    console.error('Error fetching header data:', error);
   }
   
   try {
@@ -153,11 +164,11 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
         </main>
         
         <CtaBox
-          title={ctaSection.ctaText}
-          primaryButtonText={ctaSection.primaryCtaText}
+          title={ctaSection.ctaText || "Ready to start your electrical project?"}
+          primaryButtonText={ctaSection.primaryCtaText || "Get a Free Estimate"}
           primaryButtonHref={ctaSection.primaryCtaLink || "/request-estimate"}
-          secondaryButtonText={ctaSection.secondaryCtaText}
-          secondaryButtonHref={ctaSection.secondaryCtaLink || "tel:5550123456"}
+          secondaryButtonText={ctaSection.secondaryCtaText || "Call Now"}
+          secondaryButtonHref={ctaSection.secondaryCtaLink || `tel:${contactPhone}`}
         />
         
         <RelatedArticles articles={relatedArticles} />

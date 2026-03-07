@@ -84,7 +84,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         ctaBoxTitle="Ready to get started?"
         ctaBoxPrimaryButtonText={service.servicesFields.heroSection.primaryCatText || "Get a Free Estimate"}
         ctaBoxPrimaryButtonHref={service.servicesFields.heroSection.primaryCtaLink || "/request-estimate"}
-        ctaBoxSecondaryButtonText={service.servicesFields.heroSection.secondaryCtaText || "Call Us Now"}
+        ctaBoxSecondaryButtonText={service.servicesFields.heroSection.secondaryCtaText || "Contact Us"}
         ctaBoxSecondaryButtonHref={service.servicesFields.heroSection.secondaryCtaLink || "/contact"}
       />
     );

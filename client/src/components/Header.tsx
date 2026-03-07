@@ -84,7 +84,7 @@ export default function Header() {
       {/* Top bar */}
       <div className="px-4 sm:px-8 py-2 flex-[0_0_auto] bg-neutral-950 relative self-stretch w-full border-b border-neutral-200">
         {/* Mobile layout - email and service area */}
-        <div className="sm:hidden flex items-center gap-8">
+        <div className="sm:hidden flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
             <EmailIcon 
               sx={{ 

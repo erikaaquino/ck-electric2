@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import DetailView from '@/components/DetailView';
 import Button from '@/components/Button';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
-import { GET_SERVICE_AREA, GET_SERVICE_AREAS } from '@/lib/wordpress-queries';
+import { GET_SERVICE_AREA, GET_SERVICE_AREAS, GET_LANDING_PAGE } from '@/lib/wordpress-queries';
 
 interface Specification {
   label: string;
@@ -91,6 +91,17 @@ export default async function ServiceAreaPage({ params }: ServiceAreaPageProps) 
       }
     ];
 
+    // Fetch header data to get contact phone
+    let contactPhone = "2062956363"; // fallback
+    try {
+      const headerResponse = await fetchWordPressGraphQL<any>(GET_LANDING_PAGE);
+      if (headerResponse?.data?.page?.landingPage?.headerInfo?.contactPhoneNumber) {
+        contactPhone = headerResponse.data.page.landingPage.headerInfo.contactPhoneNumber;
+      }
+    } catch (error) {
+      console.error('Error fetching header data:', error);
+    }
+
     // Fetch all service areas for related section
     const serviceAreasResponse = await fetchWordPressGraphQL(GET_SERVICE_AREAS);
     const serviceAreas = (serviceAreasResponse as any)?.serviceAreas?.nodes || [];
@@ -118,8 +129,8 @@ export default async function ServiceAreaPage({ params }: ServiceAreaPageProps) 
         ctaBoxTitle="Ready to Get Started?"
         ctaBoxPrimaryButtonText={serviceArea.servicesArea?.primaryCtaText || "Get a Free Estimate"}
         ctaBoxPrimaryButtonHref={serviceArea.servicesArea?.primaryCtaLink || "/estimate"}
-        ctaBoxSecondaryButtonText="Contact Us"
-        ctaBoxSecondaryButtonHref="/contact"
+        ctaBoxSecondaryButtonText="Call Us Now"
+        ctaBoxSecondaryButtonHref={`tel:${contactPhone}`}
 
         // Related Section Props - Show other service areas as related
         relatedTitle="Other Service Areas"

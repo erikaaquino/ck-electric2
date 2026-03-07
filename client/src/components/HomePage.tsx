@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Bolt, Verified, Timer, Phone, Mail, LocationOn, Check, ArrowRightAlt, FormatQuote, CorporateFare, ElectricBolt, GridView, Light, ChargingStation, Construction, Call } from '@mui/icons-material';
+import { Bolt, Verified, Timer, Phone, Mail, LocationOn, Check, ArrowRightAlt, FormatQuote, CorporateFare, ElectricBolt, GridView, Light, ChargingStation, Construction, Call, Email } from '@mui/icons-material';
 import Button from './Button';
 import Input from './Input';
 import Select from './Select';
@@ -80,7 +80,7 @@ export default function HomePage() {
   const serviceAreas = serviceAreasData?.serviceAreas?.nodes || [];
 
   // Use WordPress data if available, otherwise use fallbacks
-  const heroTitle = landingPageData?.page.title || "Efficiency and Quality.";
+  const heroTitle = landingPageData?.page.title || "Leaders in quality electrical services";
   const heroSubtitle = stripHtml(landingPageData?.page.content || "Talk directly with a licensed electrician. No call centers, no middlemen. Fast response and industrial-grade quality for every project.");
   const tag = landingPageData?.page.landingPage.tag || "Direct Access to Licensed Experts";
   const aboutTitle = landingPageData?.page.landingPage.aboutUs.title || "NO MIDDLEMEN. NO MESS.";
@@ -431,13 +431,26 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h4 className="text-display-4 font-black text-neutral-950">{robOwner.owners.fullName}</h4>
-                    <p className="text-primary-500 text-[10px] font-black uppercase tracking-widest mb-6">{robOwner.owners.position}</p>
+                    <p className="text-primary-500 text-[10px] font-black uppercase tracking-widest mb-2">{robOwner.owners.position}</p>
+                    {robOwner.owners.email && (
+                      <div className="flex items-center gap-2 mb-4">
+                        <Email className="w-3 h-3 text-primary-600" />
+                        <a 
+                          href={`mailto:${robOwner.owners.email}`}
+                          className="text-neutral-700 text-small hover:text-primary-600 transition-colors group"
+                        >
+                          <span className="group-hover:underline decoration-primary-600 transition-all">
+                            {robOwner.owners.email}
+                          </span>
+                        </a>
+                      </div>
+                    )}
                     {robOwner.owners.phoneNumber ? (
                       <a 
                         href={`tel:${robOwner.owners.phoneNumber}`}
                         className="bg-primary-500 text-neutral-950 font-black text-[10px] uppercase tracking-widest px-6 py-3 shadow-[4px_4px_0px_0px_rgba(49,36,7,1)] hover:shadow-none transition-all inline-block"
                       >
-                        Contact {robOwner.owners.fullName.split(' ')[0]}
+                        Call {robOwner.owners.fullName.split(' ')[0]}
                       </a>
                     ) : (
                       <span className="text-neutral-500 text-[10px] font-black uppercase tracking-widest px-6 py-3 inline-block">
@@ -469,13 +482,26 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h4 className="text-display-4 font-black text-neutral-950">{mattOwner.owners.fullName}</h4>
-                    <p className="text-primary-500 text-[10px] font-black uppercase tracking-widest mb-6">{mattOwner.owners.position}</p>
+                    <p className="text-primary-500 text-[10px] font-black uppercase tracking-widest mb-2">{mattOwner.owners.position}</p>
+                    {mattOwner.owners.email && (
+                      <div className="flex items-center gap-2 mb-4">
+                        <Email className="w-3 h-3 text-primary-600" />
+                        <a 
+                          href={`mailto:${mattOwner.owners.email}`}
+                          className="text-neutral-700 text-small hover:text-primary-600 transition-colors group"
+                        >
+                          <span className="group-hover:underline decoration-primary-600 transition-all">
+                            {mattOwner.owners.email}
+                          </span>
+                        </a>
+                      </div>
+                    )}
                     {mattOwner.owners.phoneNumber ? (
                       <a 
                         href={`tel:${mattOwner.owners.phoneNumber}`}
                         className="bg-primary-500 text-neutral-950 font-black text-[10px] uppercase tracking-widest px-6 py-3 shadow-[4px_4px_0px_0px_rgba(49,36,7,1)] hover:shadow-none transition-all inline-block"
                       >
-                        Contact {mattOwner.owners.fullName.split(' ')[0]}
+                        Call {mattOwner.owners.fullName.split(' ')[0]}
                       </a>
                     ) : (
                       <span className="text-neutral-500 text-[10px] font-black uppercase tracking-widest px-6 py-3 inline-block">

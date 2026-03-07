@@ -1,5 +1,6 @@
 import { GET_SERVICES_PAGE } from '@/lib/wordpress-queries';
 import { GET_ALL_SERVICES } from '@/lib/wordpress-queries';
+import { GET_LANDING_PAGE } from '@/lib/wordpress-queries';
 import { ServicesPageData } from '@/lib/wordpress-types';
 import { ServicesResponse } from '@/lib/wordpress-types';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-graphql';
@@ -64,6 +65,17 @@ export default async function ServicesPage() {
       GET_SERVICES_PAGE
     );
 
+    // Fetch header data to get contact phone
+    let contactPhone = "2062956363"; // fallback
+    try {
+      const headerResponse = await fetchWordPressGraphQL<any>(GET_LANDING_PAGE);
+      if (headerResponse?.data?.page?.landingPage?.headerInfo?.contactPhoneNumber) {
+        contactPhone = headerResponse.data.page.landingPage.headerInfo.contactPhoneNumber;
+      }
+    } catch (error) {
+      console.error('Error fetching header data:', error);
+    }
+
     // Fetch all services from WordPress
     const servicesResponse = await fetchWordPressGraphQL<ServicesResponse>(
       GET_ALL_SERVICES
@@ -83,7 +95,7 @@ export default async function ServicesPage() {
           primaryButtonText={pageData?.ctaButtonsHero?.primaryCtaText || "Get a Free Estimate"}
           primaryButtonHref={pageData?.ctaButtonsHero?.primaryCtaLink || "/request-estimate"}
           secondaryButtonText={pageData?.ctaButtonsHero?.secondaryCtaText || "Call Us Now"}
-          secondaryButtonHref={pageData?.ctaButtonsHero?.secondaryCtaLink || "/contact"}
+          secondaryButtonHref={pageData?.ctaButtonsHero?.secondaryCtaLink || `tel:${contactPhone}`}
           backgroundImage={pageData?.featuredImage?.node?.mediaItemUrl || "https://images.unsplash.com/photo-1621905492509-7d1729c5be18?w=1920&h=1080&fit=crop"}
         />
         

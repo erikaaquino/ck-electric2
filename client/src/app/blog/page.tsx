@@ -62,7 +62,7 @@ export default async function BlogPage() {
         category: category,
         date: formattedDate,
         readTime: readTime,
-        title: blog.seo.title,
+        title: blog.title,
         description: blog.blogEntry.shortDescription,
         link: `/blog/${blog.slug}`
       };

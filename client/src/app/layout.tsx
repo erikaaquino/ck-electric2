@@ -24,6 +24,15 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "CK Electric - Puget Sound",
   description: "Professional electrical services in Tacoma to Skagit Valley",
+  icons: {
+    icon: [
+      { url: '/favicon.ico?v=20240306', sizes: 'any' },
+      { url: '/favicon-16x16.png?v=20240306', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png?v=20240306', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: { url: '/apple-touch-icon.png?v=20240306', sizes: '180x180', type: 'image/png' },
+  },
+  manifest: '/site.webmanifest?v=20240306',
 };
 
 export default function RootLayout({
