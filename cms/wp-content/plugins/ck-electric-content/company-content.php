@@ -39,13 +39,23 @@ function company_register_cpts() {
     // Services
     register_post_type(
         'service',
-        company_base_cpt_args('Service', 'Services', 'services', 'dashicons-hammer')
+        array_merge(
+            company_base_cpt_args('Service', 'Services', 'services', 'dashicons-hammer'),
+            [
+                'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions')
+            ]
+        )
     );
 
     // Service Areas
     register_post_type(
         'service_area',
-        company_base_cpt_args('ServiceArea', 'ServiceAreas', 'service-areas', 'dashicons-location')
+        array_merge(
+            company_base_cpt_args('ServiceArea', 'ServiceAreas', 'service-areas', 'dashicons-location'),
+            [
+                'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions')
+            ]
+        )
     );
 
     // Projects
@@ -68,7 +78,12 @@ function company_register_cpts() {
     // Owners
     register_post_type(
         'owner',
-        company_base_cpt_args('Owner', 'Owners', 'owners', 'dashicons-businessman')
+        array_merge(
+            company_base_cpt_args('Owner', 'Owners', 'owners', 'dashicons-businessman'),
+            [
+                'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions')
+            ]
+        )
     );
 
     // Clients
@@ -80,7 +95,12 @@ function company_register_cpts() {
     // Testimonials
     register_post_type(
         'testimonial',
-        company_base_cpt_args('Testimonial', 'Testimonials', 'testimonials', 'dashicons-format-quote')
+        array_merge(
+            company_base_cpt_args('Testimonial', 'Testimonials', 'testimonials', 'dashicons-format-quote'),
+            [
+                'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'revisions')
+            ]
+        )
     );
 
     // Blog
