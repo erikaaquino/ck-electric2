@@ -34,19 +34,14 @@ export default function Header() {
   // Fetch WordPress data on component mount
   useEffect(() => {
     async function fetchHeaderData() {
-      console.log('🚀 Header: Starting data fetch');
   
       let landingPageData: LandingPageData | null = null;
   
       try {
         const response = await fetchWordPressGraphQL<LandingPageData>(GET_LANDING_PAGE);
-        console.log('📋 Header: Raw landing page data:', JSON.stringify(response, null, 2));
         
         if (response && response.data && response.data.page) {
           const page = response.data.page;
-          console.log('🎯 Header: Full page structure:', JSON.stringify(page, null, 2));
-          console.log('🎯 Header: Landing page data:', JSON.stringify(page.landingPage, null, 2));
-          console.log('🎯 Header: Header info:', JSON.stringify(page.landingPage?.headerInfo, null, 2));
           
           setHeaderData({
             serviceArea: page.landingPage?.headerInfo?.serviceArea || "Not Available",

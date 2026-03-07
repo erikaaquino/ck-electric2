@@ -56,7 +56,6 @@ interface ProjectsResponse {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   
-  console.log(`🎯 [METADATA] Generando metadata para slug: ${resolvedParams.slug}`);
   
   try {
     // Server-side GraphQL fetch

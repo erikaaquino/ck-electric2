@@ -39,14 +39,8 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   // Await the params promise for Next.js 15+
   const resolvedParams = await params;
   
-  // Basic debugging
-  console.log('=== BLOG DETAIL PAGE DEBUG ===');
-  console.log('params object:', JSON.stringify(resolvedParams, null, 2));
-  console.log('params.slug:', resolvedParams.slug);
-  console.log('typeof params.slug:', typeof resolvedParams.slug);
   
   if (!resolvedParams.slug) {
-    console.log('❌ No slug provided');
     return <div>Error: No slug parameter provided</div>;
   }
 
@@ -64,14 +58,12 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   try {
     // Fetch blog data from WordPress
     const variables = { slug: resolvedParams.slug };
-    console.log('GraphQL variables:', JSON.stringify(variables, null, 2));
     
     const response = await fetchWordPressGraphQL<BlogDetailData>(
       GET_BLOG_BY_SLUG,
       variables
     );
 
-    console.log('🔍 BlogArticlePage - GraphQL Response:', response);
     const blogData = response?.blog;
     
     if (!blogData) {

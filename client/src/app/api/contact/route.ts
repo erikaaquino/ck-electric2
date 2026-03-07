@@ -6,17 +6,12 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Contact API endpoint hit');
     
     // Check if environment variables are configured
     const resendApiKey = process.env.RESEND_API_KEY;
     const emailTo = process.env.EMAIL_TO;
-    console.log('Resend API Key exists:', !!resendApiKey);
-    console.log('Email To configured:', !!emailTo);
-    console.log('Email To value:', emailTo);
     
     const body = await request.json();
-    console.log('Request body:', body);
     const { name, email, phone, subject, message } = body;
 
     // Validate form data

@@ -41,8 +41,6 @@ export default async function BlogPage() {
       GET_BLOGS
     );
 
-    console.log('🔍 BlogPage - WordPress Response:', pageDataResponse);
-    console.log('🔍 Blogs Data - WordPress Response:', blogsDataResponse);
 
     // Transform WordPress blog data to match BlogPageContent expected format
     const blogPosts = blogsDataResponse?.blogs?.nodes?.map((blog: any, index: any) => {

@@ -6,17 +6,12 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Estimate API endpoint hit');
     
     // Check if Resend API key is configured
     const resendApiKey = process.env.RESEND_API_KEY;
     const emailTo = process.env.EMAIL_TO;
-    console.log('Resend API Key exists:', !!resendApiKey);
-    console.log('Email To configured:', !!emailTo);
-    console.log('Email To value:', emailTo);
     
     const body = await request.json();
-    console.log('Request body:', body);
     const { name, phone, email, project, address } = body;
 
     // Validate form data
@@ -74,8 +69,6 @@ export async function POST(request: NextRequest) {
       </div>
     `;
 
-    console.log('Attempting to send email');
-    console.log('Email To:', emailTo);
     const { data, error } = await resend.emails.send({
       from: 'CK Electric Website <onboarding@resend.dev>',
       to: [emailTo || 'hello@ckelectricps.com'],
@@ -84,7 +77,6 @@ export async function POST(request: NextRequest) {
       replyTo: email,
     });
 
-    console.log('Resend response:', { data, error });
 
     if (error) {
       console.error('Resend error:', error);

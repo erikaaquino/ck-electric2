@@ -58,7 +58,6 @@ export default function HomePage() {
           fetchWordPressGraphQL<ProjectsResponse>(GET_ALL_PROJECTS)
         ]);
 
-        console.log("this is testimonialResponse", testimonialsResponse)
 
         setLandingPageData(landingPageResponse?.data || null);
         setOwnersData(ownersResponse?.data || null);

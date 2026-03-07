@@ -77,11 +77,6 @@ export default function BlogPageContent({ blogPosts, blogPageData }: BlogPageCon
   const hasNext = currentPage < totalPages;
   const hasPrevious = currentPage > 1;
 
-  // Debug: Log the WordPress data
-  console.log('🔍 BlogPageContent - WordPress Data:', blogPageData);
-  console.log('🔍 BlogPageContent - Featured Image:', blogPageData?.featuredImage?.node?.mediaItemUrl);
-  console.log('🔍 BlogPageContent - Title:', blogPageData?.title);
-  console.log('🔍 BlogPageContent - Content:', blogPageData?.content);
 
   // Clean the content for display
   const cleanContent = stripHtml(blogPageData?.content);

@@ -16,11 +16,6 @@ export interface GraphQLResponse<T> {
 }
 
 export async function fetchWordPressGraphQL<T>(query: string, variables?: Record<string, any>): Promise<GraphQLResponse<T>> {
-  console.log('🔍 GraphQL Request:', {
-    url: WORDPRESS_API_URL,
-    query: query.substring(0, 100) + '...',
-    variables
-  });
 
   try {
     const response = await fetch(WORDPRESS_API_URL, {
@@ -35,8 +30,6 @@ export async function fetchWordPressGraphQL<T>(query: string, variables?: Record
       next: { revalidate: 60 }, // Revalidate every 60 seconds
     });
 
-    console.log('📡 GraphQL Response Status:', response.status, response.statusText);
-    console.log('📡 GraphQL Response Headers:', Object.fromEntries(response.headers.entries()));
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -45,7 +38,6 @@ export async function fetchWordPressGraphQL<T>(query: string, variables?: Record
     }
 
     const data = await response.json();
-    console.log('📊 GraphQL Response Data:', JSON.stringify(data, null, 2));
     return data;
   } catch (error) {
     console.error('❌ GraphQL fetch error:', error);
