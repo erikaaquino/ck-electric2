@@ -1,4 +1,4 @@
-import { GET_BLOG_PAGE, BlogPageData, GET_BLOGS, BlogsData, GET_HEADER_DATA } from '@/lib/wordpress-queries';
+import { GET_BLOG_PAGE, BlogPageData, GET_BLOGS, BlogsData } from '@/lib/wordpress-queries';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import { Metadata } from 'next';
 import BlogPageContent from '@/components/BlogPageContent';
@@ -13,10 +13,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
     const pageData = pageDataResponse?.page;
 
+    const ogImage = (pageData?.seo as any)?.opengraphImage?.mediaItemUrl;
     return {
       title: pageData?.title || 'Blog | CK Electric - Puget Sound',
       description: pageData?.seo?.metaDesc || 'Electrical tips, industry insights, and project highlights from CK Electric professionals serving Puget Sound.',
       keywords: pageData?.seo?.metaKeywords || 'electrical blog, electrical tips, electrical safety, electrical projects, Puget Sound electrical contractor',
+      openGraph: {
+        title: pageData?.title || 'Blog | CK Electric - Puget Sound',
+        description: pageData?.seo?.metaDesc || '',
+        type: 'website',
+        images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: 'CK Electric Blog' }] : [],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        images: ogImage ? [ogImage] : [],
+      },
     };
   } catch (error) {
     console.error('Error generating blog metadata:', error);
@@ -33,8 +44,6 @@ export default async function BlogPage() {
     const pageDataResponse = await fetchWordPressGraphQL<BlogPageData>(
       GET_BLOG_PAGE
     );
-
-    const pageData = pageDataResponse?.page;
 
     // Fetch blogs data from WordPress
     const blogsDataResponse = await fetchWordPressGraphQL<BlogsData>(
@@ -56,7 +65,7 @@ export default async function BlogPage() {
       
       return {
         id: index + 1,
-        image: blog.featuredImage?.node?.mediaItemUrl || '/images/default-blog.jpg',
+        image: blog.featuredImage?.node?.mediaItemUrl,
         category: category,
         date: formattedDate,
         readTime: readTime,

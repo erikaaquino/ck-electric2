@@ -260,6 +260,9 @@ export const GET_LANDING_PAGE = `
         metaRobotsNoindex
         opengraphAuthor
         opengraphDescription
+        opengraphImage {
+          mediaItemUrl
+        }
       }
     }
   }
@@ -311,6 +314,9 @@ export const GET_PROJECTS_PAGE = `
         opengraphAuthor
         opengraphDescription
         opengraphUrl
+        opengraphImage {
+          mediaItemUrl
+        }
       }
       id
     }
@@ -332,6 +338,9 @@ export const GET_BLOG_PAGE = `
         metaRobotsNoindex
         opengraphAuthor
         opengraphDescription
+        opengraphImage {
+          mediaItemUrl
+        }
       }
       ctaButtonsHero {
         primaryCtaLink
@@ -360,6 +369,9 @@ export const GET_SERVICES_PAGE = `
         metaRobotsNoindex
         opengraphAuthor
         opengraphDescription
+        opengraphImage {
+          mediaItemUrl
+        }
       }
       ctaButtonsHero {
         primaryCtaLink
@@ -589,6 +601,16 @@ export const GET_PROJECT_BY_SLUG = `
             altText
           }
         }
+      }
+    }
+  }
+`;
+
+export const GET_SOCIAL_LINKS = `
+  query GetSocialLinks {
+    page(id: "cG9zdDoyNTQ=") {
+      contactInformation {
+        facebookLink
       }
     }
   }

@@ -4,17 +4,19 @@ interface ClientLogoProps {
   title: string;
   imageUrl: string;
   clientUrl: string | null;
+  tabIndex?: number;
 }
 
-export default function ClientLogo({ title, imageUrl, clientUrl }: ClientLogoProps) {
+export default function ClientLogo({ title, imageUrl, clientUrl, tabIndex }: ClientLogoProps) {
   if (clientUrl) {
     return (
-      <a 
+      <a
         href={clientUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="group"
         aria-label={`Visit ${title} website`}
+        tabIndex={tabIndex}
       >
         <div className="relative overflow-hidden rounded-lg bg-white p-6 animate-pulse-subtle flex items-center justify-center">
           <img

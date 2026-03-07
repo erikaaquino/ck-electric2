@@ -38,14 +38,9 @@ export async function generateMetadata(): Promise<Metadata> {
         'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality for every project.',
       type: 'website',
       url: 'https://ck-electric.com',
-      images: [
-        {
-          url: '/images/og-home.jpg',
-          width: 1200,
-          height: 630,
-          alt: 'CK Electric - Premier Electrical Contractor',
-        },
-      ],
+      images: page?.seo?.opengraphImage?.mediaItemUrl
+        ? [{ url: page.seo.opengraphImage.mediaItemUrl, width: 1200, height: 630, alt: 'CK Electric - Premier Electrical Contractor' }]
+        : [],
     },
     twitter: {
       card: 'summary_large_image',
@@ -53,7 +48,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         page?.seo?.opengraphDescription ||
         'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality.',
-      images: ['/images/og-home.jpg'],
+      images: page?.seo?.opengraphImage?.mediaItemUrl
+        ? [page.seo.opengraphImage.mediaItemUrl]
+        : [],
     },
   };
 }

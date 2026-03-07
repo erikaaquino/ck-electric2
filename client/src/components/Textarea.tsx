@@ -30,8 +30,7 @@ export default function Textarea({
       <textarea
         id={name}
         name={name}
-        defaultValue={defaultValue}
-        value={value}
+        {...(value !== undefined ? { value } : { defaultValue })}
         placeholder={placeholder}
         rows={rows}
         required={required}

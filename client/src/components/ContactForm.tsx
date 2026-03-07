@@ -120,7 +120,9 @@ export default function ContactForm({ pageData }: ContactFormProps) {
   };
 
   const socialLinks = [
-    { icon: <Facebook className="text-xl" />, href: pageData?.contactInformation?.facebookLink || "#facebook", label: "Facebook" },
+    ...(pageData?.contactInformation?.facebookLink
+      ? [{ icon: <Facebook className="text-xl" />, href: pageData.contactInformation.facebookLink, label: "Facebook" }]
+      : []),
   ];
 
   return (
@@ -185,20 +187,9 @@ export default function ContactForm({ pageData }: ContactFormProps) {
                   </div>
                   
                   {/* Trust Indicators */}
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* <div className="p-6 bg-white rounded-2xl border border-neutral-200">
-                      <div className="flex text-primary-500 mb-2">
-                        <Star className="text-2xl" />
-                        <Star className="text-2xl" />
-                        <Star className="text-2xl" />
-                        <Star className="text-2xl" />
-                        <Star className="text-2xl" />
-                      </div>
-                      <p className="text-base-bold text-neutral-950 font-black">{pageData?.contactInformation?.googleMapsRating?.rating || "4.9 Stars"}</p>
-                      <p className="text-small-upper text-neutral-500">Google Rating</p>
-                    </div> */}
-                    <div className="p-6 bg-white rounded-2xl border border-neutral-200">
-                      <CheckCircle className="text-3xl text-primary-500 mb-2 block" />
+                  <div className="flex items-center gap-4 p-5 bg-white rounded-2xl border border-neutral-200">
+                    <CheckCircle className="text-4xl text-primary-500 flex-shrink-0" />
+                    <div>
                       <p className="text-base-bold text-neutral-950 font-black leading-tight">{pageData?.contactInformation?.extraInfo?.title || "Fully Licensed & Insured"}</p>
                       <p className="text-small-upper text-neutral-500">{pageData?.contactInformation?.extraInfo?.subtitle || "Certified Professional"}</p>
                     </div>

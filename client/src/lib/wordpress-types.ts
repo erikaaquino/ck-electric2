@@ -106,6 +106,7 @@ export interface LandingPageData {
       opengraphTitle: string;
       opengraphType: string;
       opengraphUrl: string;
+      opengraphImage?: { mediaItemUrl: string };
       readingTime: number;
       title: string;
     };

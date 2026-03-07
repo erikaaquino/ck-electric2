@@ -4,6 +4,22 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MuiProvider from "@/components/MuiProvider";
+import { fetchWordPressGraphQL } from "@/lib/wordpress-ssr";
+import { GET_HEADER_DATA } from "@/lib/wordpress-queries";
+
+interface HeaderDataResponse {
+  page: {
+    landingPage: {
+      headerInfo: {
+        companyLogo: { node: { mediaItemUrl: string; altText: string } } | null;
+        contactEmail: string;
+        contactPhoneNumber: string;
+        serviceArea: string;
+        slogan: string;
+      };
+    };
+  };
+}
 
 const inter = Inter({
   variable: "--font-inter",
@@ -92,11 +108,14 @@ const localBusinessSchema = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerResponse = await fetchWordPressGraphQL<HeaderDataResponse>(GET_HEADER_DATA);
+  const headerInfo = headerResponse?.page?.landingPage?.headerInfo;
+
   return (
     <html lang="en">
       <body className={`${playfairDisplay.variable} ${inter.variable} antialiased`}>
@@ -110,7 +129,13 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <Header />
+        <Header
+          serviceArea={headerInfo?.serviceArea ?? ""}
+          slogan={headerInfo?.slogan ?? ""}
+          contactEmail={headerInfo?.contactEmail ?? ""}
+          contactPhone={headerInfo?.contactPhoneNumber ?? ""}
+          companyLogo={headerInfo?.companyLogo ?? null}
+        />
         <MuiProvider>
           <main id="main-content">
             {children}

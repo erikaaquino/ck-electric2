@@ -42,6 +42,9 @@ export async function generateMetadata(): Promise<Metadata> {
       title: page?.title || 'Electrical Services | CK Electric',
       description: page?.seo?.opengraphDescription || page?.seo?.metaDesc || '',
       type: 'website',
+      images: (page?.seo as any)?.opengraphImage?.mediaItemUrl
+        ? [{ url: (page?.seo as any).opengraphImage.mediaItemUrl, width: 1200, height: 630, alt: 'CK Electric Services' }]
+        : [],
     },
   };
 }

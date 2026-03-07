@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Button from "./Button";
@@ -8,63 +8,18 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { fetchWordPressGraphQL } from '../lib/wordpress-graphql';
-import { GET_LANDING_PAGE } from '../lib/wordpress-queries';
-import { LandingPageData, CompanyLogo } from '../lib/wordpress-types';
 
-export default function Header() {
+interface HeaderProps {
+  serviceArea: string;
+  slogan: string;
+  contactEmail: string;
+  contactPhone: string;
+  companyLogo: { node: { mediaItemUrl: string; altText: string } } | null;
+}
+
+export default function Header({ serviceArea, slogan, contactEmail, contactPhone, companyLogo }: HeaderProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [headerData, setHeaderData] = useState<{
-    serviceArea: string;
-    slogan: string;
-    contactEmail: string;
-    contactPhone: string;
-    companyLogo: CompanyLogo | null;
-    loading: boolean;
-  }>({
-    serviceArea: "",
-    slogan: "",
-    contactEmail: "",
-    contactPhone: "",
-    companyLogo: null,
-    loading: true
-  });
-
-  // Fetch WordPress data on component mount
-  useEffect(() => {
-    async function fetchHeaderData() {
-  
-      let landingPageData: LandingPageData | null = null;
-  
-      try {
-        const response = await fetchWordPressGraphQL<LandingPageData>(GET_LANDING_PAGE);
-        
-        if (response && response.data && response.data.page) {
-          const page = response.data.page;
-          
-          setHeaderData({
-            serviceArea: page.landingPage?.headerInfo?.serviceArea || "",
-            slogan: page.landingPage?.headerInfo?.slogan || "",
-            contactEmail: page.landingPage?.headerInfo?.contactEmail || "",
-            contactPhone: page.landingPage?.headerInfo?.contactPhoneNumber || "2062956363",
-            companyLogo: page.landingPage?.headerInfo?.companyLogo || null,
-            loading: false
-          });
-        } else {
-          console.error('❌ Header: Invalid response structure:', response);
-          setHeaderData(prev => ({ ...prev, loading: false }));
-        }
-      } catch (error) {
-        console.error('❌ Header: Fetch error:', error);
-        setHeaderData(prev => ({ ...prev, loading: false }));
-      }
-    }
-    
-    fetchHeaderData();
-  }, []);
-
-  const { serviceArea, slogan, contactEmail, contactPhone, companyLogo } = headerData;
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -78,41 +33,26 @@ export default function Header() {
     <nav className="flex flex-col w-full items-start sticky top-0 z-50" role="navigation" aria-label="Main navigation">
       {/* Top bar */}
       <div className="px-4 sm:px-8 py-2 flex-[0_0_auto] bg-neutral-950 relative self-stretch w-full border-b border-neutral-200">
-        {/* Mobile layout - email and service area */}
-        <div className="sm:hidden flex items-center justify-between w-full">
-          <div className="flex items-center gap-2">
-            <EmailIcon 
-              sx={{ 
-                color: 'white', 
-                fontSize: '20px',
-                width: '20px',
-                height: '24px'
-              }} 
-              aria-hidden="true"
-            />
-            <a
-              href={`mailto:${contactEmail}`}
-              className="text-small-bold text-white whitespace-nowrap hover:underline"
-              aria-label={`Email us at ${contactEmail}`}
-            >
-              {contactEmail}
-            </a>
-          </div>
-          <span className="text-small text-white whitespace-nowrap">
-            {serviceArea}
-          </span>
+        {/* Mobile layout - email only */}
+        <div className="sm:hidden flex items-center gap-2">
+          <EmailIcon
+            sx={{ color: 'white', fontSize: '20px', width: '20px', height: '24px' }}
+            aria-hidden="true"
+          />
+          <a
+            href={`mailto:${contactEmail}`}
+            className="text-small-bold text-white whitespace-nowrap hover:underline"
+            aria-label={`Email us at ${contactEmail}`}
+          >
+            {contactEmail}
+          </a>
         </div>
-        
-        {/* Desktop layout - email and service area */}
-        <div className="hidden sm:flex justify-center items-center gap-12">
+
+        {/* Desktop layout - email left, service area right */}
+        <div className="hidden sm:flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <EmailIcon 
-              sx={{ 
-                color: 'white', 
-                fontSize: '20px',
-                width: '20px',
-                height: '24px'
-              }} 
+            <EmailIcon
+              sx={{ color: 'white', fontSize: '20px', width: '20px', height: '24px' }}
               aria-hidden="true"
             />
             <a
@@ -154,7 +94,7 @@ export default function Header() {
                 </span>
               </div>
               <div className="flex items-start self-stretch w-full flex-col relative flex-[0_0_auto]">
-                <span className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small text-primary-500 whitespace-nowrap">
+                <span className="relative flex items-center justify-center w-fit mt-[-1.00px] text-small text-neutral-700 whitespace-nowrap">
                   {slogan}
                 </span>
               </div>
@@ -162,7 +102,7 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <ul className="hidden lg:flex flex-wrap items-center gap-[8px_8px] relative list-none m-0 p-0" role="menubar">
+          <ul className="hidden lg:flex flex-wrap items-center gap-[8px_8px] relative list-none m-0 p-0">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (

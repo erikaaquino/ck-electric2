@@ -31,8 +31,7 @@ export default function Input({
         id={name}
         name={name}
         type={type}
-        defaultValue={defaultValue}
-        value={value}
+        {...(value !== undefined ? { value } : { defaultValue })}
         placeholder={placeholder}
         required={required}
         onChange={onChange}

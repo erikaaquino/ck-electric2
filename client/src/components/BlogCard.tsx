@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowRightAlt } from '@mui/icons-material';
-import Button from './Button';
 
 interface BlogCardProps {
   image: string;
@@ -50,13 +49,9 @@ export default function BlogCard({
           {description}
         </p>
         
-        <Button
-          label="Read More"
-          icon={<ArrowRightAlt className="w-4 h-4" />}
-          variant="tertiary"
-          href={link}
-          className="w-full"
-        />
+        <span className="inline-flex items-center gap-1 text-small-upper tracking-widest text-neutral-950 group-hover:text-primary-500 transition-colors font-bold uppercase">
+          Read More <ArrowRightAlt className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </span>
       </div>
       </article>
     </a>

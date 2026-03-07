@@ -163,7 +163,7 @@ export default function HomePage({
               <div className="flex items-center justify-between gap-4 mb-8">
                 <div>
                   <h2 className="text-display-3 text-neutral-950">Get a Free Estimate</h2>
-                  <p className="text-neutral-700/60 text-small">Professional service within 24 hours.</p>
+                  <p className="text-neutral-700 text-small">Professional service within 24 hours.</p>
                 </div>
                 {landingPageData?.page?.landingPage?.formImage?.node?.mediaItemUrl && (
                   <img
@@ -615,6 +615,7 @@ export default function HomePage({
                       title={client.title}
                       imageUrl={client.featuredImage?.node?.mediaItemUrl || ''}
                       clientUrl={client.data.clientUrl}
+                      tabIndex={-1}
                     />
                   </div>
                 ))}
@@ -625,6 +626,7 @@ export default function HomePage({
                       title={client.title}
                       imageUrl={client.featuredImage?.node?.mediaItemUrl || ''}
                       clientUrl={client.data.clientUrl}
+                      tabIndex={-1}
                     />
                   </div>
                 ))}

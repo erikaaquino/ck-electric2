@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Phone, Mail, LocationOn, Facebook } from '@mui/icons-material';
 import SocialLinks from './SocialLinks';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
-import { GET_HEADER_DATA, GET_FOOTER_SERVICES } from '@/lib/wordpress-queries';
+import { GET_HEADER_DATA, GET_FOOTER_SERVICES, GET_SOCIAL_LINKS } from '@/lib/wordpress-queries';
 
 interface FooterLink {
   label: string;
@@ -16,12 +16,16 @@ interface FooterProps {
 
 export default async function Footer({ headerData, servicesData }: FooterProps) {
   // If data not passed as props, fetch it
-  const headerResponse = headerData || await fetchWordPressGraphQL(GET_HEADER_DATA);
-  const servicesResponse = servicesData || await fetchWordPressGraphQL(GET_FOOTER_SERVICES);
-  
+  const [headerResponse, servicesResponse, socialLinksResponse] = await Promise.all([
+    headerData || fetchWordPressGraphQL(GET_HEADER_DATA),
+    servicesData || fetchWordPressGraphQL(GET_FOOTER_SERVICES),
+    fetchWordPressGraphQL(GET_SOCIAL_LINKS),
+  ]);
+
   const headerInfo = headerResponse?.page?.landingPage?.headerInfo;
   const services = servicesResponse?.services?.nodes || [];
-  
+  const facebookLink = (socialLinksResponse as any)?.page?.contactInformation?.facebookLink;
+
   const companyLinks: FooterLink[] = [
     { label: "Services", href: "/services" },
     { label: "Projects", href: "/projects" },
@@ -33,8 +37,8 @@ export default async function Footer({ headerData, servicesData }: FooterProps) 
     href: `/services/${service.slug}`,
   }));
 
-  const socialLinks = headerInfo?.facebookLink
-    ? [{ icon: <Facebook className="text-xl" />, href: headerInfo.facebookLink, label: "Facebook" }]
+  const socialLinks = facebookLink
+    ? [{ icon: <Facebook className="text-xl" />, href: facebookLink, label: "Facebook" }]
     : [];
 
   return (
