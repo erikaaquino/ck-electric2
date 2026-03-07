@@ -49,6 +49,9 @@ interface DetailViewProps {
   relatedTitle?: string;
   relatedItems?: RelatedItem[];
   relatedSectionType?: 'services' | 'projects' | 'areas';
+
+  // Gallery Props
+  projectImages?: string[];
 }
 
 export default function DetailView({
@@ -71,7 +74,8 @@ export default function DetailView({
   ctaBoxSecondaryButtonHref = "/contact",
   relatedTitle = "Related",
   relatedItems = [],
-  relatedSectionType = 'services'
+  relatedSectionType = 'services',
+  projectImages = [],
 }: DetailViewProps) {
 
   
@@ -181,9 +185,83 @@ export default function DetailView({
         </div>
       </section>
 
+      {/* Project Gallery */}
+      {projectImages.length > 0 && (
+        <section className="bg-neutral-950 py-20 px-2 md:px-4 lg:px-10">
+          <div className="mx-auto max-w-[1200px]">
+            <div className="flex flex-col gap-3 mb-10">
+              <p className="text-primary-500 text-small-upper font-bold uppercase tracking-widest">Project Gallery</p>
+              <h2 className="text-neutral-50 text-display-3 font-black leading-tight tracking-tight">
+                Project in Detail
+              </h2>
+              <div className="w-20 h-1.5 bg-primary-500 rounded-full"></div>
+            </div>
+
+            {/* Desktop editorial grid */}
+            <div className="hidden md:grid grid-cols-12 gap-4 auto-rows-[280px]">
+              <div className="col-span-7 row-span-2 relative overflow-hidden rounded-2xl">
+                <img
+                  src={projectImages[0]}
+                  alt="Project photo 1"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 to-transparent pointer-events-none" />
+              </div>
+              {projectImages[1] && (
+                <div className="col-span-5 row-span-1 relative overflow-hidden rounded-2xl">
+                  <img
+                    src={projectImages[1]}
+                    alt="Project photo 2"
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 to-transparent pointer-events-none" />
+                </div>
+              )}
+              {projectImages[2] && (
+                <div className="col-span-5 row-span-1 relative overflow-hidden rounded-2xl">
+                  <img
+                    src={projectImages[2]}
+                    alt="Project photo 3"
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 to-transparent pointer-events-none" />
+                </div>
+              )}
+            </div>
+
+            {/* Mobile scroll-snap carousel */}
+            <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-2 px-2 scrollbar-hide">
+              {projectImages.map((img, i) => (
+                <div
+                  key={i}
+                  className="snap-center flex-none w-[85vw] h-[240px] relative overflow-hidden rounded-2xl"
+                >
+                  <img
+                    src={img}
+                    alt={`Project photo ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 to-transparent pointer-events-none" />
+                </div>
+              ))}
+            </div>
+
+            {/* Carousel dots (mobile) */}
+            <div className="md:hidden flex justify-center gap-2 mt-5">
+              {projectImages.map((_, i) => (
+                <span
+                  key={i}
+                  className={`block rounded-full transition-all ${i === 0 ? 'w-6 h-1.5 bg-primary-500' : 'w-1.5 h-1.5 bg-neutral-600'}`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Related Section using RelatedArticles component */}
       {relatedItems.length > 0 && (
-        <RelatedArticles 
+        <RelatedArticles
           articles={relatedArticles}
           title={getRelatedSectionTitle()}
         />

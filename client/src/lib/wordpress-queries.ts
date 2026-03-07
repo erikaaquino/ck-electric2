@@ -571,6 +571,24 @@ export const GET_PROJECT_BY_SLUG = `
           warranty
         }
         mainContentSection
+        image1 {
+          node {
+            mediaItemUrl
+            altText
+          }
+        }
+        image2 {
+          node {
+            mediaItemUrl
+            altText
+          }
+        }
+        image3 {
+          node {
+            mediaItemUrl
+            altText
+          }
+        }
       }
     }
   }
