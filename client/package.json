@@ -29,16 +29,15 @@
   ],
   "license": "MIT",
   "browserslist": [
-    "chrome >= 90",
-    "firefox >= 88",
-    "safari >= 14",
-    "edge >= 90"
+    "chrome >= 92",
+    "firefox >= 90",
+    "safari >= 15.4",
+    "edge >= 92"
   ],
   "copyright": "© 2026 Erika Aquino",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "eslint",
     "type-check": "tsc --noEmit"
