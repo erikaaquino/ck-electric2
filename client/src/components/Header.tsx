@@ -111,7 +111,7 @@ export default function Header({ serviceArea, slogan, contactEmail, contactPhone
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
-                <li key={item.label} role="none">
+                <li key={item.label}>
                   <Link
                     href={item.href}
                     aria-current={isActive ? 'page' : undefined}
