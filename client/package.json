@@ -28,6 +28,12 @@
     "tailwindcss"
   ],
   "license": "MIT",
+  "browserslist": [
+    "chrome >= 92",
+    "firefox >= 90",
+    "safari >= 15.4",
+    "edge >= 92"
+  ],
   "copyright": "© 2026 Erika Aquino",
   "scripts": {
     "dev": "next dev",

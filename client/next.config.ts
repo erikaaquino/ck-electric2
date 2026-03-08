@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    // In dev, Next.js image optimization proxies requests server-side, which
+    // can't reach DevKinsta's `testing2.local` hostname. Disable in dev so
+    // <Image> falls back to serving the src URL directly (same as plain <img>).
+    unoptimized: process.env.NODE_ENV === 'development',
   },
   async headers() {
     return [

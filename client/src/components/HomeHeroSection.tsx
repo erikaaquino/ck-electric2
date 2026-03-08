@@ -1,5 +1,5 @@
+import Image from 'next/image';
 import { Verified, Timer } from '@mui/icons-material';
-import Button from './Button';
 import EstimateForm from './EstimateForm';
 import type { LandingPageData } from '../lib/wordpress-types';
 
@@ -28,12 +28,13 @@ export default function HomeHeroSection({ landingPageData }: Props) {
     <section className="relative min-h-screen flex items-center overflow-hidden pt-24 pb-32">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-100 via-primary-100/60 to-transparent z-10"></div>
-        <img
+        <Image
           alt="Professional electrician working on electrical panel"
-          className="w-full h-full object-cover opacity-40 mix-blend-multiply"
+          className="object-cover opacity-40 mix-blend-multiply"
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe1RGeqlhyzdm30jYOPD9HCL5yeYkmqTmDP8YHhPde388fuAjj5yUNgcTMi5wM5p-7m2FjEg7REBZKjBYIIvHLiGnl5CoamJanmWrHX-oxIky2gOJ3r8iHWB16MULUGKtMv9knWBq-2s317u7chblbTbQLI2B9Aul3ej42k6uQ8nyfpU7rDA-cqo8o3aeOLx-NqgKY9Nhv2LV0X2lnvNaSfC3CSGeMqLSAmLiZcsyCLXHoXptBMGQpy_UGpCZh1llDd_AnSjUmc6Q"
-          width={1920}
-          height={1080}
+          fill
+          priority
+          sizes="100vw"
         />
       </div>
 
@@ -88,13 +89,14 @@ export default function HomeHeroSection({ landingPageData }: Props) {
                 <p className="text-neutral-700 text-small">Professional service within 24 hours.</p>
               </div>
               {formImageUrl && (
-                <img
+                <Image
                   src={formImageUrl}
                   alt=""
                   aria-hidden="true"
                   className="w-16 h-16 object-contain flex-shrink-0"
                   width={64}
                   height={64}
+                  sizes="64px"
                 />
               )}
             </div>

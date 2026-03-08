@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Check } from '@mui/icons-material';
 import Button from './Button';
 import type { LandingPageData } from '../lib/wordpress-types';
@@ -25,12 +26,14 @@ export default function HomeAboutSection({ landingPageData }: Props) {
         <div className="flex flex-col md:flex-row gap-20 items-center">
           <div className="w-full md:w-1/2 relative group">
             <div className="absolute top-0 left-0 w-full h-full bg-primary-400 -rotate-3 transition-transform group-hover:rotate-0"></div>
-            <img
+            <Image
               alt="Modern industrial electrical equipment"
               className="relative z-10 w-full h-auto grayscale hover:grayscale-0 transition-all duration-700"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuANLZ7KGX7PAID37XG0QghBlVd6mx5151hYLtPb__9r9muTE_OVodG09JpjxXC20XbMKiqFvHriC13oTOg-6M-cS8J6wz2Eal1zizA_zFVtzW55ZUOR6THsd7rmYfcIc5nYPnwthvKNH4FP6Ffw6Vyg4tYQsxRcIE8T95B9-KDPdk7YXMDVwYth_u5NKtQpB9-aoG4Fow4jdgYcM5ArO-ogkYwdFWZ04bwSVT4SbBq24kFi8SQo6hN3cF0HEFbcVRVujlc-H9RCPwY"
               width={800}
               height={600}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              loading="lazy"
             />
           </div>
 

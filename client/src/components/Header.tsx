@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Button from "./Button";
 import EmailIcon from '@mui/icons-material/Email';
@@ -76,10 +77,14 @@ export default function Header({ serviceArea, slogan, contactEmail, contactPhone
           <div className="inline-flex items-center gap-3 sm:gap-6 relative flex-[0_0_auto]">
             <Link href="/" aria-label="CK Electric home" className="relative w-[50px] h-[36px] flex items-center justify-center">
               {companyLogo?.node?.mediaItemUrl ? (
-                <img 
+                <Image
                   src={companyLogo.node.mediaItemUrl}
                   alt={companyLogo.node.altText || "CK Electric Logo"}
                   className="w-full h-full object-contain"
+                  width={50}
+                  height={36}
+                  priority
+                  sizes="50px"
                 />
               ) : (
                 <div className="w-full h-full bg-neutral-300 rounded flex items-center justify-center">
@@ -183,10 +188,13 @@ export default function Header({ serviceArea, slogan, contactEmail, contactPhone
                 <div className="inline-flex items-center gap-3">
                   {companyLogo?.node?.mediaItemUrl ? (
                     <div className="w-[60px] h-[40px] flex items-center justify-center">
-                      <img 
+                      <Image
                         src={companyLogo.node.mediaItemUrl}
                         alt={companyLogo.node.altText || "CK Electric Logo"}
                         className="w-full h-full object-contain"
+                        width={60}
+                        height={40}
+                        sizes="60px"
                       />
                     </div>
                   ) : (
