@@ -270,7 +270,7 @@ export const GET_LANDING_PAGE = `
 
 export const GET_ALL_PROJECTS = `
   query MyQuery3 {
-    projects {
+    projects(first: 100) {
       nodes {
         id
         title
@@ -438,7 +438,7 @@ export const GET_OWNERS = `
 
 export const GET_ALL_SERVICES = `
   query GetAllServices {
-    services {
+    services(first: 100) {
       nodes {
         id
         title

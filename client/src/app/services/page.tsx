@@ -3,8 +3,7 @@ import { ServicesPageData, ServicesResponse } from '@/lib/wordpress-types';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import { Metadata } from 'next';
 import HeroSection from '@/components/HeroSection';
-import ServiceCard from '@/components/ServiceCard';
-import { ElectricBolt } from '@mui/icons-material';
+import ServicesSearch from '@/components/ServicesSearch';
 
 function stripHtml(html: string | undefined): string {
   if (!html) return '';
@@ -81,15 +80,7 @@ export default async function ServicesPage() {
 
       <section className="py-20 bg-neutral-50" aria-label="All services">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                icon={<ElectricBolt className="text-4xl" />}
-              />
-            ))}
-          </div>
+          <ServicesSearch services={services} />
         </div>
       </section>
     </>
