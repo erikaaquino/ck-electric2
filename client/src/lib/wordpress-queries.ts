@@ -300,7 +300,7 @@ export const GET_ALL_PROJECTS = `
 
 export const GET_PROJECTS_PAGE = `
   query NewQuery {
-    page(id: "cG9zdDoyNDk=") {
+    page(id: "cG9zdDoyMzQ=") {
       featuredImage {
         node {
           mediaItemUrl
@@ -318,14 +318,22 @@ export const GET_PROJECTS_PAGE = `
           mediaItemUrl
         }
       }
+      ctaButtonsHero {
+        primaryCtaLink
+        primaryCtaText
+        secondaryCtaLink
+        secondaryCtaText
+      }
+      title
+      content
       id
     }
   }
 `;
 
 export const GET_BLOG_PAGE = `
-  query GetBlogPage {
-    page(id: "/blog", idType: URI) {
+  query NewQuery {
+    page(id: "cG9zdDoyNDk=") {
       featuredImage {
         node {
           mediaItemUrl
@@ -338,6 +346,7 @@ export const GET_BLOG_PAGE = `
         metaRobotsNoindex
         opengraphAuthor
         opengraphDescription
+        opengraphUrl
         opengraphImage {
           mediaItemUrl
         }
@@ -671,6 +680,11 @@ export const GET_CONTACT_PAGE = `
     page(id: "cG9zdDoyNTQ=") {
       content
       title
+      featuredImage {
+        node {
+          mediaItemUrl
+        }
+      }
       seo {
         metaDesc
         metaKeywords

@@ -1,4 +1,5 @@
-import { GET_BLOG_PAGE, BlogPageData, GET_BLOGS, BlogsData } from '@/lib/wordpress-queries';
+import { GET_BLOG_PAGE, GET_BLOGS, BlogsData } from '@/lib/wordpress-queries';
+import type { BlogPageData } from '@/lib/wordpress-types';
 import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import { Metadata } from 'next';
 import BlogPageContent from '@/components/BlogPageContent';
@@ -12,6 +13,11 @@ export async function generateMetadata(): Promise<Metadata> {
     );
 
     const pageData = pageDataResponse?.page;
+
+    // If no page data found, the blog posts will still work with fallbacks
+    if (!pageData) {
+      console.log("No blog page data found, using fallbacks");
+    }
 
     const ogImage = (pageData?.seo as any)?.opengraphImage?.mediaItemUrl;
     return {

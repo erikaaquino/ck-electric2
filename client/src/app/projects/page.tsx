@@ -88,13 +88,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProjectsPage() {
-  const [pageData, data] = await Promise.all([
+  const [pageData, projectsData] = await Promise.all([
     fetchWordPressGraphQL<ProjectsPageData>(GET_PROJECTS_PAGE),
     fetchWordPressGraphQL<ProjectsResponse>(GET_ALL_PROJECTS),
   ]);
 
   const page = pageData?.page;
-  const projects = data?.projects?.nodes || [];
+  const projects = projectsData?.projects?.nodes || [];
   const cleanContent = stripHtml(page?.content);
 
   return (

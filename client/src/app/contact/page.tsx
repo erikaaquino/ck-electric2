@@ -20,6 +20,11 @@ interface ContactPageData {
   page: {
     title: string;
     content: string;
+    featuredImage?: {
+      node: {
+        mediaItemUrl: string;
+      };
+    };
     seo: {
       metaDesc: string;
       metaKeywords: string;
@@ -61,7 +66,7 @@ export default async function ContactPage() {
         title={page?.title || "Get in Touch"}
         subtitle={stripHtml(page?.content) || "Ready to start your electrical project? Contact our team for expert service and competitive pricing across Puget Sound."}
         hideCTA={true}
-        backgroundImage="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1920&h=1080&fit=crop"
+        backgroundImage={page?.featuredImage?.node?.mediaItemUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1920&h=1080&fit=crop"}
       />
       <ContactForm pageData={page ?? null} />
     </>
