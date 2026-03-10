@@ -58,7 +58,7 @@ export default function HomeHeroSection({ landingPageData }: Props) {
             )}
           </h1>
 
-          <p className="text-base text-neutral-700 mb-10 leading-relaxed max-w-xl">
+          <p className="text-medium text-neutral-700 mb-10 leading-relaxed max-w-xl">
             {heroSubtitle}
           </p>
 
