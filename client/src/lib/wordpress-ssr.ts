@@ -23,7 +23,7 @@ export async function fetchWordPressGraphQL<T>(
         'User-Agent': 'Next.js SSR Client',
       },
       body: JSON.stringify({ query, variables }),
-      next: { revalidate: 300 }, // Revalidate every 5 minutes
+      next: { revalidate: 30 }, // Revalidate every 30 seg
     });
 
     if (!response.ok) {
