@@ -24,7 +24,7 @@ export default function BlogArticle({
   heroImage
 }: BlogArticleProps) {
   return (
-    <article className="max-w-4xl mx-auto text-left mb-12">
+    <article className="max-w-4xl mx-auto text-left mb-12 px-4 md:px-0">
       <div className="flex justify-center gap-2 mb-6">
         {categories.map((category) => (
           <span 

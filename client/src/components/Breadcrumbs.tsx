@@ -21,7 +21,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
                   </a>
                 </li>
               ) : (
-                <li className="text-primary-500">{item.label}</li>
+                <li className="text-primary-500 max-w-[200px] sm:max-w-xs truncate" title={item.label}>{item.label}</li>
               )}
               {index < items.length - 1 && <li>/</li>}
             </React.Fragment>
