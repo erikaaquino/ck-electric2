@@ -1,249 +1,228 @@
-# CK Electric Monorepo
+# CK Electric
 
-A monorepo containing CK Electric's Next.js web application and WordPress headless CMS.
+Website for **CK Electric**, a licensed electrical contractor serving the Puget Sound region of Washington State — from Tacoma to Skagit Valley.
 
-## Structure
+Live: [ck-electric.com](https://ck-electric.com)
+
+---
+
+## Architecture
+
+This project uses a **headless WordPress** architecture. WordPress runs as a pure content backend and is never visited directly by users. The Next.js frontend fetches all content at build/request time via GraphQL and handles all rendering.
 
 ```
-ck-electric-monorepo/
-├── client/          # Next.js web application
-├── wordpress/        # WordPress headless CMS
-└── README.md
+WordPress (Kinsta)
+       │
+  GraphQL API
+  (WPGraphQL)
+       │
+  Next.js App
+   (Netlify)
+       │
+     Users
 ```
 
-## Web Application (client/)
+---
 
-A modern web application built with Next.js and WordPress as a headless CMS using the REST API.
+## Frontend (`/client`)
 
-### Features
+### Stack
 
-- 🚀 **Next.js 16** with App Router
-- 📝 **WordPress Headless CMS** integration
-- 🔄 **REST API** for content fetching
-- 🎨 **Tailwind CSS** with custom design tokens
-- 📱 **Responsive design** with mobile-first approach
-- ⚡ **SSR performance** with client-side enhancements
-- 🖼️ **Material Icons** integration
-- 📄 **Component-based architecture**
-- 🔍 **Dynamic routing** for pages and posts
+| | |
+|---|---|
+| **Framework** | Next.js 15 — App Router, SSR, Static Generation |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS v4 + MUI (Material UI) |
+| **Fonts** | Inter + Playfair Display (Google Fonts) |
+| **Forms** | Netlify Forms |
+| **Deployment** | Netlify (`@netlify/plugin-nextjs`) |
 
-### Getting Started
+### Pages
 
-#### Prerequisites
+| Route | Description |
+|---|---|
+| `/` | Landing page |
+| `/services` | Electrical services listing |
+| `/services/[slug]` | Individual service detail |
+| `/projects` | Completed projects portfolio |
+| `/projects/[slug]` | Individual project detail |
+| `/blog` | Blog article listing |
+| `/blog/[slug]` | Individual blog article |
+| `/contact` | Contact page with form |
+| `/request-estimate` | Free estimate request form |
+| `/service-areas/[slug]` | Location-specific pages (Seattle, Tacoma, etc.) |
 
-- Node.js 18+ installed
-- A WordPress site with REST API enabled
-- WordPress site should have some posts with featured images
+Detail pages (`/services/[slug]`, `/projects/[slug]`, `/blog/[slug]`, `/service-areas/[slug]`) are statically pre-rendered at build time via `generateStaticParams()`.
 
-#### Installation
+### Project Structure
 
-1. Install dependencies:
+```
+client/
+├── src/
+│   ├── app/                        # Next.js App Router
+│   │   ├── layout.tsx              # Root layout, global metadata, LocalBusiness schema
+│   │   ├── page.tsx                # Home page
+│   │   ├── blog/
+│   │   ├── services/
+│   │   ├── projects/
+│   │   ├── contact/
+│   │   ├── request-estimate/
+│   │   └── service-areas/[slug]/
+│   ├── components/                 # Reusable React components
+│   └── lib/
+│       ├── wordpress-queries.ts    # All GraphQL query definitions + SEO_FIELDS fragment
+│       ├── wordpress-types.ts      # TypeScript interfaces for WordPress data
+│       ├── wordpress-ssr.ts        # GraphQL fetch utility (server-side)
+│       └── seo-utils.ts            # Shared SEO metadata builder (buildMetadata)
+├── public/
+│   ├── contact-form.html           # Netlify Forms static detection file
+│   └── estimate-form.html          # Netlify Forms static detection file
+└── netlify.toml                    # Netlify build config + Next.js runtime plugin
+```
+
+### Local Development
+
 ```bash
+cd client
 npm install
-```
-
-2. Set up environment variables:
-```bash
-cp client/.env.example client/.env.local
-```
-
-3. Update `client/.env.local` with your WordPress site URL:
-```env
-NEXT_PUBLIC_WORDPRESS_URL=https://your-wordpress-site.com
-NEXT_PUBLIC_WORDPRESS_API_URL=https://your-wordpress-site.com/wp-json/wp/v2
-```
-
-4. Run the development server:
-```bash
+cp .env.example .env.local
+# Fill in .env.local with your local WordPress URL
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000).
+
+### Environment Variables
+
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_WORDPRESS_URL` | WordPress site URL (production: Kinsta) |
+| `NEXT_PUBLIC_WORDPRESS_API_URL` | GraphQL endpoint (`/graphql`) |
+| `NEXT_PUBLIC_WORDPRESS_REST_URL` | REST API base (`/wp-json/wp/v2`) |
+| `EMAIL_TO` | Recipient address for form notification emails |
 
 ### Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Run TypeScript type checking
-
-## WordPress CMS (wordpress/)
-
-WordPress configuration for the headless CMS setup.
-
-### Features
-
-- 📝 **REST API** enabled
-- 🖼️ **Featured images** support
-- 📄 **Custom post types**
-- 🔍 **SEO optimization**
-- 📱 **Responsive admin**
-
-### Setup
-
-1. Install WordPress in the `wordpress/` directory
-2. Configure REST API endpoints
-3. Set up custom post types and taxonomies
-4. Configure featured images
-5. Set up CORS for Next.js application
-
-## Development Workflow
-
-### Monorepo Commands
-
-From the root directory:
-
 ```bash
-# Install all dependencies
-npm install
-
-# Run web app development
-npm run dev
-
-# Build web app
-npm run build
-
-# Start production web app
-npm run start
-
-# Lint web app
-npm run lint
-
-# Type check web app
-npm run type-check
+npm run dev          # Start dev server
+npm run build        # Production build
+npm run start        # Start production server
+npm run type-check   # TypeScript check
+npm run lint         # ESLint
 ```
 
-### Workspace-Specific Commands
+---
 
-Navigate to specific workspace:
+## Backend — WordPress (Kinsta)
 
-```bash
-# Web app specific
-cd client
-npm run dev
+The WordPress installation is **not part of this repository**. It runs on [Kinsta](https://kinsta.com) and acts exclusively as a headless CMS — no PHP theme is ever rendered to users.
 
-# WordPress specific
-cd wordpress
-# WordPress CLI commands
+### Key Plugins
+
+- **[WPGraphQL](https://www.wpgraphql.com/)** — Exposes all WordPress content as a GraphQL API at `/graphql`
+- **[Yoast SEO](https://yoast.com/wordpress/plugins/seo/) + WPGraphQL Yoast SEO** — Surfaces SEO metadata (title, description, Open Graph, canonical, robots) through the GraphQL API
+- **Custom CK Electric Plugin** — A bespoke plugin that registers all the custom post types and Advanced Custom Fields (ACF) field groups used by this project
+
+### Custom Post Types
+
+Registered by the custom plugin:
+
+| Post Type | Purpose |
+|---|---|
+| `services` | Electrical service pages (panel upgrades, EV chargers, etc.) |
+| `projects` | Completed project portfolio entries |
+| `blogs` | Blog articles with author, categories, and CTA section |
+| `service-areas` | Location-specific landing pages |
+| `owners` | Company owner profiles (Rob & Matt) |
+| `testimonials` | Client testimonials |
+| `clients` | Client logos and references |
+
+---
+
+## Data Fetching with GraphQL
+
+All data is fetched server-side using `fetchWordPressGraphQL()` from `src/lib/wordpress-ssr.ts`. There are no client-side API calls for content.
+
+### GraphQL Queries
+
+All queries are defined as template literal strings in `src/lib/wordpress-queries.ts`. A shared `SEO_FIELDS` constant is interpolated into every query's `seo {}` block to guarantee consistent SEO data across all pages:
+
+```graphql
+seo {
+  title
+  metaDesc
+  metaKeywords
+  canonical
+  metaRobotsNoindex
+  metaRobotsNofollow
+  opengraphTitle
+  opengraphDescription
+  opengraphImage { mediaItemUrl }
+  opengraphUrl
+  opengraphType
+  opengraphSiteName
+  opengraphPublishedTime
+  opengraphModifiedTime
+}
 ```
 
-4. Run the development server:
-```bash
-npm run dev
+### Example
+
+```ts
+const data = await fetchWordPressGraphQL<ServiceDetailResponse>(
+  GET_SERVICE_BY_SLUG,
+  { slug }
+);
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+---
 
-## Project Structure
+## SEO
 
-```
-src/
-├── app/
-│   ├── page.tsx              # Home page
-│   ├── posts/
-│   │   ├── page.tsx          # Posts listing page
-│   │   └── [slug]/
-│   │       └── page.tsx      # Single post page
-│   ├── layout.tsx            # Root layout
-│   └── globals.css           # Global styles
-├── lib/
-│   └── wordpress.ts          # WordPress API service
-└── components/               # Reusable components
+SEO is centralized in `src/lib/seo-utils.ts`. The `buildMetadata()` function maps WordPress Yoast SEO fields to a Next.js `Metadata` object, with robust fallbacks for every field.
+
+```ts
+export function buildMetadata(
+  seo: WpSeo | null | undefined,
+  fallbacks: SeoFallbacks,
+): Metadata
 ```
 
-## WordPress Configuration
+Every page's `generateMetadata()` calls `buildMetadata()`. A marketer can fill in any Yoast field on the WordPress side and it automatically surfaces on the frontend — no code changes needed.
 
-### Enable REST API
+**Fields handled automatically:**
 
-Make sure your WordPress site has the REST API enabled. It's enabled by default in WordPress 4.7+.
+- Page title and meta description
+- Canonical URL
+- Robots (index/follow) directives from Yoast
+- Open Graph (title, description, image, type, site name, published/modified time)
+- Twitter cards (falls back to Open Graph values when Twitter-specific fields are empty)
 
-### Required Plugins
+---
 
-For the best experience, install these WordPress plugins:
+## Forms
 
-1. **Classic Editor** (if you prefer the classic editor)
-2. **Regenerate Thumbnails** (to ensure proper image sizes)
-3. **WP REST API Cache** (for better performance)
+Contact (`/contact`) and estimate request (`/request-estimate`) forms submit to **Netlify Forms**. Because Next.js renders forms client-side, static HTML detection files in `public/` register the forms with Netlify at build time. Email notifications are configured in the Netlify dashboard under **Forms → Notifications**.
 
-### API Endpoints Used
+Form names: `contact`, `estimate`, `estimate-request`
 
-- `/wp/v2/posts` - Fetch posts
-- `/wp/v2/posts/{slug}` - Fetch single post by slug
-- `/wp/v2/categories` - Fetch categories
-- `/wp/v2/tags` - Fetch tags
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## Customization
-
-### Styling
-
-The project uses Tailwind CSS. You can customize the theme in `tailwind.config.js`.
-
-### WordPress API
-
-The WordPress API service is located in `src/lib/wordpress.ts`. You can extend it with additional endpoints as needed.
-
-### Components
-
-Add reusable components in the `src/components/` directory.
+---
 
 ## Deployment
 
-### Vercel
+| Layer | Platform | Trigger |
+|---|---|---|
+| Frontend | Netlify | Auto-deploy on push to `main` |
+| CMS | Kinsta (WordPress) | Manual via WordPress admin |
 
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy
+**Netlify build settings:**
+- Base directory: `client`
+- Build command: `npm run build`
+- Publish directory: `client/.next`
+- Plugin: `@netlify/plugin-nextjs`
 
-### Other Platforms
-
-The app can be deployed to any platform that supports Next.js applications.
-
-## Troubleshooting
-
-### CORS Issues
-
-If you encounter CORS errors, add this code to your WordPress theme's `functions.php`:
-
-```php
-add_action('rest_api_init', function () {
-    remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
-    add_filter('rest_pre_serve_request', function ($value) {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        header('Access-Control-Allow-Credentials: true');
-        return $value;
-    });
-}, 15);
-```
-
-### Images Not Loading
-
-Ensure your WordPress site allows hotlinking or configure proper CORS headers for media files.
-
-### 404 Errors
-
-Check that:
-1. Your WordPress URL is correct in `.env.local`
-2. The REST API is enabled on your WordPress site
-3. Posts are published (not in draft status)
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+---
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+MIT © [Erika Aquino](https://github.com/erikaaquino)
