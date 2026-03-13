@@ -1,3 +1,28 @@
+// Reusable SEO fields fragment — matches the WpSeo interface in seo-utils.ts.
+// Only includes fields confirmed supported by the installed Yoast WPGraphQL plugin.
+// Twitter-specific fields (twitterTitle, twitterImage, etc.) and schema.raw require
+// Yoast SEO Premium + a newer plugin version — add them here when the plugin supports them.
+// buildMetadata() already falls back to opengraph values for Twitter cards.
+// Use ${SEO_FIELDS} inside any seo { } block.
+export const SEO_FIELDS = `
+  title
+  metaDesc
+  metaKeywords
+  canonical
+  metaRobotsNoindex
+  metaRobotsNofollow
+  opengraphTitle
+  opengraphDescription
+  opengraphImage {
+    mediaItemUrl
+  }
+  opengraphUrl
+  opengraphType
+  opengraphSiteName
+  opengraphPublishedTime
+  opengraphModifiedTime
+`;
+
 export const NEW_QUERY = `
   query GetAllPosts($first: Int, $after: String) {
     posts(first: $first, after: $after) {
@@ -56,9 +81,7 @@ export const GET_PAGE_BY_SLUG = `
         }
       }
       seo {
-        metaDesc
-        metaKeywords
-        opengraphDescription
+        ${SEO_FIELDS}
       }
     }
   }
@@ -79,9 +102,7 @@ export const GET_ALL_PAGES = `
           }
         }
         seo {
-          metaDesc
-          metaKeywords
-          opengraphDescription
+          ${SEO_FIELDS}
         }
       }
       pageInfo {
@@ -168,10 +189,7 @@ export const GET_POST_BY_SLUG = `
         }
       }
       seo {
-        metaDesc
-        metaKeywords
-        opengraphDescription
-        opengraphTitle
+        ${SEO_FIELDS}
       }
     }
   }
@@ -256,19 +274,7 @@ export const GET_LANDING_PAGE = `
         tag
       }
       seo {
-        canonical
-        cornerstone
-        focuskw
-        fullHead
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
-        opengraphAuthor
-        opengraphDescription
-        opengraphImage {
-          mediaItemUrl
-        }
+        ${SEO_FIELDS}
       }
     }
   }
@@ -313,16 +319,7 @@ export const GET_PROJECTS_PAGE = `
         }
       }
       seo {
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
-        opengraphAuthor
-        opengraphDescription
-        opengraphUrl
-        opengraphImage {
-          mediaItemUrl
-        }
+        ${SEO_FIELDS}
       }
       ctaButtonsHero {
         primaryCtaLink
@@ -346,16 +343,7 @@ export const GET_BLOG_PAGE = `
         }
       }
       seo {
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
-        opengraphAuthor
-        opengraphDescription
-        opengraphUrl
-        opengraphImage {
-          mediaItemUrl
-        }
+        ${SEO_FIELDS}
       }
       ctaButtonsHero {
         primaryCtaLink
@@ -378,15 +366,7 @@ export const GET_SERVICES_PAGE = `
         }
       }
       seo {
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
-        opengraphAuthor
-        opengraphDescription
-        opengraphImage {
-          mediaItemUrl
-        }
+        ${SEO_FIELDS}
       }
       ctaButtonsHero {
         primaryCtaLink
@@ -481,9 +461,7 @@ export const GET_ALL_SERVICES = `
           }
         }
         seo {
-          metaDesc
-          metaKeywords
-          opengraphDescription
+          ${SEO_FIELDS}
         }
         featuredImage {
           node {
@@ -502,17 +480,7 @@ export const GET_SERVICE_BY_SLUG = `
       title
       slug
       seo {
-        canonical
-        cornerstone
-        focuskw
-        fullHead
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
-        opengraphAuthor
-        opengraphDescription
-        readingTime
+        ${SEO_FIELDS}
       }
       servicesFields {
         specifications {
@@ -569,25 +537,7 @@ export const GET_PROJECT_BY_SLUG = `
         }
       }
       seo {
-        canonical
-        cornerstone
-        focuskw
-        fullHead
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
-        opengraphAuthor
-        opengraphDescription
-        opengraphModifiedTime
-        opengraphPublishedTime
-        opengraphPublisher
-        opengraphSiteName
-        opengraphTitle
-        opengraphType
-        opengraphUrl
-        readingTime
-        title
+        ${SEO_FIELDS}
       }
       projectFields {
         fieldGroupName
@@ -692,8 +642,7 @@ export const GET_CONTACT_PAGE = `
         }
       }
       seo {
-        metaDesc
-        metaKeywords
+        ${SEO_FIELDS}
       }
       contactInformation {
         businessHours
@@ -750,14 +699,7 @@ export const GET_SERVICE_AREA = `
       }
       content
       seo {
-        metaDesc
-        metaKeywords
-        focuskw
-        cornerstone
-        canonical
-        opengraphTitle
-        opengraphSiteName
-        title
+        ${SEO_FIELDS}
       }
       servicesArea {
         content
@@ -822,13 +764,7 @@ export const GET_REQUEST_ESTIMATE_PAGE = `
         }
       }
       seo {
-        canonical
-        cornerstone
-        focuskw
-        metaDesc
-        metaKeywords
-        metaRobotsNofollow
-        metaRobotsNoindex
+        ${SEO_FIELDS}
       }
       requestEstimate {
         step1 {
@@ -916,15 +852,7 @@ export const GET_BLOG_BY_SLUG = `
       }
       title
       seo {
-        focuskw
-        metaDesc
-        metaKeywords
-        cornerstone
-        canonical
-        opengraphTitle
-        opengraphSiteName
-        title
-        readingTime
+        ${SEO_FIELDS}
       }
       date
       slug
