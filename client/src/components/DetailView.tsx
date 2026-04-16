@@ -55,6 +55,12 @@ interface DetailViewProps {
 
   // Gallery Props
   projectImages?: string[];
+
+  // Slot rendered between hero and content sections
+  afterHeroSlot?: React.ReactNode;
+
+  // Slot rendered before related articles
+  testimonialsSlot?: React.ReactNode;
 }
 
 export default function DetailView({
@@ -81,6 +87,8 @@ export default function DetailView({
   relatedItems = [],
   relatedSectionType = 'services',
   projectImages = [],
+  afterHeroSlot,
+  testimonialsSlot,
 }: DetailViewProps) {
 
   
@@ -143,6 +151,8 @@ export default function DetailView({
           </div>
         </div>
       </section>
+
+      {afterHeroSlot}
 
       {/* Content Section */}
       <section className="px-2 md:px-4 lg:px-10 py-12">
@@ -285,6 +295,8 @@ export default function DetailView({
           </div>
         </section>
       )}
+
+      {testimonialsSlot}
 
       {/* Related Section using RelatedArticles component */}
       {relatedItems.length > 0 && (

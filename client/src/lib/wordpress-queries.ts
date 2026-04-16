@@ -710,6 +710,84 @@ export const GET_SERVICE_AREA = `
         primaryCtaText
         secondaryCtaLink
         secondaryCtaText
+        introSection {
+          title
+          subtitle
+          introContent
+          introImage {
+            node {
+              mediaItemUrl
+            }
+          }
+        }
+        whyCk {
+          title
+          subtitle
+          reason1 {
+            title
+            subtitle
+          }
+          reason2 {
+            title
+            subtitle
+          }
+          reason3 {
+            title
+            subtitle
+          }
+          reason4 {
+            title
+            subtitle
+          }
+          reason5 {
+            title
+            subtitle
+          }
+          reason6 {
+            title
+            subtitle
+          }
+        }
+        electricProblems {
+          title
+          content
+          problem1 {
+            title
+            subtitle
+            problemImage {
+              node {
+                mediaItemUrl
+              }
+            }
+          }
+          problem2 {
+            title
+            subtitle
+            problemImage {
+              node {
+                mediaItemUrl
+              }
+            }
+          }
+          problem3 {
+            title
+            subtitle
+            problemImage {
+              node {
+                mediaItemUrl
+              }
+            }
+          }
+          problem4 {
+            title
+            subtitle
+            problemImage {
+              node {
+                mediaItemUrl
+              }
+            }
+          }
+        }
       }
     }
   }
