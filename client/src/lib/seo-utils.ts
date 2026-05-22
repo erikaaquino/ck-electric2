@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const SITE_NAME = 'CK Electric';
-export const SITE_URL = 'https://ck-electric.com';
+export const SITE_URL = 'https://ckelectricllp.com';
 export const SITE_DEFAULT_DESCRIPTION =
   'Talk directly with licensed electricians. No call centers, no middlemen. Fast response and industrial-grade quality for every project in the Puget Sound.';
 export const SITE_DEFAULT_KEYWORDS =
