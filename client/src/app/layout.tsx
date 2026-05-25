@@ -37,7 +37,7 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ck-electric.com"),
+  metadataBase: new URL("https://ckelectricllp.com"),
   title: {
     default: "CK Electric | Premier Electrical Contractor Puget Sound",
     template: "%s | CK Electric",
@@ -63,11 +63,11 @@ export const metadata: Metadata = {
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": ["ElectricalContractor", "LocalBusiness"],
-  "@id": "https://ck-electric.com/#business",
+  "@id": "https://ckelectricllp.com/#business",
   name: "CK Electric",
   description:
     "Licensed electrical contractors serving the Puget Sound from Tacoma to Skagit Valley. Commercial TIs, residential wiring, EV charger installation, panel upgrades.",
-  url: "https://ck-electric.com",
+  url: "https://ckelectricllp.com",
   telephone: "+1-206-295-6363",
   priceRange: "$$",
   areaServed: [

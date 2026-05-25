@@ -114,12 +114,12 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     publisher: {
       '@type': 'Organization',
       name: 'CK Electric',
-      url: 'https://ck-electric.com',
+      url: 'https://ckelectricllp.com',
     },
     datePublished: blogData.date,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://ck-electric.com/blog/${slug}`,
+      '@id': `https://ckelectricllp.com/blog/${slug}`,
     },
   };
 

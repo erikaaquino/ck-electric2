@@ -64,7 +64,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
     description: service.seo?.metaDesc || stripHtml(service.servicesFields?.smallDescription),
     provider: {
       '@type': 'ElectricalContractor',
-      '@id': 'https://ck-electric.com/#business',
+      '@id': 'https://ckelectricllp.com/#business',
       name: 'CK Electric',
     },
     areaServed: {

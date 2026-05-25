@@ -3,7 +3,7 @@ import { fetchWordPressGraphQL } from '@/lib/wordpress-ssr';
 import { GET_ALL_SERVICES, GET_ALL_PROJECTS, GET_BLOGS, GET_SERVICE_AREAS } from '@/lib/wordpress-queries';
 
 export async function GET() {
-  const baseUrl = 'https://ck-electric.com';
+  const baseUrl = 'https://ckelectricllp.com';
   const currentDate = new Date().toISOString();
 
   try {
