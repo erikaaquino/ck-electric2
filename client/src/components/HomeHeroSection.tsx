@@ -58,7 +58,7 @@ export default function HomeHeroSection({ landingPageData }: Props) {
             )}
           </h1>
 
-          <p className="text-medium text-neutral-700 mb-10 leading-relaxed max-w-xl">
+          <p className="text-medium text-neutral-700 mb-6 leading-relaxed max-w-xl">
             {heroSubtitle}
           </p>
 
@@ -81,20 +81,20 @@ export default function HomeHeroSection({ landingPageData }: Props) {
               </div>
             </div>
 
-            <div className="grid grid-cols-[80px_1fr] items-center gap-4 border border-primary-200 border-l-4 border-l-primary-500 bg-primary-100/90 p-4 shadow-[4px_4px_0px_var(--color-primary-500)] backdrop-blur-sm sm:grid-cols-[112px_1fr_auto] sm:gap-5">
+            <div className="grid grid-cols-[144px_1fr] items-center gap-2 border border-primary-200 border-l-4 border-l-primary-500 bg-primary-100/90 p-0 shadow-[4px_4px_0px_var(--color-primary-500)] backdrop-blur-sm sm:grid-cols-[160px_1fr_auto] sm:gap-3">
               <Image
                 src="/award-businessrate-shield.png"
                 alt="BusinessRate Ranked #1 award shield, June 2026"
                 width={800}
                 height={600}
-                sizes="112px"
-                className="h-auto w-20 object-contain sm:w-28"
+                sizes="(max-width: 640px) 144px, 160px"
+                className="h-auto w-36 object-contain sm:w-40"
               />
-              <div>
+              <div className="py-2">
                 <p className="mb-1 text-small-upper text-primary-800">BusinessRate Award Winner</p>
                 <p className="text-display-5 text-neutral-950">#1 Electrician in Kirkland</p>
               </div>
-              <div className="col-span-2 border-t border-primary-300 pt-3 sm:col-span-1 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+              <div className="col-span-2 border-t border-primary-300 p-2 sm:col-span-1 sm:border-l sm:border-t-0 sm:py-2 sm:pl-3 sm:pr-2">
                 <p className="text-small text-neutral-600">Powered by</p>
                 <p className="text-small-bold text-neutral-950">Google Reviews</p>
                 <p className="text-small text-primary-800">June 2026</p>
