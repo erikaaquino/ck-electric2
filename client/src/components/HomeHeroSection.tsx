@@ -40,7 +40,7 @@ export default function HomeHeroSection({ landingPageData }: Props) {
 
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-7">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-positive-100 border border-positive-200 rounded-full text-small-upper text-positive-700 mb-8">
+          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-positive-200 bg-positive-100 px-4 py-2 text-small-upper text-positive-700">
             <span className="flex h-2 w-2 rounded-full bg-positive-500 animate-pulse" aria-hidden="true"></span>
             {tag}
           </div>
@@ -62,20 +62,42 @@ export default function HomeHeroSection({ landingPageData }: Props) {
             {heroSubtitle}
           </p>
 
-          <div className="flex flex-wrap flex-col md:flex-row gap-6">
-            <div className="flex items-center gap-4 bg-white/50 backdrop-blur-sm p-4 border-l-4 border-primary-500">
-              <Verified className="text-primary-500 text-4xl" aria-hidden="true" />
-              <div>
-                <p className="text-neutral-950 text-base-upper mb-1">{feature1Title}</p>
-                <p className="text-neutral-700/70 text-small mt-1">{feature1Description}</p>
+          <div className="max-w-2xl space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="flex items-center gap-3 border-l-4 border-primary-500 bg-white/50 p-4 backdrop-blur-sm">
+                <Verified className="text-primary-500 text-4xl" aria-hidden="true" />
+                <div>
+                  <p className="mb-1 text-base-upper text-neutral-950">{feature1Title}</p>
+                  <p className="mt-1 text-small text-neutral-700/70">{feature1Description}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 border-l-4 border-primary-500 bg-white/50 p-4 backdrop-blur-sm">
+                <Timer className="text-primary-500 text-4xl" aria-hidden="true" />
+                <div>
+                  <p className="mb-1 text-base-upper text-neutral-950">{feature2Title}</p>
+                  <p className="mt-1 text-small text-neutral-700/70">{feature2Description}</p>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 bg-white/50 backdrop-blur-sm p-4 border-l-4 border-primary-500">
-              <Timer className="text-primary-500 text-4xl" aria-hidden="true" />
+            <div className="grid grid-cols-[80px_1fr] items-center gap-4 border border-primary-200 border-l-4 border-l-primary-500 bg-primary-100/90 p-4 shadow-[4px_4px_0px_var(--color-primary-500)] backdrop-blur-sm sm:grid-cols-[112px_1fr_auto] sm:gap-5">
+              <Image
+                src="/award-businessrate-shield.png"
+                alt="BusinessRate Ranked #1 award shield, June 2026"
+                width={800}
+                height={600}
+                sizes="112px"
+                className="h-auto w-20 object-contain sm:w-28"
+              />
               <div>
-                <p className="text-neutral-950 text-base-upper mb-1">{feature2Title}</p>
-                <p className="text-neutral-700/70 text-small mt-1">{feature2Description}</p>
+                <p className="mb-1 text-small-upper text-primary-800">BusinessRate Award Winner</p>
+                <p className="text-display-5 text-neutral-950">#1 Electrician in Kirkland</p>
+              </div>
+              <div className="col-span-2 border-t border-primary-300 pt-3 sm:col-span-1 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+                <p className="text-small text-neutral-600">Powered by</p>
+                <p className="text-small-bold text-neutral-950">Google Reviews</p>
+                <p className="text-small text-primary-800">June 2026</p>
               </div>
             </div>
           </div>
