@@ -17,6 +17,7 @@ import EditOutlined from '@mui/icons-material/EditOutlined';
 import DeleteOutline from '@mui/icons-material/DeleteOutline';
 import EstimateDatePicker, { friendlyDate, friendlyTime } from './EstimateDatePicker';
 import Button from './Button';
+import { sendNetlifyTestNotification } from '@/lib/netlify-estimate-test';
 
 type Kind = 'ev' | 'panel';
 const inputClass = 'mt-2 block min-h-14 w-full min-w-0 rounded-lg border border-neutral-300 bg-background px-4 py-3 text-base transition-colors hover:border-neutral-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100';
@@ -166,7 +167,17 @@ export default function ServiceEstimatePreview({ kind, hostedDemo = false, produ
       setError(`Please keep photos within the upload limits: ${(limits.file_bytes / 1024 / 1024).toFixed(1)} MB per photo, ${(limits.total_bytes / 1024 / 1024).toFixed(1)} MB total.`); return;
     }
     if (hostedDemo) {
-      setReference(`PREVIEW-${crypto.randomUUID().slice(0, 8).toUpperCase()}`);
+      const previewReference = `PREVIEW-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
+      if (process.env.CK_NETLIFY_NOTIFICATION_TEST === 'true') {
+        submitting.current = true; setBusy(true); setError('');
+        try {
+          await sendNetlifyTestNotification(kind, values, previewReference);
+        } catch {
+          setError('The test could not be sent to Netlify. Your answers are still here; please try again.');
+          return;
+        } finally { submitting.current = false; setBusy(false); }
+      }
+      setReference(previewReference);
       requestAnimationFrame(() => heading.current?.focus());
       return;
     }
@@ -219,7 +230,7 @@ export default function ServiceEstimatePreview({ kind, hostedDemo = false, produ
             <span className="absolute bottom-8 right-[26%] text-lg text-primary-500">✦</span>
           </div> : hostedDemo || displayedOutcome === 'test' ? <InfoOutlined className="text-primary-700" fontSize="large" aria-hidden="true" /> : displayedOutcome === 'attention' ? <ErrorOutline className="text-negative-700" fontSize="large" aria-hidden="true" /> : <CheckCircleOutline className="text-positive-600" fontSize="large" aria-hidden="true" />}
           <h2 ref={heading} tabIndex={-1} className="text-display-4">{hostedDemo ? 'Request received' : displayedOutcome === 'wordpress-test' ? 'Request saved' : displayedOutcome === 'test' ? 'Test request saved' : displayedOutcome === 'attention' ? 'We saved your request' : displayedOutcome === 'pending' ? 'Your request is still processing' : 'Request received'}</h2>
-          <p className="text-base text-neutral-950">{hostedDemo ? 'Thanks for reaching out. The CK Electric team received your project details and will follow up. A price or appointment is not confirmed yet.' : displayedOutcome === 'wordpress-test' ? 'Your project details and photos were saved to your local WordPress site. This local test was not sent to Housecall Pro.' : displayedOutcome === 'test' ? (serverMessage || 'This is a test submission. It was not sent to Housecall Pro.') : displayedOutcome === 'attention' ? (serverMessage || 'Your project details are saved, but we could not confirm delivery. Please contact CK Electric and share this reference.') : displayedOutcome === 'pending' ? (serverMessage || 'Your project details are saved and are still being submitted. Keep this reference, and contact CK Electric if you do not hear back.') : (serverMessage || 'Thanks for reaching out. The CK Electric team received your project details and will follow up. A price or appointment is not confirmed yet.')}</p>
+          <p className="text-base text-neutral-950">{hostedDemo ? 'This is a preview. No estimate was sent to WordPress or Housecall Pro.' : displayedOutcome === 'wordpress-test' ? 'Your project details and photos were saved to your local WordPress site. This local test was not sent to Housecall Pro.' : displayedOutcome === 'test' ? (serverMessage || 'This is a test submission. It was not sent to Housecall Pro.') : displayedOutcome === 'attention' ? (serverMessage || 'Your project details are saved, but we could not confirm delivery. Please contact CK Electric and share this reference.') : displayedOutcome === 'pending' ? (serverMessage || 'Your project details are saved and are still being submitted. Keep this reference, and contact CK Electric if you do not hear back.') : (serverMessage || 'Thanks for reaching out. The CK Electric team received your project details and will follow up. A price or appointment is not confirmed yet.')}</p>
           {displayedOutcome !== 'received' && <p className="text-small break-all">Reference: <strong>{displayedReference}</strong></p>}<Button href="/services" variant="secondary" label="Explore our services" /></div> : <>
           <ol className="mb-8 grid grid-cols-3 gap-2 text-small" aria-label="Progress">{['Project', needsPhotos ? 'Photos' : 'Visit preferences', 'Contact & review'].map((label, i) => <li key={i} aria-current={step === i ? 'step' : undefined} className={`border-t-4 pt-3 ${i <= step ? 'border-primary-500 text-neutral-950' : 'border-neutral-200 text-neutral-700'}`}><span className="mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-neutral-100 text-small-bold" aria-hidden="true">{i < step ? <CheckCircleOutline fontSize="small" className="text-primary-800" /> : i + 1}</span>{label}</li>)}</ol>
           <p className="mb-2 text-small-bold text-primary-800">Step {step + 1} of 3</p>
